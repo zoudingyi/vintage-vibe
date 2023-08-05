@@ -36,13 +36,19 @@ window.onload = () => {
           <div>
             I am the modal content
           </div>
+
+          <div class="aesthetic-windows-95-button" style="margin: 10px auto">
+            <button>
+              OK
+            </button>
+          </div>
         </div>
       </div>`;
       div.innerHTML = html;
 
       parent.appendChild(div);
 
-      let planeDrag = new PlaneDrag({
+      const planeDrag = new PlaneDrag({
         id: "box" + boxIndex,
         index: index,
         head: ".aesthetic-windows-95-modal-title-bar",
@@ -80,8 +86,19 @@ window.onload = () => {
         .addEventListener(
           "mousedown",
           function (ev) {
-            console.log(this);
             ev.stopPropagation();
+            this.hide();
+            objectPool.push(this);
+          }.bind(planeDrag),
+          false
+        );
+
+      // close button
+      planeDrag.dom
+        .querySelector(".aesthetic-windows-95-button>button")
+        .addEventListener(
+          "click",
+          function () {
             this.hide();
             objectPool.push(this);
           }.bind(planeDrag),
@@ -90,7 +107,6 @@ window.onload = () => {
     } else {
       // 从对象池中取出来
       let planeDrag = objectPool[0];
-      console.log("planeDrag :>> ", planeDrag);
       index++;
       planeDrag.setZindex(index);
       planeDrag.reset();
@@ -99,7 +115,12 @@ window.onload = () => {
     }
   }
 
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 5; i++) {
     setTimeout(() => createWindows(i), i * 100);
   }
 };
+
+// 桌面图标事件
+function desktopIconClick(params) {
+  console.log("params :>> ", params);
+}
