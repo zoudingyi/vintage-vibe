@@ -8,13 +8,19 @@
   <link rel="stylesheet" type="text/css" href="./assets/css/normalize.css" />
   <link rel="stylesheet" type="text/css" href="./assets/css/aesthetic.css" />
   <link rel="stylesheet" type="text/css" href="./assets/css/main.css" />
+  <link rel="stylesheet" type="text/css" href="./assets/css/background.css" />
 </head>
 
-<body class="aesthetic-bg-gradient aesthetic-font">
+<body class="aesthetic-font">
+  <div class="bg-ae">
+    <div class="sun"></div>
+    <div class="overlay"></div>
+    <div class="overlay glitch"></div>
+  </div>
   <div class="main-container">
     <!-- 桌面图标 -->
     <div class="desktop-icon-container">
-      <div class="desktop-icon-item" tabindex="0">
+      <div class="desktop-icon-item" tabindex="0" ondblclick="desktopIconClick('computer')">
         <img class="desktop-icon" src="/assets/image/this_computer.png" alt="">
         <span>
           My Computer
@@ -47,44 +53,6 @@
     </div>
 
 
-    <!-- <h2>Tabs</h2>
-
-    <div class="aesthetic-windows-95-tabbed-container">
-      <div class="aesthetic-windows-95-tabbed-container-tabs">
-        <div class="aesthetic-windows-95-tabbed-container-tabs-button is-active">
-          <button>
-            General
-          </button>
-        </div>
-        <div class="aesthetic-windows-95-tabbed-container-tabs-button">
-          <button>
-            Vapor
-          </button>
-        </div>
-        <div class="aesthetic-windows-95-tabbed-container-tabs-button">
-          <button>
-            Macintosh
-          </button>
-        </div>
-        <div class="aesthetic-windows-95-tabbed-container-tabs-button">
-          <button>
-            Anime
-          </button>
-        </div>
-      </div>
-
-      <div class="aesthetic-windows-95-container">
-        I am some tabbed contained element
-
-
-        dsads
-        <br>
-        dasdsa
-      </div>
-    </div> -->
-
-    <!-- <img style="width: 400px;" src="/assets/image/kbLd9vb_new.gif" alt=""> -->
-
 
   </div>
 
@@ -92,8 +60,8 @@
     <div class="aesthetic-windows-95-taskbar">
       <div class="aesthetic-windows-95-taskbar-start">
         <button>
+          <img class="start-icon" src="/assets/image/windows_start.png" alt="">
           <strong>
-            <img class="start-icon" src="/assets/image/windows_start.png" alt="">
             Start
           </strong>
         </button>

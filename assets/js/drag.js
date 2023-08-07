@@ -22,7 +22,7 @@ function PlaneDrag(opt) {
   this.menuH = 41; // 全屏高度 需要减去菜单栏高度
   this.moveFlag = false;
   this.minW = 300; // 最小宽度
-  this.minH = 100; // 最小高度
+  this.minH = 130; // 最小高度
   this.width = opt.width || this.minW;
   this.height = opt.height || this.minH;
   this.top = opt.top || 100;

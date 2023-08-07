@@ -31,11 +31,12 @@ body {
 }
 .desktop-icon-item {
   cursor: pointer;
+  color: #fff;
   padding: 8px;
   border: 1px solid #0000;
 }
 .desktop-icon-item:focus {
-  border: 1px dashed #000;
+  border: 1px dashed #dadada;
 }
 .desktop-icon-item + .desktop-icon-item {
   margin-top: 15px;
@@ -46,17 +47,77 @@ body {
   margin-bottom: 10px;
 }
 
+.base-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.introduce-container,
+.motorcycle-container {
+  width: 688px;
+  height: 464px;
+  display: none;
+}
+.introduce-container.is-active {
+  display: flex;
+}
+.introduce-content {
+  margin-top: 80px;
+  padding: 15px;
+  line-height: 30px;
+  width: 300px;
+  user-select: text;
+}
+
+.motorcycle-container.is-active {
+  display: block;
+}
+
+.motorcycle-container,
+.game-container {
+  overflow: hidden;
+  user-select: text;
+  line-height: 30px;
+}
+.motorcycle-container p,
+.game-container p {
+  margin: 10px 0;
+  padding: 0 15px;
+}
+
+.motorcycle-container img {
+  width: 230px;
+  display: block;
+  margin: 45px auto;
+}
+
+.game-container img {
+  width: 250px;
+  float: right;
+}
+
+.gif-modal .aesthetic-windows-95-modal-content {
+  padding: 5px 0 0 0;
+}
+
+.gif-modal img {
+  display: block;
+}
 footer {
   width: 100vw;
   position: absolute;
   bottom: 0;
+  z-index: 99;
+  filter: hue-rotate(50deg);
 }
 .taskbar-time {
-  margin-left: 15px;
+  margin-left: 20px;
 }
 .start-icon {
-  width: 26px;
-  vertical-align: middle;
+  width: 21px;
+  /* vertical-align: top; */
 }
 .task-line {
   margin: 0px 10px;
@@ -84,8 +145,8 @@ footer {
 .main-container .plane-box {
   position: absolute;
   z-index: 0;
-  width: 300px;
-  height: 100px;
+  /* width: 300px;
+  height: 100px; */
   top: 0;
   left: 0;
   display: -webkit-box;
