@@ -455,10 +455,10 @@ const imgItems = [
 // 随机生成gif图片流
 function createPictures() {
   const promises = [];
-  const randomImgs = gifItems
-    .concat(imgItems)
-    .filter(() => Math.random() > 0.3);
-
+  const randomImgs = [];
+  const gifs = gifItems.filter(() => Math.random() > 0.7);
+  const imgs = imgItems.filter(() => Math.random() > 0.3);
+  randomImgs = imgs.concat(gifs);
   randomImgs.forEach((item, i) => {
     const promise = new Promise((resolve) => {
       setTimeout(() => {
