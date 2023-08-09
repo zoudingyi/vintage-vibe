@@ -13,6 +13,9 @@ body {
   align-items: center;
   justify-content: center;
   background-color: #000;
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity 0.5s;
 }
 .windows-bg {
   position: relative;

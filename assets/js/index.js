@@ -1,6 +1,6 @@
 let index = 1;
-let domArr = [];
 let boxIndex = 0;
+let firstBox = null; // 第一个弹窗
 let objectPool = []; // 对象池
 let renderPool = []; // 渲染池
 const mainContainer = document.querySelector(".main-container");
@@ -188,6 +188,8 @@ function createWindows({
         false
       );
     }
+    // 存储aboutMe box
+    if (boxIndex === 1) firstBox = planeDrag;
   } else {
     // 从对象池中取出来
     let planeDrag = objectPool[0];
@@ -202,11 +204,17 @@ function createWindows({
 function desktopIconClick(params) {
   if (params === "computer") {
     const objIndex = objectPool.findIndex((item) => item.opt.id === "box1");
+    // 判断该弹窗是否被关闭
     if (objIndex > -1) {
       index++;
       objectPool[objIndex].setZindex(index);
       objectPool[objIndex].show();
       objectPool.splice(objIndex, 1);
+    } else {
+      // 未关闭 修改index置顶
+      index++;
+      firstBox.setZindex(index);
+      firstBox.reset();
     }
   }
 }
@@ -520,7 +528,7 @@ window.onload = (event) => {
 
   // 预加载图片流
   loadImage((imgs) => {
-    loading.style.display = "none"; // 取消loading
+    loading.style.opacity = 0; // 取消loading
 
     // 创建个人卡片弹窗
     createWindows({
