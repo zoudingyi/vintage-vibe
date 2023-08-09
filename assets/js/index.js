@@ -1,10 +1,8 @@
 let index = 1;
 let domArr = [];
 let boxIndex = 0;
-
 let objectPool = []; // 对象池
 let renderPool = []; // 渲染池
-
 const mainContainer = document.querySelector(".main-container");
 
 // err弹窗html
@@ -120,8 +118,12 @@ function createWindows({
     const div = document.createElement("div");
     div.className = "plane-box";
     div.id = "box" + boxIndex;
-
-    div.innerHTML = html;
+    // 判断是否是dom元素
+    if (html instanceof HTMLElement) {
+      div.appendChild(html);
+    } else {
+      div.innerHTML = html;
+    }
 
     mainContainer.appendChild(div);
 
@@ -224,31 +226,48 @@ function tabClick(index) {
 }
 
 // 创建gif popup
-function createGifPopup({ src, top, left, width, height }) {
-  const gifPopup = `
-  <div class="aesthetic-windows-95-modal gif-modal">
+function createGifPopup({ img, top, left, width, height }) {
+  // const html = `
+  // <div class="aesthetic-windows-95-modal gif-modal">
+  //   <div class="aesthetic-windows-95-modal-title-bar">
+  //     <div class="aesthetic-windows-95-modal-title-bar-text">
+  //     A E S T H E T I C
+  //     </div>
+
+  //     <div class="aesthetic-windows-95-modal-title-bar-controls">
+  //       <div class="aesthetic-windows-95-button-title-bar">
+  //         <button>×</button>
+  //       </div>
+  //     </div>
+  //   </div>
+  //   <!-- Content -->
+  //   <div class="aesthetic-windows-95-modal-content">
+  //     <img src="${src}" alt="">
+  //   </div>
+  // </div>`;
+  const popup = document.createElement("div");
+  popup.className = "aesthetic-windows-95-modal gif-modal";
+  popup.innerHTML = `
     <div class="aesthetic-windows-95-modal-title-bar">
       <div class="aesthetic-windows-95-modal-title-bar-text">
       A E S T H E T I C
       </div>
-  
       <div class="aesthetic-windows-95-modal-title-bar-controls">
         <div class="aesthetic-windows-95-button-title-bar">
           <button>×</button>
         </div>
       </div>
     </div>
-    <!-- Content -->
     <div class="aesthetic-windows-95-modal-content">
-      <img src="${src}" alt="">
     </div>
-  </div>`;
+  `;
+  popup.querySelector(".aesthetic-windows-95-modal-content").appendChild(img);
   createWindows({
     top,
     left,
     width,
     height,
-    html: gifPopup,
+    html: popup,
   });
 }
 
@@ -260,9 +279,9 @@ function getRandom(min, max) {
 }
 
 // 随机定位图片
-const rangeT = 10;
+const rangeT = -200;
 const rangeB = 800;
-const rangeL = 10;
+const rangeL = -200;
 const rangeR = 1500;
 const gifItems = [
   {
@@ -453,12 +472,38 @@ const imgItems = [
 ];
 
 // 随机生成gif图片流
-function createPictures() {
-  const promises = [];
+function getPictures() {
   const gifs = gifItems.filter(() => Math.random() > 0.75);
   const imgs = imgItems.filter(() => Math.random() > 0.25);
-  const randomImgs = imgs.concat(gifs);
-  randomImgs.forEach((item, i) => {
+  return imgs.concat(gifs);
+}
+
+// 预加载图片
+function loadImage(fn) {
+  const imgs = getPictures();
+  const imagePaths = imgs.map((item) => item.src); // 预加载图片地址
+  const promises = imagePaths.map((path) => {
+    return new Promise(function (resolve, reject) {
+      const image = new Image();
+      image.src = path;
+      image.onload = () => resolve(image);
+      image.onerror = () => reject(new Error("图片加载失败: " + src));
+    });
+  });
+  Promise.all(promises)
+    .then((res) => {
+      console.log("所有图片加载完成");
+      imgs.forEach((img, i) => (img.img = res[i]));
+      fn(imgs);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+// 延时生成图片弹窗
+function createPicPopup(pictures) {
+  const promises = [];
+  pictures.forEach((item, i) => {
     const promise = new Promise((resolve) => {
       setTimeout(() => {
         createGifPopup(item);
@@ -467,35 +512,41 @@ function createPictures() {
     });
     promises.push(promise);
   });
-
   return promises;
 }
 
 window.onload = (event) => {
-  // 创建个人卡片弹窗
-  createWindows({
-    top: 20,
-    left: 680,
-    width: 728,
-    height: 596,
-    html: personal,
-  });
-  const person = document.querySelector("#box1");
-  person.style.zIndex = 10;
+  const loading = document.querySelector(".loading");
 
-  // 图片流
-  Promise.all(createPictures()).then(() => {
-    // 创建err弹窗
-    for (let i = 0; i < 10; i++) {
-      setTimeout(
-        () =>
-          createWindows({
-            top: 50 + i * 15,
-            left: 100 + i * 15,
-            html: errHtml,
-          }),
-        i * 100
-      );
-    }
+  // 预加载图片流
+  loadImage((imgs) => {
+    loading.style.display = "none"; // 取消loading
+
+    // 创建个人卡片弹窗
+    createWindows({
+      top: 20,
+      left: 680,
+      width: 728,
+      height: 596,
+      html: personal,
+    });
+    const person = document.querySelector("#box1");
+    person.style.zIndex = 10;
+    // 生成图片流
+    const promises = createPicPopup(imgs);
+    Promise.all(promises).then(() => {
+      // 所有gif图片完成后再 创建err弹窗
+      for (let i = 0; i < 10; i++) {
+        setTimeout(
+          () =>
+            createWindows({
+              top: 50 + i * 15,
+              left: 100 + i * 15,
+              html: errHtml,
+            }),
+          i * 100
+        );
+      }
+    });
   });
 };

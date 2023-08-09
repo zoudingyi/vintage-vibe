@@ -2,7 +2,56 @@ body {
   overflow: hidden;
   height: 100vh;
 }
-
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+}
+.windows-bg {
+  position: relative;
+  width: 1024px;
+  height: 768px;
+  background: url(/assets/image/windows95.jpg) center no-repeat #000;
+  background-size: 1024px 768px;
+}
+.windows-bg > .crt {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(
+    rgba(17, 20, 53, 0.1),
+    rgba(118, 255, 241, 0.1)
+  );
+  background-repeat: repeat;
+  background-size: 100vw 5vh;
+  animation: bgscroll 15s linear infinite;
+}
+@keyframes bgscroll {
+  100% {
+    background-position: 0% 100%;
+  }
+}
+.windows-bg .aesthetic-windows-95-boot-loader {
+  background: none;
+  position: absolute;
+  bottom: 0;
+}
+.loading .aesthetic-windows-95-boot-loader > * {
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    #000084 15%,
+    #000084 85%,
+    transparent 100%
+  );
+}
 .main-container {
   position: relative;
   height: 100%;
@@ -116,8 +165,9 @@ footer {
   margin-left: 20px;
 }
 .start-icon {
-  width: 21px;
-  /* vertical-align: top; */
+  width: 60px;
+  display: block;
+  margin: auto;
 }
 .task-line {
   margin: 0px 10px;
