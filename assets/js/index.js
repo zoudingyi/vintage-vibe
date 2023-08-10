@@ -111,94 +111,81 @@ function createWindows({
   html,
   isfullWindow = false,
 }) {
-  if (objectPool.length == 0) {
-    boxIndex++;
-    index++;
+  boxIndex++;
+  index++;
 
-    const div = document.createElement("div");
-    div.className = "plane-box";
-    div.id = "box" + boxIndex;
-    // 判断是否是dom元素
-    if (html instanceof HTMLElement) {
-      div.appendChild(html);
-    } else {
-      div.innerHTML = html;
-    }
+  const div = document.createElement("div");
+  div.className = "plane-box";
+  div.id = "box" + boxIndex;
+  // 判断是否是dom元素
+  if (html instanceof HTMLElement) div.appendChild(html);
+  else div.innerHTML = html;
 
-    mainContainer.appendChild(div);
+  mainContainer.appendChild(div);
 
-    const planeDrag = new PlaneDrag({
-      id: "box" + boxIndex,
-      index: index,
-      head: ".aesthetic-windows-95-modal-title-bar",
-      top: top ?? 100,
-      left: left ?? 200,
-      width,
-      height,
-      isfullWindow,
-    });
+  const planeDrag = new PlaneDrag({
+    id: "box" + boxIndex,
+    index: index,
+    head: ".aesthetic-windows-95-modal-title-bar",
+    top: top ?? 100,
+    left: left ?? 200,
+    width,
+    height,
+    isfullWindow,
+  });
 
-    planeDrag.dom.addEventListener(
-      "mousedown",
-      function () {
-        if (this.headClick) {
-          this.headClick = false;
-          return;
-        }
-        index++;
-        this.setZindex(index);
-        this.render1();
-      }.bind(planeDrag),
-      false
-    );
+  planeDrag.dom.addEventListener(
+    "mousedown",
+    function () {
+      if (this.headClick) {
+        this.headClick = false;
+        return;
+      }
+      index++;
+      this.setZindex(index);
+      this.render1();
+    }.bind(planeDrag),
+    false
+  );
 
-    planeDrag.head.addEventListener(
+  planeDrag.head.addEventListener(
+    "mousedown",
+    function (ev) {
+      this.headClick = true;
+      index++;
+      this.setZindex(index);
+    }.bind(planeDrag),
+    false
+  );
+  // 关闭icon
+  planeDrag.head
+    .querySelector(".aesthetic-windows-95-button-title-bar>button")
+    .addEventListener(
       "mousedown",
       function (ev) {
-        this.headClick = true;
-        index++;
-        this.setZindex(index);
+        ev.stopPropagation();
+        this.hide();
+        objectPool.push(this);
       }.bind(planeDrag),
       false
     );
-    // 关闭icon
-    planeDrag.head
-      .querySelector(".aesthetic-windows-95-button-title-bar>button")
-      .addEventListener(
-        "mousedown",
-        function (ev) {
-          ev.stopPropagation();
-          this.hide();
-          objectPool.push(this);
-        }.bind(planeDrag),
-        false
-      );
 
-    // close button
-    const closeBtn = planeDrag.dom.querySelector(
-      ".aesthetic-windows-95-button>button"
+  // close button
+  const closeBtn = planeDrag.dom.querySelector(
+    ".aesthetic-windows-95-button>button"
+  );
+  if (closeBtn) {
+    closeBtn.addEventListener(
+      "click",
+      function () {
+        this.hide();
+        objectPool.push(this);
+      }.bind(planeDrag),
+      false
     );
-    if (closeBtn) {
-      closeBtn.addEventListener(
-        "click",
-        function () {
-          this.hide();
-          objectPool.push(this);
-        }.bind(planeDrag),
-        false
-      );
-    }
-    // 存储aboutMe box
-    if (boxIndex === 1) firstBox = planeDrag;
-  } else {
-    // 从对象池中取出来
-    let planeDrag = objectPool[0];
-    index++;
-    planeDrag.setZindex(index);
-    planeDrag.reset();
-    // planeDrag.show();
-    objectPool.shift();
   }
+  // 存储aboutMe box
+  if (boxIndex === 1) firstBox = planeDrag;
 }
 // 桌面图标事件
 function desktopIconClick(params) {
