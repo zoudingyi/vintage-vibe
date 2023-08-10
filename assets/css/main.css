@@ -60,14 +60,6 @@ body {
   height: 100%;
   overflow: hidden;
 }
-.aesthetic-windows-95-modal-content.vaporwave-img-content {
-  margin-top: 5px;
-  padding: 0;
-}
-.vaporwave-img {
-  vertical-align: top;
-  width: 100%;
-}
 .desktop-icon-container {
   margin: 15px 0 0 10px;
   user-select: none;
@@ -156,6 +148,7 @@ body {
 
 .gif-modal img {
   display: block;
+  width: 100%;
 }
 footer {
   width: 100vw;

@@ -363,6 +363,27 @@ const gifItems = [
     width: 320 + 10,
     height: 400 + 39,
   },
+  {
+    src: "/assets/image/gif/vaporwave-13.gif",
+    top: getRandom(rangeT, rangeB),
+    left: getRandom(rangeL, rangeR),
+    width: 540 + 10,
+    height: 404 + 39,
+  },
+  {
+    src: "/assets/image/gif/vaporwave-14.gif",
+    top: getRandom(rangeT, rangeB),
+    left: getRandom(rangeL, rangeR),
+    width: 480 + 10,
+    height: 360 + 39,
+  },
+  {
+    src: "/assets/image/gif/vaporwave-15.gif",
+    top: getRandom(rangeT, rangeB),
+    left: getRandom(rangeL, rangeR),
+    width: 500 + 10,
+    height: 500 + 39,
+  },
 ];
 
 const imgItems = [
@@ -370,8 +391,8 @@ const imgItems = [
     src: "/assets/image/citypop/1.png",
     top: getRandom(rangeT, rangeB),
     left: getRandom(rangeL, rangeR),
-    width: 400 + 10, // 10 = padding: 8 + border: 2
-    height: 400 + 39, // 39 = padding-top: 5 + bar: 26 + padding: 8
+    width: 300 + 10, // 10 = padding: 8 + border: 2
+    height: 300 + 39, // 39 = padding-top: 5 + bar: 26 + padding: 8
   },
   {
     src: "/assets/image/citypop/2.jpg",
@@ -405,8 +426,8 @@ const imgItems = [
     src: "/assets/image/citypop/6.png",
     top: getRandom(rangeT, rangeB),
     left: getRandom(rangeL, rangeR),
-    width: 380 + 10,
-    height: 380 + 39,
+    width: 300 + 10,
+    height: 300 + 39,
   },
   {
     src: "/assets/image/citypop/7.png",
@@ -444,11 +465,11 @@ const imgItems = [
     height: 499 + 39,
   },
   {
-    src: "/assets/image/citypop/12.png",
+    src: "/assets/image/citypop/12.jpg",
     top: getRandom(rangeT, rangeB),
     left: getRandom(rangeL, rangeR),
-    width: 350 + 10,
-    height: 279 + 39,
+    width: 250 + 10,
+    height: 250 + 39,
   },
   {
     src: "/assets/image/citypop/13.png",
@@ -463,6 +484,34 @@ const imgItems = [
     left: getRandom(rangeL, rangeR),
     width: 400 + 10,
     height: 380 + 39,
+  },
+  {
+    src: "/assets/image/citypop/15.jpg",
+    top: getRandom(rangeT, rangeB),
+    left: getRandom(rangeL, rangeR),
+    width: 380 + 10,
+    height: 570 + 39,
+  },
+  {
+    src: "/assets/image/citypop/16.jpg",
+    top: getRandom(rangeT, rangeB),
+    left: getRandom(rangeL, rangeR),
+    width: 350 + 10,
+    height: 438 + 39,
+  },
+  {
+    src: "/assets/image/citypop/17.jpg",
+    top: getRandom(rangeT, rangeB),
+    left: getRandom(rangeL, rangeR),
+    width: 350 + 10,
+    height: 411 + 39,
+  },
+  {
+    src: "/assets/image/citypop/18.jpg",
+    top: getRandom(rangeT, rangeB),
+    left: getRandom(rangeL, rangeR),
+    width: 350 + 10,
+    height: 347 + 39,
   },
 ];
 
