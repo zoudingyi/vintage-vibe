@@ -4,6 +4,7 @@ let firstBox = null; // 第一个弹窗
 let objectPool = []; // 对象池
 let renderPool = []; // 渲染池
 const mainContainer = document.querySelector(".main-container");
+const loadingImg = "/assets/image/windows95.jpg"; // 加载图片
 
 // err弹窗html
 const errHtml = `
@@ -522,18 +523,21 @@ function getPictures() {
   return imgs.concat(gifs);
 }
 
+// 判断图片是否加载完成
+function isImageLoaded(url) {
+  return new Promise(function (resolve, reject) {
+    const image = new Image();
+    image.src = url;
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error("图片加载失败: " + url));
+  });
+}
 // 预加载图片
 function loadImage(fn) {
   const imgs = getPictures();
   const imagePaths = imgs.map((item) => item.src); // 预加载图片地址
-  const promises = imagePaths.map((path) => {
-    return new Promise(function (resolve, reject) {
-      const image = new Image();
-      image.src = path;
-      image.onload = () => resolve(image);
-      image.onerror = () => reject(new Error("图片加载失败: " + src));
-    });
-  });
+  const promises = imagePaths.map((path) => isImageLoaded(path));
+
   Promise.all(promises)
     .then((res) => {
       console.log("所有图片加载完成");
@@ -561,6 +565,20 @@ function createPicPopup(pictures) {
 
 window.onload = (event) => {
   const loading = document.querySelector(".loading");
+  isImageLoaded(loadingImg)
+    .then(() => {
+      // 加载背景图渲染成功后添加特效
+      const windowsBg = loading.querySelector(".windows-bg");
+      windowsBg.innerHTML = `
+      <div class="crt"></div>
+      <div class="aesthetic-windows-95-boot-loader">
+        <div></div>
+      </div>
+      `;
+    })
+    .catch(() => {
+      console.error("Failed to load CSS URL.");
+    });
 
   // 预加载图片流
   loadImage((imgs) => {
