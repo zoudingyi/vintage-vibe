@@ -575,17 +575,17 @@ PlaneDrag.prototype.render2 = function () {
 PlaneDrag.prototype.moveBound1 = function () {
   var top = this.top;
   var left = this.left;
-
-  if (left < 0) {
-    left = 0;
-  } else if (left > this.W - this.width) {
-    left = this.W - this.width;
-  }
-  if (top < 0) {
-    top = 0;
-  } else if (top > this.H - this.menuH - this.height) {
-    top = this.H - this.menuH - this.height;
-  }
+  // 取消边界判定
+  // if (left < 0) {
+  //   left = 0;
+  // } else if (left > this.W - this.width) {
+  //   left = this.W - this.width;
+  // }
+  // if (top < 0) {
+  //   top = 0;
+  // } else if (top > this.H - this.menuH - this.height) {
+  //   top = this.H - this.menuH - this.height;
+  // }
 
   // 拖拉拽结束溢出边界修正
   if (!this.moveFlag) {

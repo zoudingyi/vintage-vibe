@@ -1,0 +1,101 @@
+.music-player-container {
+  width: 300px;
+  position: absolute;
+  right: 200px;
+  top: 100px;
+}
+
+.music-player-container .player-icon {
+  width: 15px;
+  vertical-align: top;
+}
+.music-player-container .aesthetic-windows-95-modal-content {
+  padding: 0;
+  margin: 5px 0;
+}
+
+.lofi-gif {
+  width: 100%;
+}
+
+.player-bottom {
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.secondary-timer {
+  padding-left: 1px;
+  padding-right: 2px;
+  width: calc(50% - 6px);
+}
+
+.player-input-of {
+  padding: 4px 0 2px 5px;
+  width: calc(100% - 5px);
+  height: 7%;
+  font-size: 12px;
+  border: 1px solid;
+  border-top-color: #000000;
+  border-left-color: #000000;
+  background-color: #c3c7cb;
+  border-bottom-color: #c3c7cb;
+  border-right-color: #c3c7cb;
+}
+
+.clock-display {
+  margin-top: 0px;
+  border: 1px solid;
+  border-bottom-color: #444;
+  outline: 1px white;
+  border-top-color: #a6a6a6;
+  background-color: black;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-clock-display {
+  text-align: center;
+  font-size: 30px;
+  color: #aaaa55;
+}
+.player-displayer {
+  padding: 10px;
+  text-align: center;
+}
+.player-displayer .singer {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.player-control {
+  padding: 0px;
+}
+
+.player-control-top,
+.player-control-bottom {
+  display: flex;
+}
+.play-button,
+.player-button {
+  border: 1px solid;
+  border-top-color: #dfdfdf;
+  border-left-color: #dfdfdf;
+  border-bottom-color: #808080;
+  border-right-color: #808080;
+  box-shadow: 1px 1px 0 0 #000;
+  background-color: #bfbfbf;
+  height: 30px;
+}
+.play-button {
+  width: 60%;
+}
+.player-button {
+  width: 20%;
+}
+
+.player-control button:active {
+  border: 0.9px solid #000000;
+}

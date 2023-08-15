@@ -74,7 +74,6 @@ body {
   align-items: center;
 }
 .desktop-icon-item {
-  cursor: pointer;
   color: #fff;
   padding: 8px;
   border: 1px solid #0000;
@@ -155,10 +154,10 @@ footer {
   position: absolute;
   bottom: 0;
   z-index: 99;
-  filter: hue-rotate(50deg);
 }
 .taskbar-time {
   margin-left: 20px;
+  user-select: none;
 }
 .start-icon {
   width: 60px;
@@ -174,17 +173,20 @@ footer {
 .task-icon-container {
   display: flex;
   align-items: center;
+  filter: hue-rotate(50deg);
 }
 .task-icon {
   margin: 0 -5px;
   width: 38px;
   height: 38px;
-  cursor: pointer;
 }
 .task-icon.sound {
   width: 20px;
   height: 20px;
   margin-left: 3px;
+}
+.aesthetic-windows-95-taskbar .aesthetic-windows-95-taskbar-services {
+  cursor: auto;
 }
 
 /* 拖拽 */

@@ -14,6 +14,7 @@
   <link rel="stylesheet" type="text/css" href="./assets/css/aesthetic.css" />
   <link rel="stylesheet" type="text/css" href="./assets/css/main.css" />
   <link rel="stylesheet" type="text/css" href="./assets/css/background.css" />
+  <link rel="stylesheet" type="text/css" href="./assets/css/player.css" />
 </head>
 
 <body class="aesthetic-font">
@@ -46,7 +47,7 @@
         </span>
       </div>
       <div class="desktop-icon-item" tabindex="0">
-        <img class="desktop-icon" src="/assets/image/IE.png" alt="">
+        <img class="desktop-icon" src="/assets/image/IE.png" style="filter: hue-rotate(32deg)" alt="">
         <span>
           Internet Explorer
         </span>
@@ -65,6 +66,56 @@
       </div>
     </div>
     <!-- 桌面图标 end-->
+
+    <!-- music player -->
+    <div class="music-player-container">
+      <div class="aesthetic-windows-95-modal">
+        <div class="aesthetic-windows-95-modal-title-bar">
+          <div class="aesthetic-windows-95-modal-title-bar-text">
+            <img class="player-icon" src="/assets/image/music.png" alt="">
+            CD player
+          </div>
+          <div class="aesthetic-windows-95-modal-title-bar-controls">
+            <div class="aesthetic-windows-95-button-title-bar">
+              <button>×</button>
+            </div>
+          </div>
+        </div>
+        <div class="aesthetic-windows-95-modal-content">
+          <!-- <div class="lofi-gif aesthetic-effect-crt">
+            <img class="lofi-gif" src="/assets/image/lofi.gif" alt="">
+          </div> -->
+          <div class="clock-display aesthetic-effect-crt">
+            <span id="track-timer" class="text-clock-display"> [00] 00 : 00</span>
+          </div>
+          <div id="track-title" class="player-displayer">Please insert a audio compact disc.</div>
+          <div class="player-control">
+            <div class="player-control-top">
+              <button class="play-button" title="play" onclick="playSong()"> &#9658;</button>
+              <button class="player-button" title="pause" onclick="pauseSong()"> &#10074;&#10074;</button>
+              <button class="player-button" title="stop" onclick="stopSong()"> &#9724;</button>
+            </div>
+            <div class="player-control-bottom">
+              <button class="player-button"> &#x23EE;</button>
+              <button class="player-button" onclick="lastSong()"> &#x23F4;</button>
+              <button class="player-button" onclick="nextSong()"> &#x23F5;</button>
+              <button class="player-button"> &#x23ED;</button>
+              <button class="player-button"> &#x23cf;</button>
+            </div>
+          </div>
+        </div>
+        <div class="player-bottom">
+          <div class="secondary-timer">
+            <div class="player-input-of">Total Play: 00:00 m:s</div>
+          </div>
+          <div class="secondary-timer">
+            <div class="player-input-of">Track: 00:00 m:s</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- player end -->
+
   </div>
   <footer>
     <div class="aesthetic-windows-95-taskbar">
@@ -83,14 +134,15 @@
       </div>
       <div class="task-line"></div>
       <div class="aesthetic-windows-95-taskbar-services">
-        <img class="task-icon" src="/assets/image/network.png" alt="">
-        <img class="task-icon sound" src="/assets/image/sound.png" alt="">
+        <img class="task-icon sound" src="/assets/image/sounds.png" alt="">
         <span class="taskbar-time" title="1995-08-24">9:53 PM</span>
       </div>
     </div>
   </footer>
+  <audio id="audio-stream-handler" style="display:none" ontimeupdate="updatePlayerUI()" controls></audio>
   <script src="/assets/js/drag.js"></script>
   <script src="/assets/js/index.js"></script>
+  <script src="/assets/js/player.js"></script>
 </body>
 
 </html>
