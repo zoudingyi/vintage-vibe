@@ -22,3 +22,6 @@ selenium-debug.log
 .cz-config.js
 package-lock.json
 yarn.lock
+
+demo.html
+Windows_95.html

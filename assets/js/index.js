@@ -1,6 +1,7 @@
 let index = 1;
 let boxIndex = 0;
-let firstBox = null; // 第一个弹窗
+let computerBox = null;
+let audioPlayerBox = null;
 let objectPool = []; // 对象池
 let renderPool = []; // 渲染池
 const mainContainer = document.querySelector(".main-container");
@@ -68,7 +69,7 @@ const personal = `
           <!-- about me  -->
           <div class="introduce-container is-active">
             <div class="aesthetic-effect-crt">
-              <img src="/assets/image/me2.jpg" alt="">
+              <img src="/assets/image/me.jpg" alt="">
             </div>
             <div class="introduce-content">
               Hello everyone! I am Dingyi Zou, a frontend intern with 2 and a half years of work experience. I enjoy
@@ -102,9 +103,54 @@ const personal = `
     </div>
   </div>
 `;
+// 音乐播放器html
+const audioPlayer = `
+  <div class="aesthetic-windows-95-modal music-player-container">
+    <div class="aesthetic-windows-95-modal-title-bar">
+      <div class="aesthetic-windows-95-modal-title-bar-text">
+        <img class="player-icon" src="/assets/image/music.png" alt="">
+        CD player
+      </div>
+      <div class="aesthetic-windows-95-modal-title-bar-controls">
+        <div class="aesthetic-windows-95-button-title-bar">
+          <button>×</button>
+        </div>
+      </div>
+    </div>
+    <div class="aesthetic-windows-95-modal-content">
+      <div class="clock-display aesthetic-effect-crt">
+        <span id="track-timer" class="text-clock-display">00 : 00</span>
+      </div>
+      <div id="track-title" class="player-displayer">Please insert a audio compact disc.</div>
+      <div class="player-control">
+        <div class="player-control-top">
+          <button class="play-button" title="play" onclick="playSong()"> &#9658;</button>
+          <button class="player-button" title="pause" onclick="pauseSong()"> &#10074;&#10074;</button>
+          <button class="player-button" title="stop" onclick="stopSong()"> &#9724;</button>
+        </div>
+        <div class="player-control-bottom">
+          <button class="player-button"> &#x23EE;</button>
+          <button class="player-button" title="previous" onclick="lastSong()"> &#x23F4;</button>
+          <button class="player-button" title="next" onclick="nextSong()"> &#x23F5;</button>
+          <button class="player-button"> &#x23ED;</button>
+          <button class="player-button"> &#x23cf;</button>
+        </div>
+      </div>
+    </div>
+    <div class="player-bottom">
+      <div class="secondary-timer">
+        <div class="player-input-of">Total Play: 00:00 m:s</div>
+      </div>
+      <div class="secondary-timer">
+        <div class="player-input-of">Track: 00:00 m:s</div>
+      </div>
+    </div>
+  </div>
+`;
 
 // 创建弹窗方法
 function createWindows({
+  id,
   top,
   left,
   width,
@@ -117,7 +163,7 @@ function createWindows({
 
   const div = document.createElement("div");
   div.className = "plane-box";
-  div.id = "box" + boxIndex;
+  div.id = id ? id : "box" + boxIndex;
   // 判断是否是dom元素
   if (html instanceof HTMLElement) div.appendChild(html);
   else div.innerHTML = html;
@@ -125,7 +171,7 @@ function createWindows({
   mainContainer.appendChild(div);
 
   const planeDrag = new PlaneDrag({
-    id: "box" + boxIndex,
+    id: id ? id : "box" + boxIndex,
     index: index,
     head: ".aesthetic-windows-95-modal-title-bar",
     top: top ?? 100,
@@ -185,24 +231,30 @@ function createWindows({
       false
     );
   }
-  // 存储aboutMe box
-  if (boxIndex === 1) firstBox = planeDrag;
+  // 存储特殊box
+  if (id === "my-computer") computerBox = planeDrag;
+  if (id === "audio-player") audioPlayerBox = planeDrag;
 }
+
 // 桌面图标事件
 function desktopIconClick(params) {
-  if (params === "computer") {
-    const objIndex = objectPool.findIndex((item) => item.opt.id === "box1");
-    // 判断该弹窗是否被关闭
-    if (objIndex > -1) {
-      index++;
-      objectPool[objIndex].setZindex(index);
-      objectPool[objIndex].show();
-      objectPool.splice(objIndex, 1);
-    } else {
-      // 未关闭 修改index置顶
-      index++;
-      firstBox.setZindex(index);
-      firstBox.reset();
+  const objIndex = objectPool.findIndex((item) => item.opt.id === params);
+  // 判断该弹窗是否被关闭
+  if (objIndex > -1) {
+    index++;
+    objectPool[objIndex].setZindex(index);
+    objectPool[objIndex].show();
+    objectPool.splice(objIndex, 1);
+  } else {
+    // 未关闭 修改index置顶
+    index++;
+    if (params === "my-computer") {
+      computerBox.setZindex(index);
+      computerBox.reset();
+    }
+    if (params === "audio-player") {
+      audioPlayerBox.setZindex(index);
+      audioPlayerBox.reset();
     }
   }
 }
@@ -275,10 +327,10 @@ function getRandom(min, max) {
 }
 
 // 随机定位图片
-const rangeT = -200;
+const rangeT = 10;
 const rangeB = 800;
 const rangeL = -200;
-const rangeR = 1500;
+const rangeR = 1800;
 const gifItems = [
   {
     src: "/assets/image/gif/vaporwave-1.gif",
@@ -563,6 +615,16 @@ function createPicPopup(pictures) {
   return promises;
 }
 
+// 创建播放器
+createWindows({
+  id: "audio-player",
+  top: 20,
+  left: window.innerWidth - 325,
+  width: 310,
+  height: 296,
+  html: audioPlayer,
+});
+
 window.onload = (event) => {
   const loading = document.querySelector(".loading");
   isImageLoaded(loadingImg)
@@ -586,13 +648,14 @@ window.onload = (event) => {
 
     // 创建个人卡片弹窗
     createWindows({
+      id: "my-computer",
       top: 20,
       left: 680,
       width: 728,
       height: 596,
       html: personal,
     });
-    const person = document.querySelector("#box1");
+    const person = document.querySelector("#my-computer");
     person.style.zIndex = 10;
     // 生成图片流
     const promises = createPicPopup(imgs);

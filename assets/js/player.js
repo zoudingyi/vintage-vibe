@@ -1,6 +1,7 @@
 const audio = document.getElementById("audio-stream-handler");
 const track_timer = document.getElementById("track-timer");
 const track_title = document.getElementById("track-title");
+const clock_display = document.querySelector(".clock-display");
 const track_list = [
   "/assets/songs/SHAMBARA - Solid Dance.mp3",
   "/assets/songs/中森明菜 - OH NO,OH YES!.mp3",
@@ -18,45 +19,45 @@ function audioInit() {
 }
 
 function playSong() {
-  console.log(`Playing song... ${getTrackTitle()}`);
   audio.play();
+  clock_display.classList.add("play");
 }
 
 function pauseSong() {
-  console.log(`Paused playback...`);
   audio.pause();
+  clock_display.classList.remove("play");
 }
 
 function stopSong() {
-  console.log(`Stopped playback.`);
   audio.pause();
   audio.currentTime = 0;
+  clock_display.classList.remove("play");
 }
 
 function lastSong() {
-  if (track_number > 0) {
-    track_number--;
-    changeAudioSource(track_list[track_number]);
-  }
+  track_number--;
+  if (track_number < 0) track_number = track_list.length - 1;
+  changeAudioSource(track_list[track_number]);
 }
+
 function nextSong() {
-  if (track_number < track_list.length - 1) {
-    track_number++;
-    changeAudioSource(track_list[track_number]);
-  }
+  track_number++;
+  if (track_number >= track_list.length) track_number = 0;
+  changeAudioSource(track_list[track_number]);
 }
+
+// 监听媒体播放结束事件
+audio.addEventListener("ended", function () {
+  nextSong();
+});
 
 // 获取歌曲名称
 function getTrackTitle() {
   const split_String = audio.src.split("/");
-  let song = "";
-  let singer = "";
   for (i = 0; i < split_String.length; i++) {
     if (split_String[i + 1] == null) {
       const title = decodeURI(split_String[i]);
-      const name = title.slice(0, -4).split(" - ");
-      singer = name[0];
-      song = name[1];
+      const [singer, song] = title.slice(0, -4).split(" - ");
 
       return `<strong>${song}</strong><div class="singer">${singer}</div>`;
     }
@@ -75,9 +76,7 @@ function getTrackTimeAsString() {
   return timer_string;
 }
 function updateMainTimer() {
-  track_timer.innerHTML = `[${onlyTwoDigits(
-    track_number
-  )}] ${getTrackTimeAsString()}`;
+  track_timer.innerHTML = `${getTrackTimeAsString()}`;
 }
 function updateTrackTitle() {
   track_title.innerHTML = getTrackTitle();
@@ -94,6 +93,7 @@ function changeAudioSource(source) {
   updateTrackTitle(); // 获取歌曲名称
   audio.load(); // 重新加载音频
   audio.play(); // 播放音频
+  clock_display.classList.add("play");
 }
 
 audioInit(); // 初始化

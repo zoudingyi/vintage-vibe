@@ -1,8 +1,5 @@
 .music-player-container {
   width: 300px;
-  position: absolute;
-  right: 200px;
-  top: 100px;
 }
 
 .music-player-container .player-icon {
@@ -12,10 +9,6 @@
 .music-player-container .aesthetic-windows-95-modal-content {
   padding: 0;
   margin: 5px 0;
-}
-
-.lofi-gif {
-  width: 100%;
 }
 
 .player-bottom {
@@ -49,16 +42,23 @@
   border-bottom-color: #444;
   outline: 1px white;
   border-top-color: #a6a6a6;
-  background-color: black;
-  height: 80px;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-image: url(/assets/image/lofi_static.jpg);
+  background-repeat: no-repeat;
+  background-color: black;
+  background-position: center;
+}
+.clock-display.play {
+  background-image: url(/assets/image/lofi.gif);
 }
 
 .text-clock-display {
+  padding-top: 15px;
+  font-size: 27px;
   text-align: center;
-  font-size: 30px;
   color: #aaaa55;
 }
 .player-displayer {

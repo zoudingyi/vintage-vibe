@@ -136,8 +136,12 @@ PlaneDrag.prototype.reset = function () {
   this.fullFlag = false;
   this.width = this.opt.width || 150 + Math.ceil(Math.random() * 400);
   this.height = this.opt.height || 200 + Math.ceil(Math.random() * 400);
-  this.top = this.opt.top || 100;
-  this.left = this.opt.left || this.W / 2 - this.width / 2;
+  // this.top = this.opt.top || 100;
+  // this.left = this.opt.left || this.W / 2 - this.width / 2;
+  // reset center
+  this.top = window.innerHeight / 2 - this.height / 2;
+  this.left = window.innerWidth / 2 - this.width / 2;
+
   this.dom.style.cssText =
     "width: " +
     this.width +

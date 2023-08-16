@@ -103,6 +103,9 @@ body {
   height: 464px;
   display: none;
 }
+.introduce-container img {
+  height: 100%;
+}
 .introduce-container.is-active {
   display: flex;
 }
@@ -110,7 +113,6 @@ body {
   margin-top: 80px;
   padding: 15px;
   line-height: 30px;
-  width: 300px;
   user-select: text;
 }
 
