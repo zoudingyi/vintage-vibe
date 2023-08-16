@@ -625,6 +625,14 @@ createWindows({
   html: audioPlayer,
 });
 
+function topMost() {
+  const computer = document.querySelector("#my-computer");
+  const audio = document.querySelector("#audio-player");
+  const planes = document.querySelectorAll(".plane-box");
+  computer.style.zIndex = planes.length + 2;
+  audio.style.zIndex = planes.length + 2;
+}
+
 window.onload = (event) => {
   const loading = document.querySelector(".loading");
   isImageLoaded(loadingImg)
@@ -655,11 +663,12 @@ window.onload = (event) => {
       height: 596,
       html: personal,
     });
-    const person = document.querySelector("#my-computer");
-    person.style.zIndex = 10;
+
     // 生成图片流
     const promises = createPicPopup(imgs);
     Promise.all(promises).then(() => {
+      // 置顶audio computer窗口
+      topMost();
       // 所有gif图片完成后再 创建err弹窗
       for (let i = 0; i < 10; i++) {
         setTimeout(
