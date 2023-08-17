@@ -5,7 +5,6 @@ let audioPlayerBox = null;
 let objectPool = []; // 对象池
 let renderPool = []; // 渲染池
 const mainContainer = document.querySelector(".main-container");
-const loadingImg = "/assets/image/windows95.jpg"; // 加载图片
 
 // err弹窗html
 const errHtml = `
@@ -615,7 +614,7 @@ function createPicPopup(pictures) {
   return promises;
 }
 
-// 创建播放器
+// 生成播放器 （必须提前渲染）
 createWindows({
   id: "audio-player",
   top: 20,
@@ -625,6 +624,7 @@ createWindows({
   html: audioPlayer,
 });
 
+// 置顶audio computer窗口
 function topMost() {
   const computer = document.querySelector("#my-computer");
   const audio = document.querySelector("#audio-player");
@@ -633,27 +633,49 @@ function topMost() {
   audio.style.zIndex = planes.length + 2;
 }
 
-window.onload = (event) => {
+function hideLoading() {
   const loading = document.querySelector(".loading");
+  loading.style.opacity = 0;
+}
+
+// init
+window.onload = (event) => {
+  const loadingImg = "/assets/image/windows95.jpg"; // 加载图片
+  const minimumLoadingTime = 4000; // 最少加载时间
+  const startTime = new Date().getTime();
+  // 预加载loading图
   isImageLoaded(loadingImg)
     .then(() => {
-      // 加载背景图渲染成功后添加特效
-      const windowsBg = loading.querySelector(".windows-bg");
+      // 给loading图添加动效 同时开始预加载其他图片
+      const windowsBg = document.querySelector(".windows-bg");
       windowsBg.innerHTML = `
       <div class="crt"></div>
       <div class="aesthetic-windows-95-boot-loader">
         <div></div>
       </div>
       `;
+      // 预加载图片流 -> 检查是否满足最少加载时间(防止闪屏)
+      loadImage((imgs) => checkLoadingTime(imgs));
     })
-    .catch(() => {
-      console.error("Failed to load CSS URL.");
-    });
+    .catch((err) => console.error(err));
 
-  // 预加载图片流
-  loadImage((imgs) => {
-    loading.style.opacity = 0; // 取消loading
+  function checkLoadingTime(params) {
+    const currentTime = new Date().getTime();
+    const elapsedTime = currentTime - startTime;
+    if (elapsedTime >= minimumLoadingTime) {
+      // 如果加载时间已达到最少加载时间，继续执行
+      hideLoading(); // 取消loading
+      generatePopups(params);
+    } else {
+      // 如果加载时间还未达到最少加载时间，继续检查
+      setTimeout(() => {
+        checkLoadingTime(params);
+      }, minimumLoadingTime - elapsedTime);
+    }
+  }
 
+  // 生成弹窗
+  function generatePopups(imgs) {
     // 创建个人卡片弹窗
     createWindows({
       id: "my-computer",
@@ -667,9 +689,8 @@ window.onload = (event) => {
     // 生成图片流
     const promises = createPicPopup(imgs);
     Promise.all(promises).then(() => {
-      // 置顶audio computer窗口
       topMost();
-      // 所有gif图片完成后再 创建err弹窗
+      // 所有gif图片完成后再 生成err弹窗
       for (let i = 0; i < 10; i++) {
         setTimeout(
           () =>
@@ -682,5 +703,5 @@ window.onload = (event) => {
         );
       }
     });
-  });
+  }
 };
