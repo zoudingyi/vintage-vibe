@@ -569,7 +569,7 @@ const imgItems = [
 
 // 随机生成gif图片流
 function getPictures() {
-  const gifs = gifItems.filter(() => Math.random() > 0.75);
+  const gifs = gifItems.filter(() => Math.random() > 0.35);
   const imgs = imgItems.filter(() => Math.random() > 0.25);
   return imgs.concat(gifs);
 }
@@ -580,7 +580,7 @@ function isImageLoaded(url) {
     const image = new Image();
     image.src = url;
     image.onload = () => resolve(image);
-    image.onerror = () => reject(new Error("图片加载失败: " + url));
+    image.onerror = () => reject(new Error("Image load failed: " + url));
   });
 }
 // 预加载图片
@@ -591,7 +591,7 @@ function loadImage(fn) {
 
   Promise.all(promises)
     .then((res) => {
-      console.log("所有图片加载完成");
+      console.log("All images loaded.");
       imgs.forEach((img, i) => (img.img = res[i]));
       fn(imgs);
     })
