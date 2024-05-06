@@ -1,0 +1,11 @@
+.vertical-MenuList .ListItem {
+  justify-content: flex-start;
+}
+
+.tool-container {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding-right: 2px;
+}
