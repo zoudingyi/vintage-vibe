@@ -1,4 +1,5 @@
 import './index.css';
+import { Link } from 'react-router-dom';
 
 function StartScreen() {
   const mountainStyles = [
@@ -105,7 +106,9 @@ function StartScreen() {
         <h1>vintage vibe</h1>
       </div>
       <div className="sun"></div>
-      <div className="entrances">Insert coin to continue...</div>
+      <Link to="/home" className="entrances">
+        Insert coin to continue...
+      </Link>
       <div className="outrun-background-container">
         <div className="background-80s stars">
           <div className="grid"></div>
