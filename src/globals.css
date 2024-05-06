@@ -1,0 +1,24 @@
+.overlay {
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  background-image: repeating-linear-gradient(
+    rgba(0, 0, 0, 0.3) 0px,
+    transparent 1px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.3) 3px
+  );
+  pointer-events: none;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.flex-column {
+  flex-direction: column;
+}
