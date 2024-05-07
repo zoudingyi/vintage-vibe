@@ -9,3 +9,41 @@
   align-items: center;
   padding-right: 2px;
 }
+
+.social-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 35px;
+  padding: 0px 3px;
+  border: 2px solid transparent;
+}
+
+.social-link:hover {
+  border-color: rgb(223, 155, 231) rgb(1, 0, 1) rgb(1, 0, 1) rgb(223, 155, 231);
+}
+
+.taskbar-date {
+  padding: 3px 15px;
+  position: relative;
+  box-sizing: border-box;
+  font-size: 1rem;
+  border-style: solid;
+  border-width: 2px;
+  border-color: rgb(108, 31, 113) rgb(223, 155, 231) rgb(223, 155, 231)
+    rgb(108, 31, 113);
+}
+
+.taskbar-date::before {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  content: '';
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  border-style: solid;
+  border-width: 2px;
+  border-color: rgb(1, 0, 1) rgb(217, 130, 222) rgb(217, 130, 222) rgb(1, 0, 1);
+  pointer-events: none;
+  box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 3px inset;
+}
