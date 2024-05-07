@@ -103,7 +103,7 @@ function StartScreen() {
   return (
     <div className="start-screen">
       <div className="site-heading">
-        <h1>vintage vibe</h1>
+        <h1>vintage visions</h1>
       </div>
       <div className="sun"></div>
       <Link to="/home" className="entrances">

@@ -34,8 +34,45 @@
 }
 
 .desktop {
+  display: flex;
+  flex-direction: column;
   height: calc(100% - 47px);
   overflow: hidden;
   position: relative;
   z-index: 1;
+}
+
+.desktop-application-item {
+  outline: none;
+  display: inline-flex;
+  flex-direction: column;
+  -webkit-box-align: center;
+  align-items: center;
+  background: none;
+  width: 70px;
+  height: 70px;
+  border: 0px;
+  margin: 4px 4px 20px;
+  color: white;
+  font-style: inherit;
+  font-variant: inherit;
+  font-weight: inherit;
+  font-stretch: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  font-optical-sizing: inherit;
+  font-kerning: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  line-height: 1;
+  text-shadow: rgba(0, 0, 0, 0.8) 1px 1px;
+}
+.desktop-application-item img {
+  margin-bottom: 4px;
+}
+.desktop-application-item span {
+  padding: 2px 3px 4px;
+}
+.desktop-application-item:active img {
+  filter: grayscale(100%) sepia(100%) hue-rotate(-120deg) brightness(80%);
 }

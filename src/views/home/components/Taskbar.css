@@ -1,6 +1,11 @@
 .vertical-MenuList .ListItem {
   justify-content: flex-start;
 }
+.ListItem-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.5rem;
+}
 
 .tool-container {
   position: relative;

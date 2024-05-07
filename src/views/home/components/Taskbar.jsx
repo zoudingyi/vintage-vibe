@@ -10,7 +10,8 @@ import {
   Tooltip
 } from 'react95';
 import './Taskbar.css';
-import logoIMG from '../../../assets/images/logo.png';
+import logoIMG from '../../../assets/images/start-logo.png';
+import folderIcon from '../../../assets/icons/folder_open.png';
 import { ReactComponent as GitHub } from '../../../assets/svg/github.svg';
 
 function Taskbar(props) {
@@ -63,22 +64,16 @@ function Taskbar(props) {
               onClick={() => props.setOpen(false)}
             >
               <MenuListItem className="ListItem">
-                <span role="img" aria-label="👨‍💻">
-                  👨‍💻
-                </span>
+                <img className="ListItem-icon" src={folderIcon} alt="" />
                 Profile
               </MenuListItem>
               <MenuListItem className="ListItem">
-                <span role="img" aria-label="📁">
-                  📁
-                </span>
+                <img className="ListItem-icon" src={folderIcon} alt="" />
                 My account
               </MenuListItem>
               <Separator />
               <MenuListItem className="ListItem" disabled>
-                <span role="img" aria-label="🔙">
-                  🔙
-                </span>
+                <img className="ListItem-icon" src={folderIcon} alt="" />
                 Logout
               </MenuListItem>
             </MenuList>
