@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import './index.css';
 import styled from 'styled-components';
 
-import computerIcon from '../../assets/icons/this_computer.png';
-import musicIcon from '../../assets/icons/music.png';
-import moviesIcon from '../../assets/icons/movies.png';
-import folderIcon from '../../assets/icons/folder_closed.png';
-import recycleIcon from '../../assets/icons/recycle_bin_full.png';
+import computerIcon from '@/assets/icons/this_computer.png';
+import musicIcon from '@/assets/icons/music.png';
+import moviesIcon from '@/assets/icons/movies.png';
+import folderIcon from '@/assets/icons/folder_closed.png';
+import recycleIcon from '@/assets/icons/recycle_bin_full.png';
 
-import Taskbar from './components/Taskbar';
+import Taskbar from '@/components/Taskbar';
 
 const Wrapper = styled.div`
   // background-color: ${({ theme }) => theme.desktopBackground};
@@ -26,7 +26,9 @@ const applications = [
   {
     lable: 'My Computer',
     icon: computerIcon,
-    click: () => {}
+    click: () => {
+      console.log(111);
+    }
   },
   {
     lable: 'My Folder',
@@ -57,7 +59,11 @@ function Home() {
     <Wrapper className="desktop-environment-wrapper">
       <div className="desktop" onClick={() => setOpenStartMenu(false)}>
         {applications.map(item => (
-          <Button className="desktop-application-item" onClick={item.click}>
+          <Button
+            className="desktop-application-item"
+            onDoubleClick={item.click}
+            key={item.lable}
+          >
             <img src={item.icon} width={32} height={32} alt="" />
             <span>{item.lable}</span>
           </Button>

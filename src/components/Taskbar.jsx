@@ -10,9 +10,9 @@ import {
   Tooltip
 } from 'react95';
 import './Taskbar.css';
-import logoIMG from '../../../assets/images/start-logo.png';
-import folderIcon from '../../../assets/icons/folder_open.png';
-import { ReactComponent as GitHub } from '../../../assets/svg/github.svg';
+import logoIMG from '@/assets/images/start-logo.png';
+import folderIcon from '@/assets/icons/folder_open.png';
+import { ReactComponent as GitHub } from '@/assets/svg/github.svg';
 
 function Taskbar(props) {
   const [time, setTime] = useState('');

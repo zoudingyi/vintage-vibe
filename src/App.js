@@ -29,7 +29,6 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 function App() {
-  console.log('theSixtiesUSA :>> ', theSixtiesUSA);
   return (
     <div className="App">
       <GlobalStyles />
