@@ -9,6 +9,7 @@ import folderIcon from '@/assets/icons/folder_closed.png';
 import recycleIcon from '@/assets/icons/recycle_bin_full.png';
 
 import Taskbar from '@/components/Taskbar';
+import System from '@/components/System';
 
 const Wrapper = styled.div`
   // background-color: ${({ theme }) => theme.desktopBackground};
@@ -56,21 +57,24 @@ function Home() {
   const [openStartMenu, setOpenStartMenu] = useState(false);
 
   return (
-    <Wrapper className="desktop-environment-wrapper">
-      <div className="desktop" onClick={() => setOpenStartMenu(false)}>
-        {applications.map(item => (
-          <Button
-            className="desktop-application-item"
-            onDoubleClick={item.click}
-            key={item.lable}
-          >
-            <img src={item.icon} width={32} height={32} alt="" />
-            <span>{item.lable}</span>
-          </Button>
-        ))}
-      </div>
-      <Taskbar open={openStartMenu} setOpen={setOpenStartMenu} />
-    </Wrapper>
+    <>
+      <Wrapper className="desktop-environment-wrapper">
+        <div className="desktop" onClick={() => setOpenStartMenu(false)}>
+          {applications.map(item => (
+            <Button
+              className="desktop-application-item"
+              onDoubleClick={item.click}
+              key={item.lable}
+            >
+              <img src={item.icon} width={32} height={32} alt="" />
+              <span>{item.lable}</span>
+            </Button>
+          ))}
+          <System />
+        </div>
+        <Taskbar open={openStartMenu} setOpen={setOpenStartMenu} />
+      </Wrapper>
+    </>
   );
 }
 
