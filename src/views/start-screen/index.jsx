@@ -112,8 +112,8 @@ function StartScreen() {
       <div className="outrun-background-container">
         <div className="background-80s stars">
           <div className="grid"></div>
-          {mountainStyles.map(itemStyle => (
-            <div className="mountain" style={itemStyle}></div>
+          {mountainStyles.map((itemStyle, index) => (
+            <div className="mountain" style={itemStyle} key={index}></div>
           ))}
           <div className="overlay"></div>
         </div>

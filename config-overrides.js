@@ -1,9 +1,20 @@
 const { override, addWebpackAlias } = require('customize-cra');
 const path = require('path');
 
-module.exports = override(
-  // add an alias for "@" imports
-  addWebpackAlias({
-    '@': path.resolve(__dirname, 'src')
-  })
-);
+const srcPath = path.resolve(__dirname, 'src');
+
+module.exports = {
+  webpack: override(
+    // add an alias for "@" imports
+    addWebpackAlias({
+      '@': srcPath
+    })
+  ),
+  jest: config => {
+    config.moduleNameMapper = {
+      ...config.moduleNameMapper,
+      '^@/(.*)$': '<rootDir>/src/$1'
+    };
+    return config;
+  }
+};
