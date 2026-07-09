@@ -11,11 +11,26 @@ import {
 } from 'react95';
 import './Taskbar.css';
 import logoIMG from '@/assets/images/start-logo.png';
-import folderIcon from '@/assets/icons/folder_open.png';
+import computerIcon from '@/assets/icons/this_computer.png';
 import { ReactComponent as GitHub } from '@/assets/svg/github.svg';
 
-function Taskbar(props) {
+function Taskbar({
+  open,
+  setOpen,
+  apps = [],
+  windows = [],
+  activeWindowId,
+  onRestoreWindow,
+  onOpenApp,
+  onShutdown
+}) {
   const [time, setTime] = useState('');
+  const appsById = apps.reduce((items, app) => {
+    items[app.id] = app;
+    return items;
+  }, {});
+  const startMenuApps = apps.filter(app => app.showInStartMenu);
+
   useEffect(() => {
     updateTime();
     const intervalId = setInterval(updateTime, 1000);
@@ -42,8 +57,8 @@ function Taskbar(props) {
       <Toolbar>
         <div className="tool-container">
           <Button
-            onClick={() => props.setOpen(!props.open)}
-            active={props.open}
+            onClick={() => setOpen(!open)}
+            active={open ? true : undefined}
             style={{ fontWeight: 'bold' }}
           >
             <img
@@ -53,7 +68,7 @@ function Taskbar(props) {
             />
             Start
           </Button>
-          {props.open && (
+          {open && (
             <MenuList
               className="vertical-MenuList"
               style={{
@@ -61,25 +76,56 @@ function Taskbar(props) {
                 left: '0',
                 bottom: '100%'
               }}
-              onClick={() => props.setOpen(false)}
+              onClick={() => setOpen(false)}
             >
-              <MenuListItem className="ListItem">
-                <img className="ListItem-icon" src={folderIcon} alt="" />
-                Profile
-              </MenuListItem>
-              <MenuListItem className="ListItem">
-                <img className="ListItem-icon" src={folderIcon} alt="" />
-                My account
-              </MenuListItem>
+              {startMenuApps.map(app => (
+                <MenuListItem
+                  className="ListItem"
+                  onClick={() => onOpenApp(app.id)}
+                  key={app.id}
+                >
+                  <img className="ListItem-icon" src={app.icon} alt="" />
+                  {app.title}
+                </MenuListItem>
+              ))}
               <Separator />
-              <MenuListItem className="ListItem" disabled>
-                <img className="ListItem-icon" src={folderIcon} alt="" />
-                Logout
+              <MenuListItem className="ListItem" onClick={onShutdown}>
+                <img className="ListItem-icon" src={computerIcon} alt="" />
+                Shutdown
               </MenuListItem>
             </MenuList>
           )}
 
           <Handle size={28} style={{ margin: 'auto 4px auto 7px' }} />
+
+          <div className="taskbar-window-list">
+            {windows.map(windowState => {
+              const app = appsById[windowState.appId];
+
+              if (!app) {
+                return null;
+              }
+
+              return (
+                <Button
+                  className="taskbar-window-button"
+                  active={
+                    activeWindowId === windowState.id && !windowState.minimized
+                      ? true
+                      : undefined
+                  }
+                  aria-label={`${
+                    windowState.minimized ? 'Restore' : 'Focus'
+                  } ${app.title}`}
+                  onClick={() => onRestoreWindow(windowState.id)}
+                  key={windowState.id}
+                >
+                  <img src={app.icon} alt="" />
+                  <span>{app.title}</span>
+                </Button>
+              );
+            })}
+          </div>
 
           <Tooltip text="E-mail" enterDelay={100} leaveDelay={300}>
             <a className="social-link" href="mailto:18483641399@163.com">

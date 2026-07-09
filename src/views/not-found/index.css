@@ -1,0 +1,17 @@
+.not-found-screen {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  background-color: #08001c;
+  background-image: radial-gradient(#ffffff 1px, transparent 1px),
+    linear-gradient(#25134c 0%, #8c2f63 55%, #e06d4f 100%);
+  background-size: 42px 42px, 100% 100%;
+}
+
+.not-found-window {
+  width: min(420px, calc(100vw - 28px));
+}
+
+.not-found-window p {
+  margin: 12px 0 18px;
+}
