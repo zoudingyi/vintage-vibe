@@ -1,3 +1,4 @@
+import '@fontsource/russo-one/latin-400.css';
 import './index.css';
 import { Link } from 'react-router-dom';
 

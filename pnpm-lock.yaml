@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@fontsource/russo-one':
+        specifier: ^5.2.7
+        version: 5.2.7
       '@testing-library/jest-dom':
         specifier: ^5.17.0
         version: 5.17.0
@@ -969,6 +972,9 @@ packages:
   '@eslint/js@8.54.0':
     resolution: {integrity: sha512-ut5V+D+fOoWPgGGNj83GGjnntO39xDy6DWxO0wb7Jp3DcMX0TfIqdzHF85VTQkerdyGmuuMD9AKAo5KiNlf/AQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+
+  '@fontsource/russo-one@5.2.7':
+    resolution: {integrity: sha512-/VyiuTzAFUjxwpJdtwR9ByC9BggUFWS5Hw/JT8ziEtNAd++BNfh/fDrKCC6oayFG69gfP0zhS5+0UenYcOK3UQ==}
 
   '@humanwhocodes/config-array@0.11.13':
     resolution: {integrity: sha512-JSBDMiDKSzQVngfRjOdFXgFfklaXI4K9nLF49Auh21lmBWRLIK3+xTErTWD4KU54pb6coM6ESE7Awz/FNU3zgQ==}
@@ -6656,6 +6662,8 @@ snapshots:
       - supports-color
 
   '@eslint/js@8.54.0': {}
+
+  '@fontsource/russo-one@5.2.7': {}
 
   '@humanwhocodes/config-array@0.11.13':
     dependencies:
