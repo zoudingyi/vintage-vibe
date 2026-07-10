@@ -1,0 +1,10 @@
+export { default as FolderApp } from './FolderApp';
+export { default as GuestbookApp } from './GuestbookApp';
+export { default as MediaPlayerApp } from './MediaPlayerApp';
+export { default as MyComputerApp } from './MyComputerApp';
+export { default as ProfileApp } from './ProfileApp';
+export { default as ProjectsApp } from './ProjectsApp';
+export { default as RecycleBinApp } from './RecycleBinApp';
+export { default as SettingsApp } from './SettingsApp';
+export { default as TerminalApp } from './TerminalApp';
+export { default as VideosApp } from './VideosApp';

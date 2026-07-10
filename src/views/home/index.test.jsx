@@ -56,8 +56,9 @@ test('preserves application state while its window is minimized', () => {
     screen.getByRole('button', { name: /pause track/i })
   ).toBeInTheDocument();
   expect(
-    within(screen.getByText(/now playing/i).closest('.media-player-display'))
-      .getByText(/neon file explorer/i)
+    within(screen.getByRole('region', { name: /now playing/i })).getByText(
+      /neon file explorer/i
+    )
   ).toBeInTheDocument();
 });
 
@@ -68,10 +69,9 @@ test('activates the next visible window after closing the active window', () => 
   openStartMenuItem(/projects/i);
   fireEvent.click(screen.getByLabelText(/close projects/i));
 
-  const activeWindow = document.querySelector(
-    '.desktop-window[data-active="true"]'
-  );
+  const activeWindow = screen.getByRole('dialog', { name: /my computer/i });
 
+  expect(activeWindow).toHaveAttribute('data-active', 'true');
   expect(activeWindow).toHaveTextContent(/my computer/i);
 });
 
@@ -82,10 +82,9 @@ test('activates the next visible window after minimizing the active window', () 
   openStartMenuItem(/projects/i);
   fireEvent.click(screen.getByLabelText(/minimize projects/i));
 
-  const activeWindow = document.querySelector(
-    '.desktop-window[data-active="true"]'
-  );
+  const activeWindow = screen.getByRole('dialog', { name: /my computer/i });
 
+  expect(activeWindow).toHaveAttribute('data-active', 'true');
   expect(activeWindow).toHaveTextContent(/my computer/i);
 });
 
@@ -158,12 +157,10 @@ test('cascades visible windows from the context menu', () => {
   });
   fireEvent.click(screen.getByRole('button', { name: /cascade windows/i }));
 
-  const computerFrame = screen
-    .getByText(/system properties/i)
-    .closest('.desktop-window').parentElement;
-  const projectsFrame = screen
-    .getByText(/projects explorer/i)
-    .closest('.desktop-window').parentElement;
+  const computerFrame = screen.getByRole('dialog', {
+    name: /my computer/i
+  });
+  const projectsFrame = screen.getByRole('dialog', { name: /projects/i });
 
   expect(computerFrame).toHaveStyle('transform: translate(24px,24px)');
   expect(projectsFrame).toHaveStyle('transform: translate(52px,52px)');
@@ -180,12 +177,10 @@ test('tiles visible windows from the context menu', () => {
   });
   fireEvent.click(screen.getByRole('button', { name: /tile windows/i }));
 
-  const computerFrame = screen
-    .getByText(/system properties/i)
-    .closest('.desktop-window').parentElement;
-  const projectsFrame = screen
-    .getByText(/projects explorer/i)
-    .closest('.desktop-window').parentElement;
+  const computerFrame = screen.getByRole('dialog', {
+    name: /my computer/i
+  });
+  const projectsFrame = screen.getByRole('dialog', { name: /projects/i });
 
   expect(computerFrame).toHaveStyle('transform: translate(8px,8px)');
   expect(projectsFrame).toHaveStyle('transform: translate(516px,8px)');
@@ -197,9 +192,7 @@ test('resizes a normal application window', () => {
   fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
 
   const resizeHandle = screen.getByLabelText(/resize my computer/i);
-  const windowFrame = screen
-    .getByText(/system properties/i)
-    .closest('.desktop-window').parentElement;
+  const windowFrame = screen.getByRole('dialog', { name: /my computer/i });
 
   fireEvent.mouseDown(resizeHandle, { clientX: 420, clientY: 180 });
   fireEvent.mouseMove(window, { clientX: 520, clientY: 230 });
@@ -253,7 +246,7 @@ test('opens the focused desktop icon with Enter', () => {
   renderDesktop();
 
   const computerIcon = screen.getByRole('button', { name: /my computer/i });
-  computerIcon.focus();
+  fireEvent.focus(computerIcon);
   fireEvent.keyDown(computerIcon, { key: 'Enter' });
 
   expect(screen.getByText(/system properties/i)).toBeVisible();
@@ -264,7 +257,7 @@ test('moves focus between desktop icons with arrow keys', () => {
 
   const computerIcon = screen.getByRole('button', { name: /my computer/i });
   const folderIcon = screen.getByRole('button', { name: /my folder/i });
-  computerIcon.focus();
+  fireEvent.focus(computerIcon);
   fireEvent.keyDown(computerIcon, { key: 'ArrowDown' });
 
   expect(folderIcon).toHaveFocus();
@@ -306,10 +299,9 @@ test('switches visible windows with Alt+Tab', () => {
   openStartMenuItem(/projects/i);
   fireEvent.keyDown(window, { altKey: true, key: 'Tab' });
 
-  const activeWindow = document.querySelector(
-    '.desktop-window[data-active="true"]'
-  );
+  const activeWindow = screen.getByRole('dialog', { name: /my computer/i });
 
+  expect(activeWindow).toHaveAttribute('data-active', 'true');
   expect(activeWindow).toHaveTextContent(/my computer/i);
 });
 
@@ -358,7 +350,7 @@ test('restores focus to the desktop icon after closing its window', () => {
   renderDesktop();
 
   const computerIcon = screen.getByRole('button', { name: /my computer/i });
-  computerIcon.focus();
+  fireEvent.focus(computerIcon);
   fireEvent.keyDown(computerIcon, { key: 'Enter' });
   fireEvent.click(screen.getByLabelText(/close my computer/i));
 
@@ -414,9 +406,7 @@ test('controls the media player playlist', () => {
 
   fireEvent.doubleClick(screen.getByRole('button', { name: /media player/i }));
 
-  const display = screen
-    .getByText(/now playing/i)
-    .closest('.media-player-display');
+  const display = screen.getByRole('region', { name: /now playing/i });
 
   expect(display).toHaveTextContent(/midnight boot sequence/i);
 
@@ -458,7 +448,7 @@ test('loads persisted desktop settings', () => {
   expect(screen.getByTestId('desktop-surface')).toHaveClass(
     'desktop-wallpaper-sunset'
   );
-  expect(screen.getByTestId('desktop-surface').parentElement).toHaveClass(
+  expect(screen.getByTestId('desktop-environment')).toHaveClass(
     'desktop-accent-green'
   );
 });
@@ -626,7 +616,7 @@ test('runs terminal commands and hidden commands', () => {
   });
   fireEvent.click(screen.getByRole('button', { name: /run/i }));
 
-  expect(screen.getByTestId('desktop-surface').parentElement).toHaveClass(
+  expect(screen.getByTestId('desktop-environment')).toHaveClass(
     'desktop-accent-green'
   );
 
@@ -657,4 +647,43 @@ test('persists guestbook signatures', () => {
     JSON.parse(window.localStorage.getItem('vintage-vibe-guestbook'))[0]
       .message
   ).toBe('Great desktop shell.');
+});
+
+test('reports corrupted local guestbook data', () => {
+  window.localStorage.setItem('vintage-vibe-guestbook', '{not-json');
+  renderDesktop();
+
+  openStartMenuItem(/guestbook/i);
+
+  expect(screen.getByRole('status')).toHaveTextContent(
+    /guestbook data could not be read/i
+  );
+});
+
+test('recovers when local guestbook data has an invalid shape', () => {
+  window.localStorage.setItem(
+    'vintage-vibe-guestbook',
+    JSON.stringify({ message: 'not an entry list' })
+  );
+  renderDesktop();
+
+  openStartMenuItem(/guestbook/i);
+
+  expect(screen.getByRole('status')).toHaveTextContent(
+    /guestbook data could not be read/i
+  );
+  expect(screen.getByText(/no signatures yet/i)).toBeInTheDocument();
+});
+
+test('renders the desktop without React console errors', () => {
+  const consoleError = jest
+    .spyOn(console, 'error')
+    .mockImplementation(() => undefined);
+
+  renderDesktop();
+
+  const consoleErrorCalls = consoleError.mock.calls;
+  consoleError.mockRestore();
+
+  expect(consoleErrorCalls).toEqual([]);
 });

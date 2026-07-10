@@ -2,21 +2,21 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { theSixtiesUSA } from 'react95/dist/themes';
-import NotFound from './index';
+import About from './index';
 
-test('renders the retro not found view', () => {
+test('renders a useful profile fallback outside the desktop shell', () => {
   render(
     <ThemeProvider theme={theSixtiesUSA}>
       <MemoryRouter
         future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
       >
-        <NotFound />
+        <About />
       </MemoryRouter>
     </ThemeProvider>
   );
 
-  expect(screen.getByText(/404 - shortcut target not found/i)).toBeInTheDocument();
-  expect(screen.getByRole('link', { name: /return to desktop/i })).toHaveAttribute(
+  expect(screen.getByText(/frontend system/i)).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: /open desktop/i })).toHaveAttribute(
     'href',
     '/home'
   );

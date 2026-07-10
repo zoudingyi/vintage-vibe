@@ -1,0 +1,43 @@
+.about-screen {
+  display: grid;
+  min-height: 100vh;
+  padding: 14px;
+  place-items: center;
+  background-color: #08001c;
+  background-image: radial-gradient(#ffffff 1px, transparent 1px),
+    linear-gradient(#25134c 0%, #8c2f63 55%, #e06d4f 100%);
+  background-size: 42px 42px, 100% 100%;
+}
+
+.about-window {
+  width: min(520px, 100%);
+}
+
+.about-window p {
+  margin: 0 0 12px;
+}
+
+.about-window fieldset {
+  margin-bottom: 16px;
+}
+
+.about-desktop-link {
+  display: inline-block;
+  padding: 7px 14px;
+  color: #000;
+  background: #c6c6c6;
+  box-shadow: inset 1px 1px #fff, inset -1px -1px #0a0a0a,
+    inset 2px 2px #dfdfdf, inset -2px -2px #808080;
+  text-decoration: none;
+}
+
+.about-desktop-link:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -4px;
+}
+
+.about-desktop-link:active {
+  padding: 8px 13px 6px 15px;
+  box-shadow: inset 1px 1px #0a0a0a, inset -1px -1px #fff,
+    inset 2px 2px #808080, inset -2px -2px #dfdfdf;
+}

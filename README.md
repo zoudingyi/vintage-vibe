@@ -1,10 +1,42 @@
-# vintage-vibe
+# Vintage Vibe
 
-This project is a personal portfolio website that combines vintage and Vaporwave elements to showcase the charm of past eras and the Vaporwave culture.
+Vintage Vibe is a playable React portfolio that combines a Windows 95-inspired desktop shell with a Vaporwave boot screen. Applications open in managed windows and share desktop-level interactions instead of behaving like separate pages.
+
+## Desktop features
+
+- Draggable, resizable, minimizable, maximizable windows.
+- Active-window focus, taskbar switching, cascading, tiling, and Show Desktop.
+- Keyboard navigation for desktop icons, the Start menu, and open windows.
+- Responsive full-screen windows and single-tap app launching on compact or touch devices.
+- Persistent themes, window geometry, and optional session restore.
+- Profile, project explorer, media player, settings, terminal, guestbook, and system applications.
+- Reduced-motion support and versioned local-storage recovery.
+
+## Keyboard shortcuts
+
+| Shortcut | Action |
+| --- | --- |
+| `Enter` or `Space` | Open the focused desktop icon or Start menu item |
+| Arrow keys | Move between desktop icons or Start menu items |
+| `Ctrl + Esc` | Toggle the Start menu |
+| `Esc` | Dismiss the Start menu or desktop context menu |
+| `Alt + Tab` | Switch visible windows |
+| `Shift + Alt + Tab` | Switch visible windows in reverse |
+| `Alt + F4` | Close the active window |
 
 ## Development
 
-- `pnpm install` - install dependencies.
-- `pnpm start` - run the local development server.
-- `pnpm test` - run tests in watch mode.
-- `pnpm build` - create a production build.
+This repository uses pnpm and the checked-in `pnpm-lock.yaml`.
+
+```bash
+pnpm install
+pnpm start
+CI=true pnpm test --watchAll=false
+pnpm build
+```
+
+Application source lives in `src/desktop/apps/`, while `src/desktop/appRegistry.js` defines which applications appear on the desktop and in the Start menu. Window lifecycle and geometry are managed by `DesktopProvider` and `windowReducer`.
+
+## Local data
+
+Desktop settings and restorable window sessions are stored in the browser under a versioned `vintage-vibe-desktop-state` key. The Settings app can disable restoration, clear only the window session, or reset personalization. Guestbook entries use a separate local key and remain private to the current browser.

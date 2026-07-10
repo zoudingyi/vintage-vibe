@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Taskbar from '@/components/Taskbar';
 import DesktopWindow from '@/desktop/DesktopWindow';
 import { DesktopProvider, useDesktop } from '@/desktop/DesktopProvider';
-import desktopApps from '@/desktop/apps';
+import appRegistry from '@/desktop/appRegistry';
 import useCompactDesktop from '@/desktop/useCompactDesktop';
 import {
   DEFAULT_DESKTOP_SESSION,
@@ -201,6 +201,7 @@ function DesktopShell({ initialDesktopData }) {
       <Wrapper
         className={`desktop-environment-wrapper desktop-accent-${desktopSettings.accent}`}
         data-scanlines={desktopSettings.scanlines}
+        data-testid="desktop-environment"
       >
         <div className="shutdown-screen">
           <p>Windows is shutting down...</p>
@@ -217,6 +218,7 @@ function DesktopShell({ initialDesktopData }) {
       <Wrapper
         className={`desktop-environment-wrapper desktop-accent-${desktopSettings.accent}`}
         data-scanlines={desktopSettings.scanlines}
+        data-testid="desktop-environment"
       >
         <div
           className={`desktop desktop-wallpaper-${desktopSettings.wallpaper} desktop-icons-${desktopSettings.iconLayout}`}
@@ -372,7 +374,7 @@ function Home() {
     : DEFAULT_DESKTOP_SESSION;
 
   return (
-    <DesktopProvider apps={desktopApps} initialSession={initialSession}>
+    <DesktopProvider apps={appRegistry} initialSession={initialSession}>
       <DesktopShell initialDesktopData={initialDesktopData} />
     </DesktopProvider>
   );

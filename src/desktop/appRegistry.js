@@ -1,0 +1,126 @@
+import computerIcon from '@/assets/icons/this_computer.png';
+import folderIcon from '@/assets/icons/folder_closed.png';
+import musicIcon from '@/assets/icons/music.png';
+import moviesIcon from '@/assets/icons/movies.png';
+import recycleIcon from '@/assets/icons/recycle_bin_full.png';
+import briefcaseIcon from '@/assets/icons/briefcase.png';
+import toolsIcon from '@/assets/icons/tools.png';
+import programIcon from '@/assets/icons/program.png';
+import mailIcon from '@/assets/icons/mail.png';
+import {
+  FolderApp,
+  GuestbookApp,
+  MediaPlayerApp,
+  MyComputerApp,
+  ProfileApp,
+  ProjectsApp,
+  RecycleBinApp,
+  SettingsApp,
+  TerminalApp,
+  VideosApp
+} from './apps';
+
+const appRegistry = [
+  {
+    id: 'my-computer',
+    title: 'My Computer',
+    icon: computerIcon,
+    showOnDesktop: true,
+    showInStartMenu: false,
+    component: MyComputerApp,
+    defaultPosition: { x: 96, y: 32 },
+    windowSize: { width: 420 }
+  },
+  {
+    id: 'my-folder',
+    title: 'My Folder',
+    icon: folderIcon,
+    showOnDesktop: true,
+    showInStartMenu: false,
+    component: FolderApp,
+    defaultPosition: { x: 132, y: 64 },
+    windowSize: { width: 420 }
+  },
+  {
+    id: 'media-player',
+    title: 'Media Player',
+    icon: musicIcon,
+    showOnDesktop: true,
+    showInStartMenu: true,
+    component: MediaPlayerApp,
+    defaultPosition: { x: 168, y: 96 },
+    windowSize: { width: 420 }
+  },
+  {
+    id: 'my-videos',
+    title: 'My Videos',
+    icon: moviesIcon,
+    showOnDesktop: true,
+    showInStartMenu: false,
+    component: VideosApp,
+    defaultPosition: { x: 204, y: 128 },
+    windowSize: { width: 420 }
+  },
+  {
+    id: 'recycle-bin',
+    title: 'Recycle Bin',
+    icon: recycleIcon,
+    showOnDesktop: true,
+    showInStartMenu: false,
+    component: RecycleBinApp,
+    defaultPosition: { x: 240, y: 160 },
+    windowSize: { width: 360 }
+  },
+  {
+    id: 'profile',
+    title: 'Profile',
+    icon: briefcaseIcon,
+    showOnDesktop: false,
+    showInStartMenu: true,
+    component: ProfileApp,
+    defaultPosition: { x: 120, y: 48 },
+    windowSize: { width: 460 }
+  },
+  {
+    id: 'projects',
+    title: 'Projects',
+    icon: folderIcon,
+    showOnDesktop: false,
+    showInStartMenu: true,
+    component: ProjectsApp,
+    defaultPosition: { x: 144, y: 72 },
+    windowSize: { width: 520 }
+  },
+  {
+    id: 'settings',
+    title: 'Settings',
+    icon: toolsIcon,
+    showOnDesktop: false,
+    showInStartMenu: true,
+    component: SettingsApp,
+    defaultPosition: { x: 168, y: 96 },
+    windowSize: { width: 420 }
+  },
+  {
+    id: 'terminal',
+    title: 'Terminal',
+    icon: programIcon,
+    showOnDesktop: false,
+    showInStartMenu: true,
+    component: TerminalApp,
+    defaultPosition: { x: 192, y: 120 },
+    windowSize: { width: 520 }
+  },
+  {
+    id: 'guestbook',
+    title: 'Guestbook',
+    icon: mailIcon,
+    showOnDesktop: false,
+    showInStartMenu: true,
+    component: GuestbookApp,
+    defaultPosition: { x: 216, y: 144 },
+    windowSize: { width: 460 }
+  }
+];
+
+export default appRegistry;
