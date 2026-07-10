@@ -14,6 +14,22 @@ const DEFAULT_DESKTOP_SETTINGS = {
   scanlines: true,
   wallpaper: 'teal'
 };
+const CONTEXT_MENU_SIZE = { height: 184, width: 156 };
+
+function getContextMenuPosition(x, y) {
+  const margin = 8;
+
+  return {
+    x: Math.max(
+      margin,
+      Math.min(x, window.innerWidth - CONTEXT_MENU_SIZE.width - margin)
+    ),
+    y: Math.max(
+      margin,
+      Math.min(y, window.innerHeight - CONTEXT_MENU_SIZE.height - margin)
+    )
+  };
+}
 
 const Wrapper = styled.div`
   // background-color: ${({ theme }) => theme.desktopBackground};
@@ -56,11 +72,18 @@ function DesktopShell() {
     apps,
     windows,
     activeWindowId,
+    cascadeWindows,
+    clampWindows,
     openApp,
     closeWindow,
     minimizeWindow,
+    moveWindow,
+    resizeWindow,
     restoreWindow,
-    focusWindow
+    showDesktop,
+    tileWindows,
+    focusWindow,
+    toggleMaximizeWindow
   } = useDesktop();
 
   React.useEffect(() => {
@@ -69,6 +92,18 @@ function DesktopShell() {
       JSON.stringify(desktopSettings)
     );
   }, [desktopSettings]);
+
+  React.useEffect(() => {
+    function keepWindowsInBounds() {
+      clampWindows({
+        height: window.innerHeight - 47,
+        width: window.innerWidth
+      });
+    }
+
+    window.addEventListener('resize', keepWindowsInBounds);
+    return () => window.removeEventListener('resize', keepWindowsInBounds);
+  }, [clampWindows]);
 
   function updateDesktopSettings(nextSettings) {
     setDesktopSettings(currentSettings => ({
@@ -123,10 +158,9 @@ function DesktopShell() {
           onContextMenu={event => {
             event.preventDefault();
             setOpenStartMenu(false);
-            setContextMenu({
-              x: event.clientX,
-              y: event.clientY
-            });
+            setContextMenu(
+              getContextMenuPosition(event.clientX, event.clientY)
+            );
           }}
         >
           {apps.filter(app => app.showOnDesktop).map(app => (
@@ -157,6 +191,9 @@ function DesktopShell() {
                 onClose={closeWindow}
                 onFocus={focusWindow}
                 onMinimize={minimizeWindow}
+                onMove={moveWindow}
+                onResize={resizeWindow}
+                onToggleMaximize={toggleMaximizeWindow}
                 appProps={{
                   desktopSettings,
                   onOpenApp: openApp,
@@ -173,8 +210,36 @@ function DesktopShell() {
               className="desktop-context-menu"
               style={{ left: contextMenu.x, top: contextMenu.y }}
               onClick={event => event.stopPropagation()}
+              role="menu"
             >
               <button onClick={arrangeDesktopIcons}>Arrange Icons</button>
+              <button
+                onClick={() => {
+                  cascadeWindows();
+                  setContextMenu(null);
+                }}
+              >
+                Cascade Windows
+              </button>
+              <button
+                onClick={() => {
+                  tileWindows({
+                    height: window.innerHeight - 47,
+                    width: window.innerWidth
+                  });
+                  setContextMenu(null);
+                }}
+              >
+                Tile Windows
+              </button>
+              <button
+                onClick={() => {
+                  showDesktop();
+                  setContextMenu(null);
+                }}
+              >
+                Show Desktop
+              </button>
               <button onClick={openPersonalization}>Personalize</button>
               <button onClick={() => setContextMenu(null)}>Refresh</button>
             </div>
@@ -197,6 +262,8 @@ function DesktopShell() {
           apps={apps}
           windows={windows}
           activeWindowId={activeWindowId}
+          onFocusWindow={focusWindow}
+          onMinimizeWindow={minimizeWindow}
           onRestoreWindow={restoreWindow}
           onOpenApp={openApp}
           onShutdown={() => setShutdown(true)}

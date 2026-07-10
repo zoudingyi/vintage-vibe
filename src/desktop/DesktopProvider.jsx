@@ -51,6 +51,34 @@ export function DesktopProvider({ apps, children }) {
     dispatch({ type: 'RESTORE_WINDOW', windowId });
   }, []);
 
+  const toggleMaximizeWindow = useCallback(windowId => {
+    dispatch({ type: 'TOGGLE_MAXIMIZE', windowId });
+  }, []);
+
+  const moveWindow = useCallback((windowId, position) => {
+    dispatch({ type: 'MOVE_WINDOW', windowId, position });
+  }, []);
+
+  const resizeWindow = useCallback((windowId, size) => {
+    dispatch({ type: 'RESIZE_WINDOW', windowId, size });
+  }, []);
+
+  const showDesktop = useCallback(() => {
+    dispatch({ type: 'SHOW_DESKTOP' });
+  }, []);
+
+  const cascadeWindows = useCallback(() => {
+    dispatch({ type: 'CASCADE_WINDOWS' });
+  }, []);
+
+  const clampWindows = useCallback(bounds => {
+    dispatch({ type: 'CLAMP_WINDOWS', bounds });
+  }, []);
+
+  const tileWindows = useCallback(bounds => {
+    dispatch({ type: 'TILE_WINDOWS', bounds });
+  }, []);
+
   const focusWindow = useCallback(windowId => {
     dispatch({ type: 'FOCUS_WINDOW', windowId });
   }, []);
@@ -60,20 +88,34 @@ export function DesktopProvider({ apps, children }) {
       apps,
       windows,
       activeWindowId,
+      cascadeWindows,
+      clampWindows,
       openApp,
       closeWindow,
       minimizeWindow,
+      moveWindow,
+      resizeWindow,
       restoreWindow,
-      focusWindow
+      showDesktop,
+      tileWindows,
+      focusWindow,
+      toggleMaximizeWindow
     }),
     [
       activeWindowId,
       apps,
+      cascadeWindows,
+      clampWindows,
       closeWindow,
       focusWindow,
       minimizeWindow,
+      moveWindow,
       openApp,
+      resizeWindow,
       restoreWindow,
+      showDesktop,
+      tileWindows,
+      toggleMaximizeWindow,
       windows
     ]
   );

@@ -10,13 +10,13 @@
 **Goal**: Add bounded movement, resizing, maximize/restore, taskbar toggling, and desktop window arrangement.
 **Success Criteria**: Windows remain recoverable, taskbar behavior matches desktop conventions, and context-menu actions arrange or hide windows correctly.
 **Tests**: Maximize/restore geometry, active task toggling, show desktop, cascade/tile layouts, and geometry constraints.
-**Status**: In Progress
+**Status**: Complete
 
 ## Stage 3: Keyboard, Focus, and Accessibility
 **Goal**: Make the desktop shell fully operable without a mouse.
 **Success Criteria**: Desktop icons, start menu, and windows support documented keyboard commands with visible focus and appropriate semantics.
 **Tests**: Icon navigation, Enter, Escape, Ctrl+Escape, Alt+Tab, Alt+F4, dialog labelling, and focus restoration.
-**Status**: Not Started
+**Status**: In Progress
 
 ## Stage 4: Responsive Desktop and Session Restore
 **Goal**: Support narrow/touch screens and versioned persistence for desktop settings and window sessions.

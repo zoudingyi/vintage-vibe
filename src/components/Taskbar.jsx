@@ -20,6 +20,8 @@ function Taskbar({
   apps = [],
   windows = [],
   activeWindowId,
+  onFocusWindow,
+  onMinimizeWindow,
   onRestoreWindow,
   onOpenApp,
   onShutdown
@@ -50,6 +52,20 @@ function Taskbar({
   function updateTime() {
     const currentTime = getCurrentTime();
     setTime(currentTime);
+  }
+
+  function handleWindowButtonClick(windowState) {
+    if (windowState.status === 'minimized') {
+      onRestoreWindow(windowState.id);
+      return;
+    }
+
+    if (activeWindowId === windowState.id) {
+      onMinimizeWindow(windowState.id);
+      return;
+    }
+
+    onFocusWindow(windowState.id);
   }
 
   return (
@@ -118,7 +134,7 @@ function Taskbar({
                   aria-label={`${
                     windowState.status === 'minimized' ? 'Restore' : 'Focus'
                   } ${app.title}`}
-                  onClick={() => onRestoreWindow(windowState.id)}
+                  onClick={() => handleWindowButtonClick(windowState)}
                   key={windowState.id}
                 >
                   <img src={app.icon} alt="" />

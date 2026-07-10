@@ -22,11 +22,18 @@
   min-width: 0;
   flex: 1;
   margin-right: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.taskbar-window-list::-webkit-scrollbar {
+  display: none;
 }
 
 .taskbar-window-button {
+  flex: 0 1 180px;
   max-width: 180px;
-  min-width: 120px;
+  min-width: 80px;
   height: 31px;
   justify-content: flex-start;
 }

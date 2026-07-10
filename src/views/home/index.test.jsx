@@ -88,6 +88,157 @@ test('activates the next visible window after minimizing the active window', () 
   expect(activeWindow).toHaveTextContent(/my computer/i);
 });
 
+test('maximizes and restores an application window', () => {
+  renderDesktop();
+
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
+  fireEvent.click(screen.getByLabelText(/maximize my computer/i));
+
+  expect(
+    screen.getByRole('button', { name: /restore my computer/i })
+  ).toBeInTheDocument();
+
+  fireEvent.click(screen.getByLabelText(/restore my computer/i));
+
+  expect(
+    screen.getByRole('button', { name: /maximize my computer/i })
+  ).toBeInTheDocument();
+});
+
+test('toggles the active window from its taskbar button', () => {
+  renderDesktop();
+
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
+  fireEvent.click(screen.getByRole('button', { name: /focus my computer/i }));
+
+  expect(screen.getByText(/system properties/i)).not.toBeVisible();
+
+  fireEvent.click(screen.getByRole('button', { name: /restore my computer/i }));
+
+  expect(screen.getByText(/system properties/i)).toBeVisible();
+});
+
+test('focuses a maximized window from the taskbar without restoring it', () => {
+  renderDesktop();
+
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
+  fireEvent.click(screen.getByLabelText(/maximize my computer/i));
+  openStartMenuItem(/projects/i);
+  fireEvent.click(screen.getByRole('button', { name: /focus my computer/i }));
+
+  expect(
+    screen.getByRole('button', { name: /restore my computer/i })
+  ).toBeInTheDocument();
+});
+
+test('shows the desktop from the context menu', () => {
+  renderDesktop();
+
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
+  openStartMenuItem(/projects/i);
+  fireEvent.contextMenu(screen.getByTestId('desktop-surface'), {
+    clientX: 24,
+    clientY: 32
+  });
+  fireEvent.click(screen.getByRole('button', { name: /show desktop/i }));
+
+  expect(screen.getByText(/system properties/i)).not.toBeVisible();
+  expect(screen.getByText(/projects explorer/i)).not.toBeVisible();
+});
+
+test('cascades visible windows from the context menu', () => {
+  renderDesktop();
+
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
+  openStartMenuItem(/projects/i);
+  fireEvent.contextMenu(screen.getByTestId('desktop-surface'), {
+    clientX: 24,
+    clientY: 32
+  });
+  fireEvent.click(screen.getByRole('button', { name: /cascade windows/i }));
+
+  const computerFrame = screen
+    .getByText(/system properties/i)
+    .closest('.desktop-window').parentElement;
+  const projectsFrame = screen
+    .getByText(/projects explorer/i)
+    .closest('.desktop-window').parentElement;
+
+  expect(computerFrame).toHaveStyle('transform: translate(24px,24px)');
+  expect(projectsFrame).toHaveStyle('transform: translate(52px,52px)');
+});
+
+test('tiles visible windows from the context menu', () => {
+  renderDesktop();
+
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
+  openStartMenuItem(/projects/i);
+  fireEvent.contextMenu(screen.getByTestId('desktop-surface'), {
+    clientX: 24,
+    clientY: 32
+  });
+  fireEvent.click(screen.getByRole('button', { name: /tile windows/i }));
+
+  const computerFrame = screen
+    .getByText(/system properties/i)
+    .closest('.desktop-window').parentElement;
+  const projectsFrame = screen
+    .getByText(/projects explorer/i)
+    .closest('.desktop-window').parentElement;
+
+  expect(computerFrame).toHaveStyle('transform: translate(8px,8px)');
+  expect(projectsFrame).toHaveStyle('transform: translate(516px,8px)');
+});
+
+test('resizes a normal application window', () => {
+  renderDesktop();
+
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
+
+  const resizeHandle = screen.getByLabelText(/resize my computer/i);
+  const windowFrame = screen
+    .getByText(/system properties/i)
+    .closest('.desktop-window').parentElement;
+
+  fireEvent.mouseDown(resizeHandle, { clientX: 420, clientY: 180 });
+  fireEvent.mouseMove(window, { clientX: 520, clientY: 230 });
+  fireEvent.mouseUp(window);
+
+  expect(windowFrame).toHaveStyle('width: 520px');
+});
+
+test('keeps the desktop context menu inside the viewport', () => {
+  const originalWidth = window.innerWidth;
+  const originalHeight = window.innerHeight;
+  Object.defineProperty(window, 'innerWidth', {
+    configurable: true,
+    value: 320
+  });
+  Object.defineProperty(window, 'innerHeight', {
+    configurable: true,
+    value: 240
+  });
+
+  renderDesktop();
+  fireEvent.contextMenu(screen.getByTestId('desktop-surface'), {
+    clientX: 310,
+    clientY: 230
+  });
+
+  const contextMenu = screen.getByRole('menu');
+
+  Object.defineProperty(window, 'innerWidth', {
+    configurable: true,
+    value: originalWidth
+  });
+  Object.defineProperty(window, 'innerHeight', {
+    configurable: true,
+    value: originalHeight
+  });
+
+  expect(contextMenu).toHaveStyle({ left: '156px', top: '48px' });
+});
+
 test('opens apps from the start menu', () => {
   renderDesktop();
 
