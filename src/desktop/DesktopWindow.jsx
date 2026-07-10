@@ -20,16 +20,32 @@ const WindowFrame = styled.div`
   .desktop-window {
     min-height: 180px;
     height: ${({ $fullScreen }) => ($fullScreen ? '100%' : 'auto')};
+
+    ${({ $fullScreen }) =>
+      $fullScreen &&
+      `
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      `}
   }
 
-  .desktop-window > div:last-child {
+  .desktop-window-content {
     max-height: ${({ $fullScreen }) =>
       $fullScreen ? 'calc(100% - 34px)' : 'none'};
     overflow: auto;
+
+    ${({ $fullScreen }) =>
+      $fullScreen &&
+      `
+        flex: 1 1 auto;
+        min-height: 0;
+      `}
   }
 
   .desktop-window-title {
     display: flex;
+    flex: 0 0 auto;
     align-items: center;
     justify-content: space-between;
     cursor: move;
@@ -196,7 +212,11 @@ function DesktopWindow({
               </Button>
             </span>
           </WindowHeader>
-          <WindowContent>
+          <WindowContent
+            aria-label={`${app.title} content`}
+            className="desktop-window-content"
+            role="region"
+          >
             <AppComponent {...appProps} />
           </WindowContent>
         </Window>

@@ -105,6 +105,19 @@ test('maximizes and restores an application window', () => {
   ).toBeInTheDocument();
 });
 
+test('expands application content to fill a maximized window', () => {
+  renderDesktop();
+
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
+  fireEvent.click(screen.getByLabelText(/maximize my computer/i));
+
+  const content = screen.getByRole('region', {
+    name: /my computer content/i
+  });
+
+  expect(content).toHaveStyle({ flexGrow: '1', minHeight: '0' });
+});
+
 test('toggles the active window from its taskbar button', () => {
   renderDesktop();
 
