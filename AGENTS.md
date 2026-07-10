@@ -29,3 +29,17 @@
 ## 安全与配置提示
 
 不要提交密钥或机器特定配置。自定义构建变更应保留在 `config-overrides.js` 中；在依赖任何新的环境变量前，先在 README 中记录它们。
+
+## Agent skills
+
+### Issue tracker
+
+Issues and PRDs are tracked in this repository's GitHub Issues. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Use the canonical `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, and `wontfix` labels. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+This repository uses a single-context domain documentation layout. See `docs/agents/domain.md`.
