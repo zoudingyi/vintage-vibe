@@ -88,6 +88,49 @@ test('activates the next visible window after minimizing the active window', () 
   expect(activeWindow).toHaveTextContent(/my computer/i);
 });
 
+test('brings a background window forward when its content is pressed', () => {
+  renderDesktop();
+
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
+  openStartMenuItem(/projects/i);
+
+  const computerWindow = screen.getByRole('dialog', {
+    name: /my computer/i
+  });
+  const projectsWindow = screen.getByRole('dialog', { name: /projects/i });
+
+  fireEvent.mouseDown(
+    screen.getByRole('region', { name: /my computer content/i })
+  );
+
+  expect(computerWindow).toHaveAttribute('data-active', 'true');
+  expect(Number(computerWindow.style.zIndex)).toBeGreaterThan(
+    Number(projectsWindow.style.zIndex)
+  );
+});
+
+test('brings a background window forward when its title bar is dragged', () => {
+  renderDesktop();
+
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
+  openStartMenuItem(/projects/i);
+
+  const computerWindow = screen.getByRole('dialog', {
+    name: /my computer/i
+  });
+  const projectsWindow = screen.getByRole('dialog', { name: /projects/i });
+  const titleBar = within(computerWindow).getByText(/^my computer$/i);
+
+  fireEvent.mouseDown(titleBar, { clientX: 110, clientY: 50 });
+  fireEvent.mouseMove(window, { clientX: 130, clientY: 60 });
+  fireEvent.mouseUp(window);
+
+  expect(computerWindow).toHaveAttribute('data-active', 'true');
+  expect(Number(computerWindow.style.zIndex)).toBeGreaterThan(
+    Number(projectsWindow.style.zIndex)
+  );
+});
+
 test('maximizes and restores an application window', () => {
   renderDesktop();
 

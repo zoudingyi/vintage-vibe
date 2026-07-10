@@ -105,6 +105,7 @@ function DesktopWindow({
   function startResize(event) {
     event.preventDefault();
     event.stopPropagation();
+    onFocus(windowState.id);
 
     const startX = event.clientX;
     const startY = event.clientY;
@@ -134,6 +135,7 @@ function DesktopWindow({
       disabled={fullScreen}
       handle=".desktop-window-title"
       nodeRef={nodeRef}
+      onMouseDown={() => onFocus(windowState.id)}
       onStop={(event, data) =>
         onMove(windowState.id, { x: data.x, y: data.y })
       }
@@ -152,7 +154,6 @@ function DesktopWindow({
           display: windowState.status === 'minimized' ? 'none' : undefined,
           zIndex: windowState.zIndex
         }}
-        onMouseDown={() => onFocus(windowState.id)}
         role="dialog"
         tabIndex={-1}
       >
