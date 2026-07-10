@@ -31,7 +31,7 @@ test('opens, minimizes, restores, and closes a desktop app window', () => {
 
   fireEvent.click(screen.getByLabelText(/minimize my computer/i));
 
-  expect(screen.queryByText(/system properties/i)).not.toBeInTheDocument();
+  expect(screen.getByText(/system properties/i)).not.toBeVisible();
 
   fireEvent.click(screen.getByRole('button', { name: /restore my computer/i }));
 
@@ -40,6 +40,52 @@ test('opens, minimizes, restores, and closes a desktop app window', () => {
   fireEvent.click(screen.getByLabelText(/close my computer/i));
 
   expect(screen.queryByText(/system properties/i)).not.toBeInTheDocument();
+});
+
+test('preserves application state while its window is minimized', () => {
+  renderDesktop();
+
+  fireEvent.doubleClick(screen.getByRole('button', { name: /media player/i }));
+  fireEvent.click(screen.getByRole('button', { name: /play track/i }));
+  fireEvent.click(screen.getByRole('button', { name: /next track/i }));
+  fireEvent.click(screen.getByLabelText(/minimize media player/i));
+  fireEvent.click(screen.getByRole('button', { name: /restore media player/i }));
+
+  expect(
+    screen.getByRole('button', { name: /pause track/i })
+  ).toBeInTheDocument();
+  expect(
+    within(screen.getByText(/now playing/i).closest('.media-player-display'))
+      .getByText(/neon file explorer/i)
+  ).toBeInTheDocument();
+});
+
+test('activates the next visible window after closing the active window', () => {
+  renderDesktop();
+
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
+  openStartMenuItem(/projects/i);
+  fireEvent.click(screen.getByLabelText(/close projects/i));
+
+  const activeWindow = document.querySelector(
+    '.desktop-window[data-active="true"]'
+  );
+
+  expect(activeWindow).toHaveTextContent(/my computer/i);
+});
+
+test('activates the next visible window after minimizing the active window', () => {
+  renderDesktop();
+
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
+  openStartMenuItem(/projects/i);
+  fireEvent.click(screen.getByLabelText(/minimize projects/i));
+
+  const activeWindow = document.querySelector(
+    '.desktop-window[data-active="true"]'
+  );
+
+  expect(activeWindow).toHaveTextContent(/my computer/i);
 });
 
 test('opens apps from the start menu', () => {

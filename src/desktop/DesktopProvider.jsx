@@ -3,86 +3,57 @@ import React, {
   useCallback,
   useContext,
   useMemo,
-  useRef,
-  useState
+  useReducer
 } from 'react';
+import { initialDesktopState, windowReducer } from './windowReducer';
 
 const DesktopContext = createContext(null);
 
 export function DesktopProvider({ apps, children }) {
-  const [windows, setWindows] = useState([]);
-  const [activeWindowId, setActiveWindowId] = useState(null);
-  const zIndexRef = useRef(100);
-
-  const nextZIndex = useCallback(() => {
-    zIndexRef.current += 1;
-    return zIndexRef.current;
-  }, []);
+  const [desktopState, dispatch] = useReducer(
+    windowReducer,
+    initialDesktopState
+  );
+  const { activeWindowId, windows } = desktopState;
 
   const openApp = useCallback(appId => {
-    const zIndex = nextZIndex();
+    const app = apps.find(item => item.id === appId);
 
-    setWindows(currentWindows => {
-      const existingWindow = currentWindows.find(item => item.appId === appId);
+    if (!app) {
+      throw new Error(`Cannot open unknown desktop app: ${appId}`);
+    }
 
-      if (existingWindow) {
-        return currentWindows.map(item =>
-          item.appId === appId
-            ? { ...item, minimized: false, zIndex }
-            : item
-        );
+    dispatch({
+      type: 'OPEN_APP',
+      window: {
+        appId,
+        id: appId,
+        position: app.defaultPosition || { x: 96, y: 48 },
+        restoreBounds: null,
+        size: {
+          height: app.windowSize?.height || null,
+          width: app.windowSize?.width || 420
+        },
+        status: 'normal'
       }
-
-      return [
-        ...currentWindows,
-        {
-          id: appId,
-          appId,
-          minimized: false,
-          zIndex
-        }
-      ];
     });
-    setActiveWindowId(appId);
-  }, [nextZIndex]);
+  }, [apps]);
 
   const closeWindow = useCallback(windowId => {
-    setWindows(currentWindows =>
-      currentWindows.filter(item => item.id !== windowId)
-    );
-    setActiveWindowId(currentId => (currentId === windowId ? null : currentId));
+    dispatch({ type: 'CLOSE_WINDOW', windowId });
   }, []);
 
   const minimizeWindow = useCallback(windowId => {
-    setWindows(currentWindows =>
-      currentWindows.map(item =>
-        item.id === windowId ? { ...item, minimized: true } : item
-      )
-    );
-    setActiveWindowId(currentId => (currentId === windowId ? null : currentId));
+    dispatch({ type: 'MINIMIZE_WINDOW', windowId });
   }, []);
 
   const restoreWindow = useCallback(windowId => {
-    const zIndex = nextZIndex();
-
-    setWindows(currentWindows =>
-      currentWindows.map(item =>
-        item.id === windowId ? { ...item, minimized: false, zIndex } : item
-      )
-    );
-    setActiveWindowId(windowId);
-  }, [nextZIndex]);
+    dispatch({ type: 'RESTORE_WINDOW', windowId });
+  }, []);
 
   const focusWindow = useCallback(windowId => {
-    const zIndex = nextZIndex();
-
-    setWindows(currentWindows =>
-      currentWindows.map(item =>
-        item.id === windowId ? { ...item, zIndex } : item
-      )
-    );
-    setActiveWindowId(windowId);
-  }, [nextZIndex]);
+    dispatch({ type: 'FOCUS_WINDOW', windowId });
+  }, []);
 
   const value = useMemo(
     () => ({

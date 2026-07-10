@@ -59,15 +59,14 @@ function DesktopWindow({
   const width = app.windowSize?.width || 420;
   const defaultPosition = app.defaultPosition || { x: 96, y: 48 };
 
-  if (windowState.minimized) {
-    return null;
-  }
-
   return (
     <Draggable handle=".desktop-window-title" defaultPosition={defaultPosition}>
       <WindowFrame
         $width={width}
-        style={{ zIndex: windowState.zIndex }}
+        style={{
+          display: windowState.status === 'minimized' ? 'none' : undefined,
+          zIndex: windowState.zIndex
+        }}
         onMouseDown={() => onFocus(windowState.id)}
       >
         <Window className="desktop-window" data-active={active}>

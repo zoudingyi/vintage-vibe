@@ -4,13 +4,13 @@
 **Goal**: Centralize window lifecycle and geometry in a predictable state model.
 **Success Criteria**: Window actions preserve app state, maintain a valid active window, and expose position, size, and status through the desktop context.
 **Tests**: Open/focus/minimize/restore/close behavior, focus fallback, duplicate app handling, and state preservation while minimized.
-**Status**: In Progress
+**Status**: Complete
 
 ## Stage 2: Window Controls and Taskbar
 **Goal**: Add bounded movement, resizing, maximize/restore, taskbar toggling, and desktop window arrangement.
 **Success Criteria**: Windows remain recoverable, taskbar behavior matches desktop conventions, and context-menu actions arrange or hide windows correctly.
 **Tests**: Maximize/restore geometry, active task toggling, show desktop, cascade/tile layouts, and geometry constraints.
-**Status**: Not Started
+**Status**: In Progress
 
 ## Stage 3: Keyboard, Focus, and Accessibility
 **Goal**: Make the desktop shell fully operable without a mouse.

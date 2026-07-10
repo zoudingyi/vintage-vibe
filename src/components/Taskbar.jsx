@@ -110,12 +110,13 @@ function Taskbar({
                 <Button
                   className="taskbar-window-button"
                   active={
-                    activeWindowId === windowState.id && !windowState.minimized
+                    activeWindowId === windowState.id &&
+                    windowState.status !== 'minimized'
                       ? true
                       : undefined
                   }
                   aria-label={`${
-                    windowState.minimized ? 'Restore' : 'Focus'
+                    windowState.status === 'minimized' ? 'Restore' : 'Focus'
                   } ${app.title}`}
                   onClick={() => onRestoreWindow(windowState.id)}
                   key={windowState.id}
