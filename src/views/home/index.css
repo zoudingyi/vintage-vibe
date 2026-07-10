@@ -369,3 +369,42 @@
   gap: 8px;
   overflow: auto;
 }
+
+.desktop-notice {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  z-index: 600;
+  display: flex;
+  max-width: min(420px, calc(100vw - 36px));
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border: 2px solid;
+  border-color: var(--desktop-accent) #010001 #010001 var(--desktop-accent);
+  background: #c6c6c6;
+}
+
+@media (max-width: 768px), (pointer: coarse) {
+  .boot-sequence {
+    right: 12px;
+    left: 12px;
+    width: auto;
+  }
+
+  .projects-app,
+  .guestbook-app {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .projects-sidebar {
+    max-height: 150px;
+    overflow: auto;
+  }
+
+  .desktop-notice {
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+  }
+}

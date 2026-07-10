@@ -87,3 +87,35 @@
   pointer-events: none;
   box-shadow: rgba(0, 0, 0, 0.2) 2px 2px 3px inset;
 }
+
+@media (max-width: 768px), (pointer: coarse) {
+  .vertical-MenuList {
+    width: min(320px, calc(100vw - 12px));
+    max-height: calc(100vh - 52px);
+    overflow: auto;
+  }
+
+  .taskbar-handle,
+  .social-link {
+    display: none;
+  }
+
+  .taskbar-window-button {
+    min-width: 38px;
+    max-width: 48px;
+    padding: 4px;
+  }
+
+  .taskbar-window-button img {
+    margin-right: 0;
+  }
+
+  .taskbar-window-button span {
+    display: none;
+  }
+
+  .taskbar-date {
+    padding: 3px 7px;
+    font-size: 0.8rem;
+  }
+}

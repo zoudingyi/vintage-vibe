@@ -9,8 +9,8 @@ const WindowFrame = styled.div`
   height: ${({ $height }) => ($height ? `${$height}px` : 'auto')};
   max-width: calc(100vw - 24px);
 
-  ${({ $maximized }) =>
-    $maximized &&
+  ${({ $fullScreen }) =>
+    $fullScreen &&
     `
       width: 100%;
       height: 100%;
@@ -19,12 +19,12 @@ const WindowFrame = styled.div`
 
   .desktop-window {
     min-height: 180px;
-    height: ${({ $maximized }) => ($maximized ? '100%' : 'auto')};
+    height: ${({ $fullScreen }) => ($fullScreen ? '100%' : 'auto')};
   }
 
   .desktop-window > div:last-child {
-    max-height: ${({ $maximized }) =>
-      $maximized ? 'calc(100% - 34px)' : 'none'};
+    max-height: ${({ $fullScreen }) =>
+      $fullScreen ? 'calc(100% - 34px)' : 'none'};
     overflow: auto;
   }
 
@@ -73,6 +73,7 @@ const WindowFrame = styled.div`
 
 function DesktopWindow({
   app,
+  compact,
   windowState,
   active,
   appProps,
@@ -86,6 +87,7 @@ function DesktopWindow({
   const nodeRef = useRef(null);
   const AppComponent = app.component;
   const maximized = windowState.status === 'maximized';
+  const fullScreen = maximized || compact;
   const titleId = `desktop-window-title-${windowState.id}`;
 
   useEffect(() => {
@@ -123,19 +125,19 @@ function DesktopWindow({
   return (
     <Draggable
       bounds="parent"
-      disabled={maximized}
+      disabled={fullScreen}
       handle=".desktop-window-title"
       nodeRef={nodeRef}
       onStop={(event, data) =>
         onMove(windowState.id, { x: data.x, y: data.y })
       }
-      position={maximized ? { x: 0, y: 0 } : windowState.position}
+      position={fullScreen ? { x: 0, y: 0 } : windowState.position}
     >
       <WindowFrame
         aria-hidden={windowState.status === 'minimized'}
         aria-labelledby={titleId}
         aria-modal="false"
-        $maximized={maximized}
+        $fullScreen={fullScreen}
         $height={windowState.size.height}
         $width={windowState.size.width}
         ref={nodeRef}
@@ -167,16 +169,20 @@ function DesktopWindow({
               >
                 _
               </Button>
-              <Button
-                className="desktop-window-control"
-                aria-label={`${maximized ? 'Restore' : 'Maximize'} ${app.title}`}
-                onClick={event => {
-                  event.stopPropagation();
-                  onToggleMaximize(windowState.id);
-                }}
-              >
-                {maximized ? '❐' : '□'}
-              </Button>
+              {!compact && (
+                <Button
+                  className="desktop-window-control"
+                  aria-label={`${
+                    maximized ? 'Restore' : 'Maximize'
+                  } ${app.title}`}
+                  onClick={event => {
+                    event.stopPropagation();
+                    onToggleMaximize(windowState.id);
+                  }}
+                >
+                  {maximized ? '❐' : '□'}
+                </Button>
+              )}
               <Button
                 className="desktop-window-control"
                 aria-label={`Close ${app.title}`}
@@ -193,7 +199,7 @@ function DesktopWindow({
             <AppComponent {...appProps} />
           </WindowContent>
         </Window>
-        {!maximized && (
+        {!fullScreen && (
           <div
             aria-label={`Resize ${app.title}`}
             className="desktop-window-resize-handle"

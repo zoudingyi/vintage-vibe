@@ -5,14 +5,40 @@ import React, {
   useMemo,
   useReducer
 } from 'react';
-import { initialDesktopState, windowReducer } from './windowReducer';
+import { windowReducer } from './windowReducer';
 
 const DesktopContext = createContext(null);
 
-export function DesktopProvider({ apps, children }) {
+function createInitialDesktopState({ apps, initialSession }) {
+  const validAppIds = new Set(apps.map(app => app.id));
+  const windows = (initialSession?.windows || []).filter(windowState =>
+    validAppIds.has(windowState.appId)
+  );
+  const highestZIndex = windows.reduce(
+    (highestValue, windowState) =>
+      Math.max(highestValue, windowState.zIndex || 100),
+    100
+  );
+  const activeWindowId = windows.some(
+    windowState =>
+      windowState.id === initialSession?.activeWindowId &&
+      windowState.status !== 'minimized'
+  )
+    ? initialSession.activeWindowId
+    : null;
+
+  return {
+    activeWindowId,
+    nextZIndex: highestZIndex,
+    windows
+  };
+}
+
+export function DesktopProvider({ apps, children, initialSession }) {
   const [desktopState, dispatch] = useReducer(
     windowReducer,
-    initialDesktopState
+    { apps, initialSession },
+    createInitialDesktopState
   );
   const { activeWindowId, windows } = desktopState;
 
@@ -79,6 +105,10 @@ export function DesktopProvider({ apps, children }) {
     dispatch({ type: 'CYCLE_WINDOWS', direction });
   }, []);
 
+  const clearSession = useCallback(() => {
+    dispatch({ type: 'CLEAR_SESSION' });
+  }, []);
+
   const tileWindows = useCallback(bounds => {
     dispatch({ type: 'TILE_WINDOWS', bounds });
   }, []);
@@ -94,6 +124,7 @@ export function DesktopProvider({ apps, children }) {
       activeWindowId,
       cascadeWindows,
       clampWindows,
+      clearSession,
       cycleWindows,
       openApp,
       closeWindow,
@@ -111,6 +142,7 @@ export function DesktopProvider({ apps, children }) {
       apps,
       cascadeWindows,
       clampWindows,
+      clearSession,
       closeWindow,
       cycleWindows,
       focusWindow,

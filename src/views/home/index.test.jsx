@@ -2,6 +2,7 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import { theSixtiesUSA } from 'react95/dist/themes';
 import Home from './index';
+import { DESKTOP_STORAGE_KEY } from '@/desktop/desktopStorage';
 
 function renderDesktop() {
   return render(
@@ -441,9 +442,8 @@ test('persists wallpaper settings from the settings app', () => {
     'desktop-wallpaper-starfield'
   );
   expect(
-    JSON.parse(
-      window.localStorage.getItem('vintage-vibe-desktop-settings')
-    ).wallpaper
+    JSON.parse(window.localStorage.getItem(DESKTOP_STORAGE_KEY)).settings
+      .wallpaper
   ).toBe('starfield');
 });
 
@@ -460,6 +460,111 @@ test('loads persisted desktop settings', () => {
   );
   expect(screen.getByTestId('desktop-surface').parentElement).toHaveClass(
     'desktop-accent-green'
+  );
+});
+
+test('clears the current window session from settings', () => {
+  renderDesktop();
+
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
+  openStartMenuItem(/settings/i);
+  fireEvent.click(screen.getByRole('button', { name: /clear session/i }));
+
+  expect(screen.queryByText(/system properties/i)).not.toBeInTheDocument();
+  expect(screen.queryByText(/^settings$/i)).not.toBeInTheDocument();
+});
+
+test('persists the session restore preference', () => {
+  renderDesktop();
+
+  openStartMenuItem(/settings/i);
+  fireEvent.click(screen.getByLabelText(/restore previous session/i));
+
+  expect(
+    JSON.parse(window.localStorage.getItem(DESKTOP_STORAGE_KEY)).settings
+      .restoreSession
+  ).toBe(false);
+});
+
+test('restores an open window from the previous desktop session', () => {
+  window.localStorage.setItem(
+    DESKTOP_STORAGE_KEY,
+    JSON.stringify({
+      version: 1,
+      settings: { restoreSession: true },
+      session: {
+        activeWindowId: 'my-computer',
+        windows: [
+          {
+            appId: 'my-computer',
+            id: 'my-computer',
+            position: { x: 96, y: 32 },
+            restoreBounds: null,
+            size: { height: null, width: 420 },
+            status: 'normal',
+            zIndex: 101
+          }
+        ]
+      }
+    })
+  );
+
+  renderDesktop();
+
+  expect(screen.getByText(/system properties/i)).toBeVisible();
+});
+
+test('does not restore windows when session restore is disabled', () => {
+  window.localStorage.setItem(
+    DESKTOP_STORAGE_KEY,
+    JSON.stringify({
+      version: 1,
+      settings: { restoreSession: false },
+      session: {
+        activeWindowId: 'my-computer',
+        windows: [
+          {
+            appId: 'my-computer',
+            id: 'my-computer',
+            position: { x: 96, y: 32 },
+            restoreBounds: null,
+            size: { height: null, width: 420 },
+            status: 'normal',
+            zIndex: 101
+          }
+        ]
+      }
+    })
+  );
+
+  renderDesktop();
+
+  expect(screen.queryByText(/system properties/i)).not.toBeInTheDocument();
+});
+
+test('opens desktop apps with one tap in compact desktop mode', () => {
+  const originalMatchMedia = window.matchMedia;
+  window.matchMedia = jest.fn().mockReturnValue({
+    addEventListener: jest.fn(),
+    matches: true,
+    removeEventListener: jest.fn()
+  });
+
+  renderDesktop();
+  fireEvent.click(screen.getByRole('button', { name: /media player/i }));
+
+  window.matchMedia = originalMatchMedia;
+
+  expect(screen.getByText(/now playing/i)).toBeVisible();
+});
+
+test('reports when corrupted desktop data is reset', () => {
+  window.localStorage.setItem(DESKTOP_STORAGE_KEY, '{not-json');
+
+  renderDesktop();
+
+  expect(screen.getByRole('status')).toHaveTextContent(
+    /desktop settings were reset/i
   );
 });
 

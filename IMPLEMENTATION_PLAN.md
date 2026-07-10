@@ -22,10 +22,10 @@
 **Goal**: Support narrow/touch screens and versioned persistence for desktop settings and window sessions.
 **Success Criteria**: Key content fits common viewport sizes, touch users can open apps, and valid sessions restore without making corrupted data fatal.
 **Tests**: Storage migration/fallback, restore opt-out, window session restore, settings reset isolation, and responsive interaction modes.
-**Status**: In Progress
+**Status**: Complete
 
 ## Stage 5: Application Modules and Quality Gates
 **Goal**: Split desktop applications into focused modules, replace placeholders, remove legacy code, and finish documentation.
 **Success Criteria**: The app registry is declarative, routes and content are complete, project-controlled warnings are removed, and all quality gates pass.
 **Tests**: Registry validation, primary app behavior, route behavior, full regression suite, production build, and diff checks.
-**Status**: Not Started
+**Status**: In Progress

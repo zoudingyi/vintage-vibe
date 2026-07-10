@@ -6,14 +6,14 @@ import Taskbar from '@/components/Taskbar';
 import DesktopWindow from '@/desktop/DesktopWindow';
 import { DesktopProvider, useDesktop } from '@/desktop/DesktopProvider';
 import desktopApps from '@/desktop/apps';
-
-const DESKTOP_SETTINGS_STORAGE_KEY = 'vintage-vibe-desktop-settings';
-const DEFAULT_DESKTOP_SETTINGS = {
-  accent: 'purple',
-  iconLayout: 'column',
-  scanlines: true,
-  wallpaper: 'teal'
-};
+import useCompactDesktop from '@/desktop/useCompactDesktop';
+import {
+  DEFAULT_DESKTOP_SESSION,
+  DEFAULT_DESKTOP_SETTINGS,
+  DESKTOP_STORAGE_VERSION,
+  loadDesktopData,
+  saveDesktopData
+} from '@/desktop/desktopStorage';
 const CONTEXT_MENU_SIZE = { height: 184, width: 156 };
 
 function getContextMenuPosition(x, y) {
@@ -43,39 +43,29 @@ const Button = styled.button`
   }
 `;
 
-function loadDesktopSettings() {
-  try {
-    const storedSettings = window.localStorage.getItem(
-      DESKTOP_SETTINGS_STORAGE_KEY
-    );
-
-    if (!storedSettings) {
-      return DEFAULT_DESKTOP_SETTINGS;
-    }
-
-    return {
-      ...DEFAULT_DESKTOP_SETTINGS,
-      ...JSON.parse(storedSettings)
-    };
-  } catch (error) {
-    return DEFAULT_DESKTOP_SETTINGS;
-  }
-}
-
-function DesktopShell() {
+function DesktopShell({ initialDesktopData }) {
+  const compactDesktop = useCompactDesktop();
   const [openStartMenu, setOpenStartMenu] = useState(false);
   const [shutdown, setShutdown] = useState(false);
   const [contextMenu, setContextMenu] = useState(null);
   const [showBootLog, setShowBootLog] = useState(true);
   const [selectedDesktopAppId, setSelectedDesktopAppId] = useState(null);
   const desktopIconRefs = React.useRef({});
-  const [desktopSettings, setDesktopSettings] = useState(loadDesktopSettings);
+  const [desktopSettings, setDesktopSettings] = useState(
+    initialDesktopData.settings
+  );
+  const [storageNotice, setStorageNotice] = useState(
+    initialDesktopData.recoveredFromError
+      ? 'Desktop settings were reset after stored data became unreadable.'
+      : null
+  );
   const {
     apps,
     windows,
     activeWindowId,
     cascadeWindows,
     clampWindows,
+    clearSession,
     cycleWindows,
     openApp,
     closeWindow,
@@ -102,11 +92,16 @@ function DesktopShell() {
   );
 
   React.useEffect(() => {
-    window.localStorage.setItem(
-      DESKTOP_SETTINGS_STORAGE_KEY,
-      JSON.stringify(desktopSettings)
-    );
-  }, [desktopSettings]);
+    const saved = saveDesktopData({
+      session: { activeWindowId, windows },
+      settings: desktopSettings,
+      version: DESKTOP_STORAGE_VERSION
+    });
+
+    if (!saved) {
+      setStorageNotice('Desktop settings could not be saved in this browser.');
+    }
+  }, [activeWindowId, desktopSettings, windows]);
 
   React.useEffect(() => {
     function keepWindowsInBounds() {
@@ -246,6 +241,9 @@ function DesktopShell() {
               onClick={event => {
                 event.stopPropagation();
                 setSelectedDesktopAppId(app.id);
+                if (compactDesktop) {
+                  openApp(app.id);
+                }
               }}
               onDoubleClick={event => {
                 event.stopPropagation();
@@ -272,6 +270,7 @@ function DesktopShell() {
             return (
               <DesktopWindow
                 app={app}
+                compact={compactDesktop}
                 windowState={windowState}
                 active={activeWindowId === windowState.id}
                 onClose={handleCloseWindow}
@@ -284,6 +283,7 @@ function DesktopShell() {
                   desktopSettings,
                   onOpenApp: openApp,
                   onArrangeDesktopIcons: arrangeDesktopIcons,
+                  onClearDesktopSession: clearSession,
                   onDesktopSettingsChange: updateDesktopSettings,
                   onResetDesktopSettings: resetDesktopSettings
                 }}
@@ -341,6 +341,12 @@ function DesktopShell() {
               </button>
             </div>
           )}
+          {storageNotice && (
+            <div className="desktop-notice" role="status">
+              <span>{storageNotice}</span>
+              <button onClick={() => setStorageNotice(null)}>Dismiss</button>
+            </div>
+          )}
         </div>
         <Taskbar
           open={openStartMenu}
@@ -360,9 +366,14 @@ function DesktopShell() {
 }
 
 function Home() {
+  const [initialDesktopData] = useState(loadDesktopData);
+  const initialSession = initialDesktopData.settings.restoreSession
+    ? initialDesktopData.session
+    : DEFAULT_DESKTOP_SESSION;
+
   return (
-    <DesktopProvider apps={desktopApps}>
-      <DesktopShell />
+    <DesktopProvider apps={desktopApps} initialSession={initialSession}>
+      <DesktopShell initialDesktopData={initialDesktopData} />
     </DesktopProvider>
   );
 }

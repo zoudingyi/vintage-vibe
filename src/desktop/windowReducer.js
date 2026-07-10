@@ -26,6 +26,9 @@ function clamp(value, minimum, maximum) {
 
 export function windowReducer(state, action) {
   switch (action.type) {
+    case 'CLEAR_SESSION':
+      return { ...initialDesktopState };
+
     case 'OPEN_APP': {
       const zIndex = nextLayer(state);
       const existingWindow = state.windows.find(

@@ -172,7 +172,9 @@ function Taskbar({
             </MenuList>
           )}
 
-          <Handle size={28} style={{ margin: 'auto 4px auto 7px' }} />
+          <span className="taskbar-handle">
+            <Handle size={28} style={{ margin: 'auto 4px auto 7px' }} />
+          </span>
 
           <div className="taskbar-window-list">
             {windows.map(windowState => {

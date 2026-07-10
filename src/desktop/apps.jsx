@@ -271,6 +271,7 @@ function ChoiceButton({ active, children, onClick }) {
 function SettingsApp({
   desktopSettings,
   onArrangeDesktopIcons,
+  onClearDesktopSession,
   onDesktopSettingsChange,
   onResetDesktopSettings
 }) {
@@ -332,9 +333,22 @@ function SettingsApp({
           />
           Scanlines
         </label>
+        <label className="settings-checkbox">
+          <input
+            checked={desktopSettings.restoreSession}
+            onChange={event =>
+              onDesktopSettingsChange({
+                restoreSession: event.target.checked
+              })
+            }
+            type="checkbox"
+          />
+          Restore previous session
+        </label>
         <div className="settings-choice-row">
           <Button onClick={onArrangeDesktopIcons}>Arrange Icons</Button>
           <Button onClick={onResetDesktopSettings}>Reset</Button>
+          <Button onClick={onClearDesktopSession}>Clear Session</Button>
         </div>
       </Fieldset>
     </div>
