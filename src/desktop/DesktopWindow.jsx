@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Draggable from 'react-draggable';
 import styled from 'styled-components';
 import { Button, Window, WindowContent, WindowHeader } from 'react95';
@@ -86,6 +86,13 @@ function DesktopWindow({
   const nodeRef = useRef(null);
   const AppComponent = app.component;
   const maximized = windowState.status === 'maximized';
+  const titleId = `desktop-window-title-${windowState.id}`;
+
+  useEffect(() => {
+    if (active && windowState.status !== 'minimized') {
+      nodeRef.current?.focus();
+    }
+  }, [active, windowState.status]);
 
   function startResize(event) {
     event.preventDefault();
@@ -125,6 +132,9 @@ function DesktopWindow({
       position={maximized ? { x: 0, y: 0 } : windowState.position}
     >
       <WindowFrame
+        aria-hidden={windowState.status === 'minimized'}
+        aria-labelledby={titleId}
+        aria-modal="false"
         $maximized={maximized}
         $height={windowState.size.height}
         $width={windowState.size.width}
@@ -134,13 +144,15 @@ function DesktopWindow({
           zIndex: windowState.zIndex
         }}
         onMouseDown={() => onFocus(windowState.id)}
+        role="dialog"
+        tabIndex={-1}
       >
         <Window className="desktop-window" data-active={active}>
           <WindowHeader
             className="desktop-window-title"
             onDoubleClick={() => onToggleMaximize(windowState.id)}
           >
-            <span className="desktop-window-title-text">
+            <span className="desktop-window-title-text" id={titleId}>
               <img className="desktop-window-icon" src={app.icon} alt="" />
               {app.title}
             </span>

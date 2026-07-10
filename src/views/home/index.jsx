@@ -67,6 +67,8 @@ function DesktopShell() {
   const [shutdown, setShutdown] = useState(false);
   const [contextMenu, setContextMenu] = useState(null);
   const [showBootLog, setShowBootLog] = useState(true);
+  const [selectedDesktopAppId, setSelectedDesktopAppId] = useState(null);
+  const desktopIconRefs = React.useRef({});
   const [desktopSettings, setDesktopSettings] = useState(loadDesktopSettings);
   const {
     apps,
@@ -74,6 +76,7 @@ function DesktopShell() {
     activeWindowId,
     cascadeWindows,
     clampWindows,
+    cycleWindows,
     openApp,
     closeWindow,
     minimizeWindow,
@@ -85,6 +88,18 @@ function DesktopShell() {
     focusWindow,
     toggleMaximizeWindow
   } = useDesktop();
+  const desktopApps = apps.filter(app => app.showOnDesktop);
+  const handleCloseWindow = React.useCallback(
+    windowId => {
+      const launcher =
+        desktopIconRefs.current[windowId] ||
+        document.querySelector('[data-start-button="true"]');
+
+      closeWindow(windowId);
+      launcher?.focus();
+    },
+    [closeWindow]
+  );
 
   React.useEffect(() => {
     window.localStorage.setItem(
@@ -105,6 +120,37 @@ function DesktopShell() {
     return () => window.removeEventListener('resize', keepWindowsInBounds);
   }, [clampWindows]);
 
+  React.useEffect(() => {
+    function handleSystemShortcut(event) {
+      if (event.ctrlKey && event.key === 'Escape') {
+        event.preventDefault();
+        setContextMenu(null);
+        setOpenStartMenu(currentValue => !currentValue);
+        return;
+      }
+
+      if (event.altKey && event.key === 'Tab') {
+        event.preventDefault();
+        cycleWindows(event.shiftKey ? -1 : 1);
+        return;
+      }
+
+      if (event.altKey && event.key === 'F4' && activeWindowId) {
+        event.preventDefault();
+        handleCloseWindow(activeWindowId);
+        return;
+      }
+
+      if (event.key === 'Escape') {
+        setContextMenu(null);
+        setOpenStartMenu(false);
+      }
+    }
+
+    window.addEventListener('keydown', handleSystemShortcut);
+    return () => window.removeEventListener('keydown', handleSystemShortcut);
+  }, [activeWindowId, cycleWindows, handleCloseWindow]);
+
   function updateDesktopSettings(nextSettings) {
     setDesktopSettings(currentSettings => ({
       ...currentSettings,
@@ -124,6 +170,35 @@ function DesktopShell() {
 
   function resetDesktopSettings() {
     setDesktopSettings(DEFAULT_DESKTOP_SETTINGS);
+  }
+
+  function handleDesktopIconKeyDown(event, appId) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      openApp(appId);
+      return;
+    }
+
+    const currentIndex = desktopApps.findIndex(app => app.id === appId);
+    const lastIndex = desktopApps.length - 1;
+    let nextIndex = null;
+
+    if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
+      nextIndex = currentIndex === lastIndex ? 0 : currentIndex + 1;
+    } else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
+      nextIndex = currentIndex === 0 ? lastIndex : currentIndex - 1;
+    } else if (event.key === 'Home') {
+      nextIndex = 0;
+    } else if (event.key === 'End') {
+      nextIndex = lastIndex;
+    }
+
+    if (nextIndex === null) {
+      return;
+    }
+
+    event.preventDefault();
+    desktopIconRefs.current[desktopApps[nextIndex].id]?.focus();
   }
 
   if (shutdown) {
@@ -163,12 +238,23 @@ function DesktopShell() {
             );
           }}
         >
-          {apps.filter(app => app.showOnDesktop).map(app => (
+          {desktopApps.map(app => (
             <Button
+              aria-pressed={selectedDesktopAppId === app.id}
               className="desktop-application-item"
+              data-selected={selectedDesktopAppId === app.id}
+              onClick={event => {
+                event.stopPropagation();
+                setSelectedDesktopAppId(app.id);
+              }}
               onDoubleClick={event => {
                 event.stopPropagation();
                 openApp(app.id);
+              }}
+              onFocus={() => setSelectedDesktopAppId(app.id)}
+              onKeyDown={event => handleDesktopIconKeyDown(event, app.id)}
+              ref={element => {
+                desktopIconRefs.current[app.id] = element;
               }}
               key={app.id}
             >
@@ -188,7 +274,7 @@ function DesktopShell() {
                 app={app}
                 windowState={windowState}
                 active={activeWindowId === windowState.id}
-                onClose={closeWindow}
+                onClose={handleCloseWindow}
                 onFocus={focusWindow}
                 onMinimize={minimizeWindow}
                 onMove={moveWindow}

@@ -121,6 +121,10 @@
 .desktop-application-item span {
   padding: 2px 3px 4px;
 }
+.desktop-application-item[data-selected='true'] span {
+  outline: 1px dotted white;
+  background: var(--desktop-accent-dark);
+}
 .desktop-application-item:active img {
   filter: grayscale(100%) sepia(100%) hue-rotate(-120deg) brightness(80%);
 }

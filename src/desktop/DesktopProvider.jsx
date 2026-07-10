@@ -75,6 +75,10 @@ export function DesktopProvider({ apps, children }) {
     dispatch({ type: 'CLAMP_WINDOWS', bounds });
   }, []);
 
+  const cycleWindows = useCallback((direction = 1) => {
+    dispatch({ type: 'CYCLE_WINDOWS', direction });
+  }, []);
+
   const tileWindows = useCallback(bounds => {
     dispatch({ type: 'TILE_WINDOWS', bounds });
   }, []);
@@ -90,6 +94,7 @@ export function DesktopProvider({ apps, children }) {
       activeWindowId,
       cascadeWindows,
       clampWindows,
+      cycleWindows,
       openApp,
       closeWindow,
       minimizeWindow,
@@ -107,6 +112,7 @@ export function DesktopProvider({ apps, children }) {
       cascadeWindows,
       clampWindows,
       closeWindow,
+      cycleWindows,
       focusWindow,
       minimizeWindow,
       moveWindow,

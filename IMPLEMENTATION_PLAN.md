@@ -16,13 +16,13 @@
 **Goal**: Make the desktop shell fully operable without a mouse.
 **Success Criteria**: Desktop icons, start menu, and windows support documented keyboard commands with visible focus and appropriate semantics.
 **Tests**: Icon navigation, Enter, Escape, Ctrl+Escape, Alt+Tab, Alt+F4, dialog labelling, and focus restoration.
-**Status**: In Progress
+**Status**: Complete
 
 ## Stage 4: Responsive Desktop and Session Restore
 **Goal**: Support narrow/touch screens and versioned persistence for desktop settings and window sessions.
 **Success Criteria**: Key content fits common viewport sizes, touch users can open apps, and valid sessions restore without making corrupted data fatal.
 **Tests**: Storage migration/fallback, restore opt-out, window session restore, settings reset isolation, and responsive interaction modes.
-**Status**: Not Started
+**Status**: In Progress
 
 ## Stage 5: Application Modules and Quality Gates
 **Goal**: Split desktop applications into focused modules, replace placeholders, remove legacy code, and finish documentation.

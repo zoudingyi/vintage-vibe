@@ -248,6 +248,122 @@ test('opens apps from the start menu', () => {
   expect(screen.getByText(/projects explorer/i)).toBeInTheDocument();
 });
 
+test('opens the focused desktop icon with Enter', () => {
+  renderDesktop();
+
+  const computerIcon = screen.getByRole('button', { name: /my computer/i });
+  computerIcon.focus();
+  fireEvent.keyDown(computerIcon, { key: 'Enter' });
+
+  expect(screen.getByText(/system properties/i)).toBeVisible();
+});
+
+test('moves focus between desktop icons with arrow keys', () => {
+  renderDesktop();
+
+  const computerIcon = screen.getByRole('button', { name: /my computer/i });
+  const folderIcon = screen.getByRole('button', { name: /my folder/i });
+  computerIcon.focus();
+  fireEvent.keyDown(computerIcon, { key: 'ArrowDown' });
+
+  expect(folderIcon).toHaveFocus();
+});
+
+test('toggles the start menu with Ctrl+Escape', () => {
+  renderDesktop();
+
+  fireEvent.keyDown(window, { ctrlKey: true, key: 'Escape' });
+
+  expect(screen.getByText(/profile/i)).toBeVisible();
+
+  fireEvent.keyDown(window, { ctrlKey: true, key: 'Escape' });
+
+  expect(screen.queryByText(/profile/i)).not.toBeInTheDocument();
+});
+
+test('dismisses desktop menus with Escape', () => {
+  renderDesktop();
+
+  fireEvent.click(screen.getByRole('button', { name: /start/i }));
+  fireEvent.keyDown(window, { key: 'Escape' });
+
+  expect(screen.queryByText(/profile/i)).not.toBeInTheDocument();
+
+  fireEvent.contextMenu(screen.getByTestId('desktop-surface'), {
+    clientX: 24,
+    clientY: 32
+  });
+  fireEvent.keyDown(window, { key: 'Escape' });
+
+  expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+});
+
+test('switches visible windows with Alt+Tab', () => {
+  renderDesktop();
+
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
+  openStartMenuItem(/projects/i);
+  fireEvent.keyDown(window, { altKey: true, key: 'Tab' });
+
+  const activeWindow = document.querySelector(
+    '.desktop-window[data-active="true"]'
+  );
+
+  expect(activeWindow).toHaveTextContent(/my computer/i);
+});
+
+test('closes the active window with Alt+F4', () => {
+  renderDesktop();
+
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
+  fireEvent.keyDown(window, { altKey: true, key: 'F4' });
+
+  expect(screen.queryByText(/system properties/i)).not.toBeInTheDocument();
+});
+
+test('navigates and opens start menu apps with the keyboard', () => {
+  renderDesktop();
+
+  fireEvent.click(screen.getByRole('button', { name: /start/i }));
+
+  const mediaPlayerItem = screen.getByRole('menuitem', {
+    name: /media player/i
+  });
+  const profileItem = screen.getByRole('menuitem', { name: /profile/i });
+
+  expect(mediaPlayerItem).toHaveFocus();
+
+  fireEvent.keyDown(mediaPlayerItem, { key: 'ArrowDown' });
+  expect(profileItem).toHaveFocus();
+
+  fireEvent.keyDown(profileItem, { key: 'Enter' });
+  expect(screen.getByText(/frontend system/i)).toBeVisible();
+});
+
+test('labels an opened application window as a dialog', () => {
+  renderDesktop();
+
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
+
+  expect(
+    screen.getByRole('dialog', { name: /my computer/i })
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole('dialog', { name: /my computer/i })
+  ).toHaveFocus();
+});
+
+test('restores focus to the desktop icon after closing its window', () => {
+  renderDesktop();
+
+  const computerIcon = screen.getByRole('button', { name: /my computer/i });
+  computerIcon.focus();
+  fireEvent.keyDown(computerIcon, { key: 'Enter' });
+  fireEvent.click(screen.getByLabelText(/close my computer/i));
+
+  expect(computerIcon).toHaveFocus();
+});
+
 test('closes the start menu when clicking the desktop', () => {
   renderDesktop();
 

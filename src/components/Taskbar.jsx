@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -27,6 +27,7 @@ function Taskbar({
   onShutdown
 }) {
   const [time, setTime] = useState('');
+  const menuItemRefs = useRef([]);
   const appsById = apps.reduce((items, app) => {
     items[app.id] = app;
     return items;
@@ -42,6 +43,12 @@ function Taskbar({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (open) {
+      menuItemRefs.current[0]?.focus();
+    }
+  }, [open]);
 
   function getCurrentTime() {
     const now = new Date();
@@ -68,13 +75,42 @@ function Taskbar({
     onFocusWindow(windowState.id);
   }
 
+  function handleMenuItemKeyDown(event, index, activate) {
+    const lastIndex = startMenuApps.length;
+    let nextIndex = null;
+
+    if (event.key === 'ArrowDown') {
+      nextIndex = index === lastIndex ? 0 : index + 1;
+    } else if (event.key === 'ArrowUp') {
+      nextIndex = index === 0 ? lastIndex : index - 1;
+    } else if (event.key === 'Home') {
+      nextIndex = 0;
+    } else if (event.key === 'End') {
+      nextIndex = lastIndex;
+    } else if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      activate();
+      setOpen(false);
+      return;
+    }
+
+    if (nextIndex !== null) {
+      event.preventDefault();
+      menuItemRefs.current[nextIndex]?.focus();
+    }
+  }
+
   return (
     <AppBar style={{ top: 'auto', bottom: 0, zIndex: 9999 }}>
       <Toolbar>
         <div className="tool-container">
           <Button
+            aria-controls="start-menu"
+            aria-expanded={open}
+            aria-haspopup="menu"
             onClick={() => setOpen(!open)}
             active={open ? true : undefined}
+            data-start-button="true"
             style={{ fontWeight: 'bold' }}
           >
             <img
@@ -87,6 +123,7 @@ function Taskbar({
           {open && (
             <MenuList
               className="vertical-MenuList"
+              id="start-menu"
               style={{
                 position: 'absolute',
                 left: '0',
@@ -94,10 +131,19 @@ function Taskbar({
               }}
               onClick={() => setOpen(false)}
             >
-              {startMenuApps.map(app => (
+              {startMenuApps.map((app, index) => (
                 <MenuListItem
                   className="ListItem"
                   onClick={() => onOpenApp(app.id)}
+                  onKeyDown={event =>
+                    handleMenuItemKeyDown(event, index, () =>
+                      onOpenApp(app.id)
+                    )
+                  }
+                  ref={element => {
+                    menuItemRefs.current[index] = element;
+                  }}
+                  tabIndex={-1}
                   key={app.id}
                 >
                   <img className="ListItem-icon" src={app.icon} alt="" />
@@ -105,7 +151,21 @@ function Taskbar({
                 </MenuListItem>
               ))}
               <Separator />
-              <MenuListItem className="ListItem" onClick={onShutdown}>
+              <MenuListItem
+                className="ListItem"
+                onClick={onShutdown}
+                onKeyDown={event =>
+                  handleMenuItemKeyDown(
+                    event,
+                    startMenuApps.length,
+                    onShutdown
+                  )
+                }
+                ref={element => {
+                  menuItemRefs.current[startMenuApps.length] = element;
+                }}
+                tabIndex={-1}
+              >
                 <img className="ListItem-icon" src={computerIcon} alt="" />
                 Shutdown
               </MenuListItem>
@@ -130,6 +190,10 @@ function Taskbar({
                     windowState.status !== 'minimized'
                       ? true
                       : undefined
+                  }
+                  aria-pressed={
+                    activeWindowId === windowState.id &&
+                    windowState.status !== 'minimized'
                   }
                   aria-label={`${
                     windowState.status === 'minimized' ? 'Restore' : 'Focus'

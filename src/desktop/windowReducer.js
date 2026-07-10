@@ -177,6 +177,38 @@ export function windowReducer(state, action) {
         })
       };
 
+    case 'CYCLE_WINDOWS': {
+      const visibleWindows = state.windows
+        .filter(windowState => windowState.status !== 'minimized')
+        .sort((first, second) => second.zIndex - first.zIndex);
+
+      if (visibleWindows.length === 0) {
+        return state;
+      }
+
+      const currentIndex = visibleWindows.findIndex(
+        windowState => windowState.id === state.activeWindowId
+      );
+      const targetIndex =
+        currentIndex === -1
+          ? 0
+          : (currentIndex + action.direction + visibleWindows.length) %
+            visibleWindows.length;
+      const targetWindowId = visibleWindows[targetIndex].id;
+      const zIndex = nextLayer(state);
+
+      return {
+        ...state,
+        activeWindowId: targetWindowId,
+        nextZIndex: zIndex,
+        windows: state.windows.map(windowState =>
+          windowState.id === targetWindowId
+            ? { ...windowState, zIndex }
+            : windowState
+        )
+      };
+    }
+
     case 'SHOW_DESKTOP':
       return {
         ...state,
