@@ -206,12 +206,18 @@ test('resizes a normal application window', () => {
 
   const resizeHandle = screen.getByLabelText(/resize my computer/i);
   const windowFrame = screen.getByRole('dialog', { name: /my computer/i });
+  const windowSurface = screen.getByTestId('window-surface-my-computer');
+  const content = screen.getByRole('region', {
+    name: /my computer content/i
+  });
 
   fireEvent.mouseDown(resizeHandle, { clientX: 420, clientY: 180 });
   fireEvent.mouseMove(window, { clientX: 520, clientY: 230 });
   fireEvent.mouseUp(window);
 
   expect(windowFrame).toHaveStyle('width: 520px');
+  expect(windowSurface).toHaveStyle({ height: '100%', width: '100%' });
+  expect(content).toHaveStyle({ flexGrow: '1', minHeight: '0' });
 });
 
 test('keeps the desktop context menu inside the viewport', () => {
