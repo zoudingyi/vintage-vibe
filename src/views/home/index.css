@@ -84,13 +84,12 @@
   isolation: isolate;
   overflow: hidden;
   background-color: #180032;
-  background-image: radial-gradient(
-      circle at 50% 42%,
-      #ffe580 0 8%,
-      #ff5dbb 8.5% 15%,
-      transparent 15.5%
+  background-image: linear-gradient(
+      155deg,
+      transparent 49%,
+      #351052 50% 59%,
+      transparent 60%
     ),
-    linear-gradient(155deg, transparent 49%, #351052 50% 59%, transparent 60%),
     linear-gradient(205deg, transparent 49%, #210d49 50% 61%, transparent 62%),
     linear-gradient(#16002f 0%, #682160 56%, #ff4f93 70%, #110127 71%);
   background-size: 100% 100%;
@@ -118,6 +117,35 @@
   transform: perspective(180px) rotateX(55deg);
   transform-origin: top;
   animation: neon-horizon-drift 4s linear infinite;
+}
+
+.desktop-wallpaper-neon-horizon::after {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  width: clamp(52px, 27%, 240px);
+  aspect-ratio: 1;
+  z-index: -2;
+  pointer-events: none;
+  border-radius: 50%;
+  background: linear-gradient(
+    to bottom,
+    #fff6b0 0 38%,
+    #ffd26d 38% 48%,
+    transparent 48% 52%,
+    #ffb061 52% 59%,
+    transparent 59% 64%,
+    #ff8373 64% 71%,
+    transparent 71% 77%,
+    #ff5c8f 77% 83%,
+    transparent 83% 90%,
+    #ff39b6 90% 100%
+  );
+  filter: drop-shadow(0 0 7px rgba(255, 227, 128, 0.95))
+    drop-shadow(0 0 22px rgba(255, 61, 181, 0.82));
+  transform: translateX(-50%);
+  animation: neon-horizon-sun-pulse 3.6s ease-in-out infinite alternate;
 }
 
 .desktop-wallpaper-midnight {
@@ -291,8 +319,20 @@
   }
 }
 
+@keyframes neon-horizon-sun-pulse {
+  from {
+    filter: drop-shadow(0 0 6px rgba(255, 227, 128, 0.9))
+      drop-shadow(0 0 16px rgba(255, 61, 181, 0.72));
+  }
+  to {
+    filter: drop-shadow(0 0 10px rgba(255, 238, 160, 1))
+      drop-shadow(0 0 28px rgba(255, 61, 181, 0.92));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .desktop-wallpaper-neon-horizon::before,
+  .desktop-wallpaper-neon-horizon::after,
   .desktop[data-icon-glow] .desktop-application-item,
   .desktop[data-icon-glow] .desktop-application-item::before,
   .desktop[data-icon-glow] .desktop-application-item img {
