@@ -46,7 +46,7 @@ Desktop settings and restorable window sessions are stored in the browser under 
 
 ## Settings pages
 
-- **Appearance** controls the react95 theme, wallpaper, scanlines, and scanline strength.
+- **Appearance** controls the react95 theme, wallpaper, scanlines, and scanline strength with a live CRT monitor preview.
 - **Desktop** controls column/grid icon layout and small/medium/large icon sizing.
 - **Taskbar** controls 12/24-hour clock formatting, seconds, and icon-only window buttons.
 - **System** controls session restore, the boot log, scoped resets, and window-session cleanup.

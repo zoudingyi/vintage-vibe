@@ -1,6 +1,19 @@
 import React from 'react';
-import { Button, Fieldset, Tab, TabBody, Tabs } from 'react95';
-import { desktopThemeOptions } from '../themeRegistry';
+import {
+  Button,
+  Fieldset,
+  Monitor,
+  Tab,
+  TabBody,
+  Tabs,
+  Window,
+  WindowContent,
+  WindowHeader
+} from 'react95';
+import {
+  desktopThemeOptions,
+  getDesktopThemeOption
+} from '../themeRegistry';
 import { wallpaperOptions } from '../wallpaperRegistry';
 
 const settingsTabs = [
@@ -79,8 +92,55 @@ function WallpaperChoice({ active, onClick, option }) {
 }
 
 function AppearanceSettings({ desktopSettings, onDesktopSettingsChange }) {
+  const previewTheme = getDesktopThemeOption(
+    desktopSettings.react95Theme
+  ).theme;
+
   return (
     <>
+      <Fieldset label="Preview">
+        <div className="settings-monitor-stage">
+          <Monitor
+            aria-label="Appearance preview"
+            backgroundStyles={{ padding: 0 }}
+            role="region"
+          >
+            <div
+              className={`settings-monitor-screen desktop-wallpaper-${desktopSettings.wallpaper}`}
+              data-scanline-intensity={desktopSettings.scanlineIntensity}
+              data-scanlines={desktopSettings.scanlines}
+              data-testid="settings-monitor-screen"
+            >
+              <div aria-hidden="true" className="settings-monitor-icons">
+                <span />
+                <span />
+              </div>
+              <Window
+                className="settings-monitor-window"
+                data-testid="settings-monitor-window"
+              >
+                <WindowHeader className="settings-monitor-window-header">
+                  <span>Preview</span>
+                  <span>×</span>
+                </WindowHeader>
+                <WindowContent className="settings-monitor-window-content">
+                  Theme
+                </WindowContent>
+              </Window>
+              <div
+                aria-hidden="true"
+                className="settings-monitor-taskbar"
+                style={{
+                  background: previewTheme.material,
+                  borderColor: `${previewTheme.borderLightest} ${previewTheme.borderDark} ${previewTheme.borderDark} ${previewTheme.borderLightest}`
+                }}
+              >
+                <span>Start</span>
+              </div>
+            </div>
+          </Monitor>
+        </div>
+      </Fieldset>
       <Fieldset label="Wallpaper">
         <div className="settings-wallpaper-grid">
           {wallpaperOptions.map(option => (

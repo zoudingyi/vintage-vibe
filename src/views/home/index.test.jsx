@@ -567,6 +567,38 @@ test('applies scanline intensity without exposing inactive animation settings', 
   );
 });
 
+test('previews appearance changes inside the settings monitor', () => {
+  renderDesktop();
+
+  openStartMenuItem(/settings/i);
+
+  const preview = screen.getByRole('region', {
+    name: /appearance preview/i
+  });
+  expect(within(preview).getByTestId('settings-monitor-screen')).toHaveClass(
+    'desktop-wallpaper-teal'
+  );
+  expect(within(preview).getByTestId('settings-monitor-screen')).toHaveAttribute(
+    'data-scanlines',
+    'true'
+  );
+
+  fireEvent.click(screen.getByRole('button', { name: /pixel clouds/i }));
+  fireEvent.click(screen.getByRole('button', { name: /matrix/i }));
+  fireEvent.click(screen.getByLabelText(/^scanlines$/i));
+
+  expect(within(preview).getByTestId('settings-monitor-screen')).toHaveClass(
+    'desktop-wallpaper-clouds'
+  );
+  expect(within(preview).getByTestId('settings-monitor-screen')).toHaveAttribute(
+    'data-scanlines',
+    'false'
+  );
+  expect(within(preview).getByTestId('settings-monitor-window')).toHaveStyle({
+    backgroundColor: '#535353'
+  });
+});
+
 test('applies desktop icon layout and size preferences', () => {
   renderDesktop();
 
