@@ -2,10 +2,7 @@ import { RouterProvider } from 'react-router-dom';
 import router from './router';
 import { styleReset } from 'react95';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import {
-  theSixtiesUSA
-  // candy
-} from 'react95/dist/themes';
+import theSixtiesUSA from 'react95/dist/themes/theSixtiesUSA';
 import ms_sans_serif_bold from 'react95/dist/fonts/ms_sans_serif_bold.woff2';
 import ms_sans_serif from 'react95/dist/fonts/ms_sans_serif.woff2';
 
