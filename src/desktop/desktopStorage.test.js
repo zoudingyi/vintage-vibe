@@ -98,7 +98,6 @@ test('loads supported multi-page desktop settings', () => {
   const desktopData = loadDesktopData(window.localStorage);
 
   expect(desktopData.settings).toMatchObject({
-    animationMode: 'reduced',
     clockFormat: '12h',
     iconLayout: 'grid',
     iconSize: 'large',
@@ -108,6 +107,7 @@ test('loads supported multi-page desktop settings', () => {
     taskbarButtonMode: 'icon',
     wallpaper: 'clouds'
   });
+  expect(desktopData.settings).not.toHaveProperty('animationMode');
 });
 
 test('falls back from unsupported multi-page desktop settings', () => {
@@ -132,7 +132,6 @@ test('falls back from unsupported multi-page desktop settings', () => {
   const desktopData = loadDesktopData(window.localStorage);
 
   expect(desktopData.settings).toMatchObject({
-    animationMode: 'system',
     clockFormat: '24h',
     iconSize: 'medium',
     scanlineIntensity: 'normal',
@@ -141,4 +140,5 @@ test('falls back from unsupported multi-page desktop settings', () => {
     taskbarButtonMode: 'label',
     wallpaper: 'teal'
   });
+  expect(desktopData.settings).not.toHaveProperty('animationMode');
 });

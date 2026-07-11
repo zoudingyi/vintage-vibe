@@ -47,15 +47,6 @@
   opacity: 0.9;
 }
 
-.desktop-environment-wrapper[data-animation-mode='reduced'] *,
-.desktop-environment-wrapper[data-animation-mode='reduced'] *::before,
-.desktop-environment-wrapper[data-animation-mode='reduced'] *::after {
-  scroll-behavior: auto !important;
-  animation-duration: 0.01ms !important;
-  animation-iteration-count: 1 !important;
-  transition-duration: 0.01ms !important;
-}
-
 .desktop {
   display: flex;
   flex-direction: column;
@@ -354,6 +345,7 @@
 }
 
 .settings-tabs {
+  margin-top: 5px;
   flex: none;
 }
 

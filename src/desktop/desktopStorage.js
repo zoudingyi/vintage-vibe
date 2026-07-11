@@ -8,7 +8,6 @@ export const LEGACY_SETTINGS_STORAGE_KEY = 'vintage-vibe-desktop-settings';
 export const DESKTOP_STORAGE_VERSION = 1;
 
 export const DEFAULT_DESKTOP_SETTINGS = {
-  animationMode: 'system',
   clockFormat: '24h',
   iconLayout: 'column',
   iconSize: 'medium',
@@ -84,11 +83,6 @@ function normalizeSettings(settings) {
       : legacyAccentThemes[settings?.accent];
 
   return {
-    animationMode: ['system', 'full', 'reduced'].includes(
-      settings?.animationMode
-    )
-      ? settings.animationMode
-      : DEFAULT_DESKTOP_SETTINGS.animationMode,
     clockFormat: ['12h', '24h'].includes(settings?.clockFormat)
       ? settings.clockFormat
       : DEFAULT_DESKTOP_SETTINGS.clockFormat,

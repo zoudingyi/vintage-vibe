@@ -132,24 +132,6 @@ function AppearanceSettings({ desktopSettings, onDesktopSettingsChange }) {
             </ChoiceButton>
           ))}
         </div>
-        <span className="settings-control-label">Animation Mode</span>
-        <div className="settings-choice-row">
-          {[
-            ['system', 'Follow System'],
-            ['full', 'Full'],
-            ['reduced', 'Reduced']
-          ].map(([value, label]) => (
-            <ChoiceButton
-              active={desktopSettings.animationMode === value}
-              key={value}
-              onClick={() =>
-                onDesktopSettingsChange({ animationMode: value })
-              }
-            >
-              {label}
-            </ChoiceButton>
-          ))}
-        </div>
       </Fieldset>
     </>
   );
@@ -354,7 +336,6 @@ export default function SettingsApp({
 
   return (
     <div className="settings-app">
-      <strong>Settings</strong>
       <Tabs
         aria-label="Settings pages"
         className="settings-tabs"

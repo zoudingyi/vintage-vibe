@@ -549,20 +549,21 @@ test('selects and persists an expanded wallpaper option', () => {
   ).toBe('checkerboard');
 });
 
-test('applies visual effect preferences from appearance settings', () => {
+test('applies scanline intensity without exposing inactive animation settings', () => {
   renderDesktop();
 
   openStartMenuItem(/settings/i);
   fireEvent.click(screen.getByRole('button', { name: /strong/i }));
-  fireEvent.click(screen.getByRole('button', { name: /reduced/i }));
 
   expect(screen.getByTestId('desktop-environment')).toHaveAttribute(
     'data-scanline-intensity',
     'strong'
   );
-  expect(screen.getByTestId('desktop-environment')).toHaveAttribute(
-    'data-animation-mode',
-    'reduced'
+  expect(
+    screen.queryByText(/^animation mode$/i)
+  ).not.toBeInTheDocument();
+  expect(screen.getByTestId('desktop-environment')).not.toHaveAttribute(
+    'data-animation-mode'
   );
 });
 

@@ -174,7 +174,6 @@ function DesktopShell({ initialDesktopData }) {
 
   function resetDesktopAppearance() {
     updateDesktopSettings({
-      animationMode: DEFAULT_DESKTOP_SETTINGS.animationMode,
       react95Theme: DEFAULT_DESKTOP_SETTINGS.react95Theme,
       scanlineIntensity: DEFAULT_DESKTOP_SETTINGS.scanlineIntensity,
       scanlines: DEFAULT_DESKTOP_SETTINGS.scanlines,
@@ -216,7 +215,6 @@ function DesktopShell({ initialDesktopData }) {
       <ThemeProvider theme={desktopTheme}>
         <Wrapper
           className="desktop-environment-wrapper"
-          data-animation-mode={desktopSettings.animationMode}
           data-scanline-intensity={desktopSettings.scanlineIntensity}
           data-scanlines={desktopSettings.scanlines}
           data-testid="desktop-environment"
@@ -237,7 +235,6 @@ function DesktopShell({ initialDesktopData }) {
     <ThemeProvider theme={desktopTheme}>
       <Wrapper
         className="desktop-environment-wrapper"
-        data-animation-mode={desktopSettings.animationMode}
         data-scanline-intensity={desktopSettings.scanlineIntensity}
         data-scanlines={desktopSettings.scanlines}
         data-testid="desktop-environment"
