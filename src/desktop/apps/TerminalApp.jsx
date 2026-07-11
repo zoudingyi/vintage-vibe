@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { Button } from 'react95';
+import {
+  getDesktopThemeOption,
+  resolveDesktopThemeId
+} from '../themeRegistry';
 
 export default function TerminalApp({ onDesktopSettingsChange, onOpenApp }) {
   const [command, setCommand] = useState('');
@@ -10,7 +14,7 @@ export default function TerminalApp({ onDesktopSettingsChange, onOpenApp }) {
 
   function getTerminalOutput(normalizedCommand) {
     if (normalizedCommand === 'help') {
-      return 'Commands: about, projects, contact, theme green, theme amber, theme purple, clear, rosebud';
+      return 'Commands: about, projects, contact, theme original, theme vapor, theme candy, theme lilac, theme matrix, theme dark, theme contrast, clear, rosebud';
     }
 
     if (normalizedCommand === 'about') {
@@ -27,12 +31,16 @@ export default function TerminalApp({ onDesktopSettingsChange, onOpenApp }) {
     }
 
     if (normalizedCommand.startsWith('theme ')) {
-      const accent = normalizedCommand.replace('theme ', '');
+      const themeId = resolveDesktopThemeId(
+        normalizedCommand.replace('theme ', '')
+      );
 
-      if (['green', 'amber', 'purple'].includes(accent)) {
-        onDesktopSettingsChange({ accent });
-        return `Theme accent set to ${accent}.`;
+      if (themeId) {
+        onDesktopSettingsChange({ react95Theme: themeId });
+        return `System theme set to ${getDesktopThemeOption(themeId).label}.`;
       }
+
+      return 'Unknown theme. Try original, vapor, candy, lilac, matrix, dark, or contrast.';
     }
 
     if (normalizedCommand === 'rosebud') {

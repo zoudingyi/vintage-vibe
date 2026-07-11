@@ -16,10 +16,10 @@
 **Goal**: Add accessible theme previews to Settings and update terminal theme commands with legacy aliases.
 **Success Criteria**: Users can select all curated themes, see the active choice, reset safely, and switch themes through documented terminal commands.
 **Tests**: Settings selection, active state, terminal commands, reset, and compact layout behavior.
-**Status**: In Progress
+**Status**: Complete
 
 ## Stage 4: Regression and Delivery
 **Goal**: Complete documentation, browser verification, and all repository quality gates.
 **Success Criteria**: Desktop and compact theme switching works in a real browser; tests, lint, build, and diff checks pass; no temporary artifacts remain.
 **Tests**: Full Jest suite, ESLint, production build, wide/narrow browser smoke tests, and persisted refresh.
-**Status**: Not Started
+**Status**: In Progress

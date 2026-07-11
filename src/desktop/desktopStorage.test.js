@@ -18,12 +18,12 @@ test('migrates legacy desktop settings into versioned data', () => {
 
   expect(desktopData).toMatchObject({
     settings: {
-      accent: 'green',
       react95Theme: 'matrix',
       wallpaper: 'sunset'
     },
     version: 1
   });
+  expect(desktopData.settings).not.toHaveProperty('accent');
   expect(window.localStorage.getItem(DESKTOP_STORAGE_KEY)).not.toBeNull();
 });
 
@@ -35,7 +35,7 @@ test('recovers from corrupted desktop data with safe defaults', () => {
   expect(desktopData).toMatchObject({
     recoveredFromError: true,
     session: { activeWindowId: null, windows: [] },
-    settings: { accent: 'purple', wallpaper: 'teal' }
+    settings: { react95Theme: 'theSixtiesUSA', wallpaper: 'teal' }
   });
 });
 

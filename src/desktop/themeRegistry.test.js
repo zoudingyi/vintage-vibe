@@ -1,7 +1,8 @@
 import {
   DEFAULT_DESKTOP_THEME_ID,
   desktopThemeOptions,
-  getDesktopThemeOption
+  getDesktopThemeOption,
+  resolveDesktopThemeId
 } from './themeRegistry';
 
 test('registers the curated react95 desktop themes', () => {
@@ -22,4 +23,13 @@ test('registers the curated react95 desktop themes', () => {
   expect(getDesktopThemeOption(DEFAULT_DESKTOP_THEME_ID).theme.name).toBe(
     DEFAULT_DESKTOP_THEME_ID
   );
+});
+
+test('resolves documented and legacy terminal theme aliases', () => {
+  expect(resolveDesktopThemeId('vapor')).toBe('vaporTeal');
+  expect(resolveDesktopThemeId('dark')).toBe('modernDark');
+  expect(resolveDesktopThemeId('contrast')).toBe('highContrast');
+  expect(resolveDesktopThemeId('green')).toBe('matrix');
+  expect(resolveDesktopThemeId('purple')).toBe('theSixtiesUSA');
+  expect(resolveDesktopThemeId('amber')).toBe('candy');
 });

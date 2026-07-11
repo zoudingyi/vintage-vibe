@@ -8,16 +8,6 @@
   height: 100vh;
 }
 
-.desktop-accent-green {
-  --desktop-accent: rgb(114, 255, 147);
-  --desktop-accent-dark: rgb(10, 95, 42);
-}
-
-.desktop-accent-amber {
-  --desktop-accent: rgb(255, 194, 87);
-  --desktop-accent-dark: rgb(120, 73, 15);
-}
-
 .desktop-environment-wrapper::after {
   content: '';
   display: block;
@@ -294,6 +284,34 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.settings-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.settings-theme-choice {
+  display: flex;
+  min-width: 0;
+  min-height: 48px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  padding: 5px;
+  text-align: left;
+}
+
+.settings-theme-preview {
+  display: grid;
+  height: 12px;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid black;
+}
+
+.settings-theme-swatch {
+  min-width: 0;
 }
 
 .settings-checkbox {

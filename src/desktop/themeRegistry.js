@@ -20,9 +20,31 @@ export const desktopThemeOptions = [
   { id: 'highContrast', label: 'High Contrast', theme: highContrast }
 ];
 
+const terminalThemeAliases = {
+  amber: 'candy',
+  candy: 'candy',
+  contrast: 'highContrast',
+  dark: 'modernDark',
+  green: 'matrix',
+  highcontrast: 'highContrast',
+  lilac: 'lilac',
+  matrix: 'matrix',
+  moderndark: 'modernDark',
+  original: 'original',
+  purple: 'theSixtiesUSA',
+  sixties: 'theSixtiesUSA',
+  thesixtiesusa: 'theSixtiesUSA',
+  vapor: 'vaporTeal',
+  vaporteal: 'vaporTeal'
+};
+
 export function getDesktopThemeOption(themeId) {
   return (
     desktopThemeOptions.find(option => option.id === themeId) ||
     desktopThemeOptions.find(option => option.id === DEFAULT_DESKTOP_THEME_ID)
   );
+}
+
+export function resolveDesktopThemeId(commandValue) {
+  return terminalThemeAliases[commandValue.toLowerCase()] || null;
 }

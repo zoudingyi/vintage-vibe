@@ -209,7 +209,7 @@ function DesktopShell({ initialDesktopData }) {
     return (
       <ThemeProvider theme={desktopTheme}>
         <Wrapper
-          className={`desktop-environment-wrapper desktop-accent-${desktopSettings.accent}`}
+          className="desktop-environment-wrapper"
           data-scanlines={desktopSettings.scanlines}
           data-testid="desktop-environment"
           style={desktopThemeStyle}
@@ -228,7 +228,7 @@ function DesktopShell({ initialDesktopData }) {
   return (
     <ThemeProvider theme={desktopTheme}>
       <Wrapper
-        className={`desktop-environment-wrapper desktop-accent-${desktopSettings.accent}`}
+        className="desktop-environment-wrapper"
         data-scanlines={desktopSettings.scanlines}
         data-testid="desktop-environment"
         style={desktopThemeStyle}

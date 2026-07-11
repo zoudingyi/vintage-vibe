@@ -1,10 +1,44 @@
 import React from 'react';
 import { Button, Fieldset } from 'react95';
+import { desktopThemeOptions } from '../themeRegistry';
 
 function ChoiceButton({ active, children, onClick }) {
   return (
-    <Button active={active ? true : undefined} onClick={onClick}>
+    <Button
+      active={active ? true : undefined}
+      aria-pressed={active}
+      onClick={onClick}
+    >
       {children}
+    </Button>
+  );
+}
+
+function ThemeChoice({ active, onClick, option }) {
+  const previewColors = [
+    option.theme.headerBackground,
+    option.theme.material,
+    option.theme.hoverBackground
+  ];
+
+  return (
+    <Button
+      active={active ? true : undefined}
+      aria-label={option.label}
+      aria-pressed={active}
+      className="settings-theme-choice"
+      onClick={onClick}
+    >
+      <span aria-hidden="true" className="settings-theme-preview">
+        {previewColors.map((color, index) => (
+          <span
+            className="settings-theme-swatch"
+            key={`${option.id}-${index}`}
+            style={{ background: color }}
+          />
+        ))}
+      </span>
+      <span>{option.label}</span>
     </Button>
   );
 }
@@ -41,26 +75,18 @@ export default function SettingsApp({
           </ChoiceButton>
         </div>
       </Fieldset>
-      <Fieldset label="Accent">
-        <div className="settings-choice-row">
-          <ChoiceButton
-            active={desktopSettings.accent === 'purple'}
-            onClick={() => onDesktopSettingsChange({ accent: 'purple' })}
-          >
-            Purple
-          </ChoiceButton>
-          <ChoiceButton
-            active={desktopSettings.accent === 'green'}
-            onClick={() => onDesktopSettingsChange({ accent: 'green' })}
-          >
-            CRT Green
-          </ChoiceButton>
-          <ChoiceButton
-            active={desktopSettings.accent === 'amber'}
-            onClick={() => onDesktopSettingsChange({ accent: 'amber' })}
-          >
-            Amber
-          </ChoiceButton>
+      <Fieldset label="System Theme">
+        <div className="settings-theme-grid">
+          {desktopThemeOptions.map(option => (
+            <ThemeChoice
+              active={desktopSettings.react95Theme === option.id}
+              key={option.id}
+              onClick={() =>
+                onDesktopSettingsChange({ react95Theme: option.id })
+              }
+              option={option}
+            />
+          ))}
         </div>
       </Fieldset>
       <Fieldset label="Desktop">

@@ -499,6 +499,38 @@ test('persists wallpaper settings from the settings app', () => {
   ).toBe('starfield');
 });
 
+test('switches and persists the react95 theme from settings', () => {
+  renderDesktop();
+
+  openStartMenuItem(/settings/i);
+  fireEvent.click(screen.getByRole('button', { name: /matrix/i }));
+
+  expect(screen.getByTestId('window-surface-settings')).toHaveStyle({
+    backgroundColor: '#535353'
+  });
+  expect(
+    JSON.parse(window.localStorage.getItem(DESKTOP_STORAGE_KEY)).settings
+      .react95Theme
+  ).toBe('matrix');
+});
+
+test('shows the active theme and resets it to the default', () => {
+  renderDesktop();
+
+  openStartMenuItem(/settings/i);
+
+  const defaultTheme = screen.getByRole('button', { name: /sixties usa/i });
+  const matrixTheme = screen.getByRole('button', { name: /matrix/i });
+
+  expect(defaultTheme).toHaveAttribute('aria-pressed', 'true');
+
+  fireEvent.click(matrixTheme);
+  expect(matrixTheme).toHaveAttribute('aria-pressed', 'true');
+
+  fireEvent.click(screen.getByRole('button', { name: /^reset$/i }));
+  expect(defaultTheme).toHaveAttribute('aria-pressed', 'true');
+});
+
 test('loads persisted desktop settings', () => {
   window.localStorage.setItem(
     'vintage-vibe-desktop-settings',
@@ -510,9 +542,10 @@ test('loads persisted desktop settings', () => {
   expect(screen.getByTestId('desktop-surface')).toHaveClass(
     'desktop-wallpaper-sunset'
   );
-  expect(screen.getByTestId('desktop-environment')).toHaveClass(
-    'desktop-accent-green'
-  );
+  expect(screen.getByTestId('desktop-environment')).toHaveStyle({
+    '--desktop-accent': '#a7a7a7',
+    '--desktop-accent-dark': '#282828'
+  });
 });
 
 test('applies the persisted react95 theme to desktop windows', () => {
@@ -696,13 +729,13 @@ test('runs terminal commands and hidden commands', () => {
   expect(screen.getByText(/commands: about/i)).toBeInTheDocument();
 
   fireEvent.change(screen.getByLabelText(/terminal command/i), {
-    target: { value: 'theme green' }
+    target: { value: 'theme matrix' }
   });
   fireEvent.click(screen.getByRole('button', { name: /run/i }));
 
-  expect(screen.getByTestId('desktop-environment')).toHaveClass(
-    'desktop-accent-green'
-  );
+  expect(screen.getByTestId('window-surface-terminal')).toHaveStyle({
+    backgroundColor: '#535353'
+  });
 
   fireEvent.change(screen.getByLabelText(/terminal command/i), {
     target: { value: 'rosebud' }
