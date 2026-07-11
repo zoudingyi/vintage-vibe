@@ -576,7 +576,7 @@ test('previews appearance changes inside the settings monitor', () => {
     name: /appearance preview/i
   });
   expect(within(preview).getByTestId('settings-monitor-screen')).toHaveClass(
-    'desktop-wallpaper-teal'
+    'desktop-wallpaper-sunset'
   );
   expect(within(preview).getByTestId('settings-monitor-screen')).toHaveAttribute(
     'data-scanlines',
@@ -769,7 +769,7 @@ test('resets appearance without changing system preferences', () => {
   expect(settings).toMatchObject({
     react95Theme: 'theSixtiesUSA',
     restoreSession: false,
-    wallpaper: 'teal'
+    wallpaper: 'sunset'
   });
 });
 

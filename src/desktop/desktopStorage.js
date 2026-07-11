@@ -18,7 +18,7 @@ export const DEFAULT_DESKTOP_SETTINGS = {
   showBootLog: true,
   showSeconds: false,
   taskbarButtonMode: 'label',
-  wallpaper: 'teal'
+  wallpaper: 'sunset'
 };
 
 const legacyAccentThemes = {

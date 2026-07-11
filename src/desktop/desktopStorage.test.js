@@ -35,7 +35,7 @@ test('recovers from corrupted desktop data with safe defaults', () => {
   expect(desktopData).toMatchObject({
     recoveredFromError: true,
     session: { activeWindowId: null, windows: [] },
-    settings: { react95Theme: 'theSixtiesUSA', wallpaper: 'teal' }
+    settings: { react95Theme: 'theSixtiesUSA', wallpaper: 'sunset' }
   });
 });
 
@@ -138,7 +138,7 @@ test('falls back from unsupported multi-page desktop settings', () => {
     showBootLog: true,
     showSeconds: false,
     taskbarButtonMode: 'label',
-    wallpaper: 'teal'
+    wallpaper: 'sunset'
   });
   expect(desktopData.settings).not.toHaveProperty('animationMode');
 });
