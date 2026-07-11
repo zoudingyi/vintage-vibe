@@ -16,10 +16,10 @@
 **Goal**: Add hidden aesthetic, mallsoft, VHS, and sunset commands that update desktop settings.
 **Success Criteria**: Commands produce themed output and apply the documented setting combinations without appearing in help.
 **Tests**: Each command output and resulting desktop state.
-**Status**: In Progress
+**Status**: Complete
 
 ## Stage 4: Regression and Delivery
 **Goal**: Complete responsive browser verification, documentation, repository gates, and incremental commits.
 **Success Criteria**: All effects work in normal, resized, maximized, and compact layouts; tests, lint, build, and diff checks pass.
 **Tests**: Full Jest suite, ESLint, production build, browser geometry and visual computed-style checks.
-**Status**: Not Started
+**Status**: In Progress

@@ -963,6 +963,77 @@ test('runs terminal commands and hidden commands', () => {
   expect(screen.getByText(/infinite nostalgia credits/i)).toBeInTheDocument();
 });
 
+test('applies hidden vaporwave terminal presets without listing them in help', () => {
+  renderDesktop();
+
+  openStartMenuItem(/terminal/i);
+
+  const runCommand = value => {
+    fireEvent.change(screen.getByLabelText(/terminal command/i), {
+      target: { value }
+    });
+    fireEvent.click(screen.getByRole('button', { name: /run/i }));
+  };
+
+  runCommand('help');
+  expect(screen.getByText(/commands: about/i)).not.toHaveTextContent(
+    /aesthetic|mallsoft|vhs on|sunset/i
+  );
+
+  runCommand('aesthetic');
+  expect(screen.getByText(/aesthetic mode engaged/i)).toBeInTheDocument();
+  expect(screen.getByTestId('desktop-surface')).toHaveClass(
+    'desktop-wallpaper-neon-horizon'
+  );
+  expect(screen.getByTestId('desktop-environment')).toHaveAttribute(
+    'data-scanline-intensity',
+    'strong'
+  );
+  expect(
+    JSON.parse(window.localStorage.getItem(DESKTOP_STORAGE_KEY)).settings
+  ).toMatchObject({
+    react95Theme: 'vaporTeal',
+    scanlineIntensity: 'strong',
+    scanlines: true,
+    wallpaper: 'neon-horizon'
+  });
+
+  runCommand('mallsoft');
+  expect(screen.getByText(/mallsoft ambience loaded/i)).toBeInTheDocument();
+  expect(screen.getByTestId('desktop-surface')).toHaveClass(
+    'desktop-wallpaper-clouds'
+  );
+  expect(
+    JSON.parse(window.localStorage.getItem(DESKTOP_STORAGE_KEY)).settings
+  ).toMatchObject({
+    react95Theme: 'candy',
+    scanlineIntensity: 'subtle',
+    scanlines: true,
+    wallpaper: 'clouds'
+  });
+
+  runCommand('vhs off');
+  expect(screen.getByTestId('desktop-environment')).toHaveAttribute(
+    'data-scanlines',
+    'false'
+  );
+
+  runCommand('vhs on');
+  expect(screen.getByTestId('desktop-environment')).toHaveAttribute(
+    'data-scanlines',
+    'true'
+  );
+  expect(screen.getByTestId('desktop-environment')).toHaveAttribute(
+    'data-scanline-intensity',
+    'strong'
+  );
+
+  runCommand('sunset');
+  expect(screen.getByTestId('desktop-surface')).toHaveClass(
+    'desktop-wallpaper-sunset'
+  );
+});
+
 test('persists guestbook signatures', () => {
   renderDesktop();
 

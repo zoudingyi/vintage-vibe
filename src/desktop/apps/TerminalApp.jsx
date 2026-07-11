@@ -47,6 +47,44 @@ export default function TerminalApp({ onDesktopSettingsChange, onOpenApp }) {
       return 'Secret unlocked: infinite nostalgia credits.';
     }
 
+    if (normalizedCommand === 'aesthetic') {
+      onDesktopSettingsChange({
+        react95Theme: 'vaporTeal',
+        scanlineIntensity: 'strong',
+        scanlines: true,
+        wallpaper: 'neon-horizon'
+      });
+      return 'Aesthetic mode engaged. Neon horizon synchronized.';
+    }
+
+    if (normalizedCommand === 'mallsoft') {
+      onDesktopSettingsChange({
+        react95Theme: 'candy',
+        scanlineIntensity: 'subtle',
+        scanlines: true,
+        wallpaper: 'clouds'
+      });
+      return 'Mallsoft ambience loaded. Please enjoy the empty food court.';
+    }
+
+    if (normalizedCommand === 'vhs on') {
+      onDesktopSettingsChange({
+        scanlineIntensity: 'strong',
+        scanlines: true
+      });
+      return 'VHS tracking enabled.';
+    }
+
+    if (normalizedCommand === 'vhs off') {
+      onDesktopSettingsChange({ scanlines: false });
+      return 'VHS tracking disabled.';
+    }
+
+    if (normalizedCommand === 'sunset') {
+      onDesktopSettingsChange({ wallpaper: 'sunset' });
+      return 'Sunset drive restored.';
+    }
+
     return `Bad command or file name: ${command}`;
   }
 
