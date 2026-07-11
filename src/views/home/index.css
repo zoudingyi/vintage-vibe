@@ -306,6 +306,7 @@
 .settings-theme-preview {
   display: grid;
   height: 12px;
+  align-self: stretch;
   grid-template-columns: repeat(3, 1fr);
   border: 1px solid black;
 }
