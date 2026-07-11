@@ -2,6 +2,8 @@
 
 Vintage Vibe is a playable React portfolio that combines a Windows 95-inspired desktop shell with a Vaporwave boot screen. Applications open in managed windows and share desktop-level interactions instead of behaving like separate pages.
 
+Planned visual effects, audio features, and desktop applications are tracked in [ROADMAP.md](ROADMAP.md).
+
 ## Desktop features
 
 - Draggable, resizable, minimizable, maximizable windows.
