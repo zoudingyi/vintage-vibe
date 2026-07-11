@@ -515,6 +515,28 @@ test('loads persisted desktop settings', () => {
   );
 });
 
+test('applies the persisted react95 theme to desktop windows', () => {
+  window.localStorage.setItem(
+    DESKTOP_STORAGE_KEY,
+    JSON.stringify({
+      version: 1,
+      settings: { react95Theme: 'matrix' },
+      session: { activeWindowId: null, windows: [] }
+    })
+  );
+
+  renderDesktop();
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
+
+  expect(screen.getByTestId('window-surface-my-computer')).toHaveStyle({
+    backgroundColor: '#535353'
+  });
+  expect(screen.getByTestId('desktop-environment')).toHaveStyle({
+    '--desktop-accent': '#a7a7a7',
+    '--desktop-accent-dark': '#282828'
+  });
+});
+
 test('clears the current window session from settings', () => {
   renderDesktop();
 

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import './index.css';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 
 import Taskbar from '@/components/Taskbar';
 import DesktopWindow from '@/desktop/DesktopWindow';
 import { DesktopProvider, useDesktop } from '@/desktop/DesktopProvider';
 import appRegistry from '@/desktop/appRegistry';
+import { getDesktopThemeOption } from '@/desktop/themeRegistry';
 import useCompactDesktop from '@/desktop/useCompactDesktop';
 import {
   DEFAULT_DESKTOP_SESSION,
@@ -79,6 +80,14 @@ function DesktopShell({ initialDesktopData }) {
     toggleMaximizeWindow
   } = useDesktop();
   const desktopApps = apps.filter(app => app.showOnDesktop);
+  const desktopThemeOption = getDesktopThemeOption(
+    desktopSettings.react95Theme
+  );
+  const desktopTheme = desktopThemeOption.theme;
+  const desktopThemeStyle = {
+    '--desktop-accent': desktopTheme.borderLightest,
+    '--desktop-accent-dark': desktopTheme.borderDark
+  };
   const handleCloseWindow = React.useCallback(
     windowId => {
       const launcher =
@@ -198,27 +207,31 @@ function DesktopShell({ initialDesktopData }) {
 
   if (shutdown) {
     return (
-      <Wrapper
-        className={`desktop-environment-wrapper desktop-accent-${desktopSettings.accent}`}
-        data-scanlines={desktopSettings.scanlines}
-        data-testid="desktop-environment"
-      >
-        <div className="shutdown-screen">
-          <p>Windows is shutting down...</p>
-          <p>Saving desktop settings to localStorage.</p>
-          <p>It is now safe to turn off your computer.</p>
-          <button onClick={() => setShutdown(false)}>Restart</button>
-        </div>
-      </Wrapper>
+      <ThemeProvider theme={desktopTheme}>
+        <Wrapper
+          className={`desktop-environment-wrapper desktop-accent-${desktopSettings.accent}`}
+          data-scanlines={desktopSettings.scanlines}
+          data-testid="desktop-environment"
+          style={desktopThemeStyle}
+        >
+          <div className="shutdown-screen">
+            <p>Windows is shutting down...</p>
+            <p>Saving desktop settings to localStorage.</p>
+            <p>It is now safe to turn off your computer.</p>
+            <button onClick={() => setShutdown(false)}>Restart</button>
+          </div>
+        </Wrapper>
+      </ThemeProvider>
     );
   }
 
   return (
-    <>
+    <ThemeProvider theme={desktopTheme}>
       <Wrapper
         className={`desktop-environment-wrapper desktop-accent-${desktopSettings.accent}`}
         data-scanlines={desktopSettings.scanlines}
         data-testid="desktop-environment"
+        style={desktopThemeStyle}
       >
         <div
           className={`desktop desktop-wallpaper-${desktopSettings.wallpaper} desktop-icons-${desktopSettings.iconLayout}`}
@@ -363,7 +376,7 @@ function DesktopShell({ initialDesktopData }) {
           onShutdown={() => setShutdown(true)}
         />
       </Wrapper>
-    </>
+    </ThemeProvider>
   );
 }
 
