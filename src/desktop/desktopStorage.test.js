@@ -74,3 +74,71 @@ test('falls back when a stored react95 theme is unsupported', () => {
 
   expect(desktopData.settings.react95Theme).toBe('theSixtiesUSA');
 });
+
+test('loads supported multi-page desktop settings', () => {
+  window.localStorage.setItem(
+    DESKTOP_STORAGE_KEY,
+    JSON.stringify({
+      version: 1,
+      settings: {
+        animationMode: 'reduced',
+        clockFormat: '12h',
+        iconLayout: 'grid',
+        iconSize: 'large',
+        scanlineIntensity: 'strong',
+        showBootLog: false,
+        showSeconds: true,
+        taskbarButtonMode: 'icon',
+        wallpaper: 'clouds'
+      },
+      session: { activeWindowId: null, windows: [] }
+    })
+  );
+
+  const desktopData = loadDesktopData(window.localStorage);
+
+  expect(desktopData.settings).toMatchObject({
+    animationMode: 'reduced',
+    clockFormat: '12h',
+    iconLayout: 'grid',
+    iconSize: 'large',
+    scanlineIntensity: 'strong',
+    showBootLog: false,
+    showSeconds: true,
+    taskbarButtonMode: 'icon',
+    wallpaper: 'clouds'
+  });
+});
+
+test('falls back from unsupported multi-page desktop settings', () => {
+  window.localStorage.setItem(
+    DESKTOP_STORAGE_KEY,
+    JSON.stringify({
+      version: 1,
+      settings: {
+        animationMode: 'sometimes',
+        clockFormat: 'analog',
+        iconSize: 'huge',
+        scanlineIntensity: 'blinding',
+        showBootLog: 'yes',
+        showSeconds: 1,
+        taskbarButtonMode: 'both',
+        wallpaper: 'missing'
+      },
+      session: { activeWindowId: null, windows: [] }
+    })
+  );
+
+  const desktopData = loadDesktopData(window.localStorage);
+
+  expect(desktopData.settings).toMatchObject({
+    animationMode: 'system',
+    clockFormat: '24h',
+    iconSize: 'medium',
+    scanlineIntensity: 'normal',
+    showBootLog: true,
+    showSeconds: false,
+    taskbarButtonMode: 'label',
+    wallpaper: 'teal'
+  });
+});

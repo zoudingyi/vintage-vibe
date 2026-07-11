@@ -8,10 +8,17 @@ export const LEGACY_SETTINGS_STORAGE_KEY = 'vintage-vibe-desktop-settings';
 export const DESKTOP_STORAGE_VERSION = 1;
 
 export const DEFAULT_DESKTOP_SETTINGS = {
+  animationMode: 'system',
+  clockFormat: '24h',
   iconLayout: 'column',
+  iconSize: 'medium',
   react95Theme: DEFAULT_DESKTOP_THEME_ID,
   restoreSession: true,
+  scanlineIntensity: 'normal',
   scanlines: true,
+  showBootLog: true,
+  showSeconds: false,
+  taskbarButtonMode: 'label',
   wallpaper: 'teal'
 };
 
@@ -77,9 +84,20 @@ function normalizeSettings(settings) {
       : legacyAccentThemes[settings?.accent];
 
   return {
+    animationMode: ['system', 'full', 'reduced'].includes(
+      settings?.animationMode
+    )
+      ? settings.animationMode
+      : DEFAULT_DESKTOP_SETTINGS.animationMode,
+    clockFormat: ['12h', '24h'].includes(settings?.clockFormat)
+      ? settings.clockFormat
+      : DEFAULT_DESKTOP_SETTINGS.clockFormat,
     iconLayout: ['column', 'grid'].includes(settings?.iconLayout)
       ? settings.iconLayout
       : DEFAULT_DESKTOP_SETTINGS.iconLayout,
+    iconSize: ['small', 'medium', 'large'].includes(settings?.iconSize)
+      ? settings.iconSize
+      : DEFAULT_DESKTOP_SETTINGS.iconSize,
     react95Theme: getDesktopThemeOption(requestedThemeId).id,
     restoreSession:
       typeof settings?.restoreSession === 'boolean'
@@ -89,7 +107,33 @@ function normalizeSettings(settings) {
       typeof settings?.scanlines === 'boolean'
         ? settings.scanlines
         : DEFAULT_DESKTOP_SETTINGS.scanlines,
-    wallpaper: ['teal', 'starfield', 'sunset'].includes(settings?.wallpaper)
+    scanlineIntensity: ['subtle', 'normal', 'strong'].includes(
+      settings?.scanlineIntensity
+    )
+      ? settings.scanlineIntensity
+      : DEFAULT_DESKTOP_SETTINGS.scanlineIntensity,
+    showBootLog:
+      typeof settings?.showBootLog === 'boolean'
+        ? settings.showBootLog
+        : DEFAULT_DESKTOP_SETTINGS.showBootLog,
+    showSeconds:
+      typeof settings?.showSeconds === 'boolean'
+        ? settings.showSeconds
+        : DEFAULT_DESKTOP_SETTINGS.showSeconds,
+    taskbarButtonMode: ['label', 'icon'].includes(
+      settings?.taskbarButtonMode
+    )
+      ? settings.taskbarButtonMode
+      : DEFAULT_DESKTOP_SETTINGS.taskbarButtonMode,
+    wallpaper: [
+      'teal',
+      'starfield',
+      'sunset',
+      'midnight',
+      'checkerboard',
+      'circuit',
+      'clouds'
+    ].includes(settings?.wallpaper)
       ? settings.wallpaper
       : DEFAULT_DESKTOP_SETTINGS.wallpaper
   };
