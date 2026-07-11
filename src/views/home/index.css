@@ -415,24 +415,26 @@
 
 .settings-monitor-window {
   position: absolute;
-  top: 19px;
-  left: 35px;
-  width: 112px;
-  min-height: 66px;
+  top: 23px;
+  left: 44px;
+  width: 96px;
+  min-height: 54px;
 }
 
-.settings-monitor-window-header {
-  min-height: 17px;
-  padding: 1px 3px;
-  font-size: 8px;
-  line-height: 1;
+.settings-monitor-window .settings-monitor-window-header {
+  height: 14px;
+  min-height: 14px;
+  padding: 1px 2px;
+  font-size: 7px;
+  line-height: 12px;
 }
 
-.settings-monitor-window-content {
-  min-height: 38px;
-  padding: 8px 5px;
+.settings-monitor-window .settings-monitor-window-content {
+  height: 30px;
+  min-height: 30px;
+  padding: 5px 4px;
   color: inherit;
-  font-size: 8px;
+  font-size: 7px;
 }
 
 .settings-monitor-taskbar {
@@ -440,17 +442,19 @@
   right: 0;
   bottom: 0;
   left: 0;
-  height: 18px;
-  padding: 2px;
-  border-width: 2px;
+  height: 14px;
+  padding: 1px;
+  border-width: 1px;
   border-style: solid;
   color: black;
 }
 
 .settings-monitor-taskbar span {
   display: inline-block;
-  padding: 1px 3px;
+  padding: 0 2px;
   border: 1px solid currentColor;
+  font-size: 7px;
+  line-height: 7px;
   font-weight: bold;
 }
 
