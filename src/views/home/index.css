@@ -79,6 +79,45 @@
   background-image: linear-gradient(#25134c 0%, #8c2f63 55%, #e06d4f 100%);
 }
 
+.desktop-wallpaper-neon-horizon {
+  position: relative;
+  overflow: hidden;
+  background-color: #180032;
+  background-image: radial-gradient(
+      circle at 50% 42%,
+      #ffe580 0 8%,
+      #ff5dbb 8.5% 15%,
+      transparent 15.5%
+    ),
+    linear-gradient(155deg, transparent 49%, #351052 50% 59%, transparent 60%),
+    linear-gradient(205deg, transparent 49%, #210d49 50% 61%, transparent 62%),
+    linear-gradient(#16002f 0%, #682160 56%, #ff4f93 70%, #110127 71%);
+  background-size: 100% 100%;
+}
+
+.desktop-wallpaper-neon-horizon::before {
+  content: '';
+  position: absolute;
+  right: -20%;
+  bottom: -14%;
+  left: -20%;
+  height: 48%;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+      90deg,
+      rgba(72, 247, 255, 0.62) 0 1px,
+      transparent 1px 36px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 68, 184, 0.58) 0 1px,
+      transparent 1px 24px
+    );
+  transform: perspective(180px) rotateX(55deg);
+  transform-origin: top;
+  animation: neon-horizon-drift 4s linear infinite;
+}
+
 .desktop-wallpaper-midnight {
   background-color: #020b28;
   background-image: linear-gradient(
@@ -241,7 +280,17 @@
   }
 }
 
+@keyframes neon-horizon-drift {
+  from {
+    background-position: 0 0, 0 0;
+  }
+  to {
+    background-position: 0 0, 0 24px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .desktop-wallpaper-neon-horizon::before,
   .desktop[data-icon-glow] .desktop-application-item,
   .desktop[data-icon-glow] .desktop-application-item::before,
   .desktop[data-icon-glow] .desktop-application-item img {

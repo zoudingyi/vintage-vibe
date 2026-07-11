@@ -10,13 +10,13 @@
 **Goal**: Add a CSS-only animated vaporwave horizon wallpaper to Settings and Monitor preview.
 **Success Criteria**: Wallpaper selection persists, animates on desktop and Monitor, and becomes static with reduced-motion preference.
 **Tests**: Registry, storage validation, selection, persistence, and preview class.
-**Status**: In Progress
+**Status**: Complete
 
 ## Stage 3: Terminal Easter Eggs
 **Goal**: Add hidden aesthetic, mallsoft, VHS, and sunset commands that update desktop settings.
 **Success Criteria**: Commands produce themed output and apply the documented setting combinations without appearing in help.
 **Tests**: Each command output and resulting desktop state.
-**Status**: Not Started
+**Status**: In Progress
 
 ## Stage 4: Regression and Delivery
 **Goal**: Complete responsive browser verification, documentation, repository gates, and incremental commits.

@@ -129,6 +129,7 @@ function normalizeSettings(settings) {
       'teal',
       'starfield',
       'sunset',
+      'neon-horizon',
       'midnight',
       'checkerboard',
       'circuit',

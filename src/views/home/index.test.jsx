@@ -549,6 +549,24 @@ test('selects and persists an expanded wallpaper option', () => {
   ).toBe('checkerboard');
 });
 
+test('selects and previews the Neon Horizon wallpaper', () => {
+  renderDesktop();
+
+  openStartMenuItem(/settings/i);
+  fireEvent.click(screen.getByRole('button', { name: /neon horizon/i }));
+
+  expect(screen.getByTestId('desktop-surface')).toHaveClass(
+    'desktop-wallpaper-neon-horizon'
+  );
+  expect(screen.getByTestId('settings-monitor-screen')).toHaveClass(
+    'desktop-wallpaper-neon-horizon'
+  );
+  expect(
+    JSON.parse(window.localStorage.getItem(DESKTOP_STORAGE_KEY)).settings
+      .wallpaper
+  ).toBe('neon-horizon');
+});
+
 test('applies scanline intensity without exposing inactive animation settings', () => {
   renderDesktop();
 

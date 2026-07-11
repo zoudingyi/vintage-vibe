@@ -90,7 +90,7 @@ test('loads supported multi-page desktop settings', () => {
         showBootLog: false,
         showSeconds: true,
         taskbarButtonMode: 'icon',
-        wallpaper: 'clouds'
+        wallpaper: 'neon-horizon'
       },
       session: { activeWindowId: null, windows: [] }
     })
@@ -107,7 +107,7 @@ test('loads supported multi-page desktop settings', () => {
     showBootLog: false,
     showSeconds: true,
     taskbarButtonMode: 'icon',
-    wallpaper: 'clouds'
+    wallpaper: 'neon-horizon'
   });
   expect(desktopData.settings).not.toHaveProperty('animationMode');
 });
