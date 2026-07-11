@@ -21,6 +21,10 @@ beforeEach(() => {
   window.localStorage.clear();
 });
 
+afterEach(() => {
+  jest.useRealTimers();
+});
+
 test('opens, minimizes, restores, and closes a desktop app window', () => {
   renderDesktop();
 
@@ -292,7 +296,7 @@ test('keeps the desktop context menu inside the viewport', () => {
     value: originalHeight
   });
 
-  expect(contextMenu).toHaveStyle({ left: '156px', top: '48px' });
+  expect(contextMenu).toHaveStyle({ left: '156px', top: '78px' });
 });
 
 test('opens apps from the start menu', () => {
@@ -562,6 +566,40 @@ test('applies visual effect preferences from appearance settings', () => {
   );
 });
 
+test('applies desktop icon layout and size preferences', () => {
+  renderDesktop();
+
+  openStartMenuItem(/settings/i);
+  fireEvent.click(screen.getByRole('tab', { name: /desktop/i }));
+  fireEvent.click(screen.getByRole('button', { name: /grid/i }));
+  fireEvent.click(screen.getByRole('button', { name: /large/i }));
+
+  expect(screen.getByTestId('desktop-surface')).toHaveClass(
+    'desktop-icons-grid',
+    'desktop-icon-size-large'
+  );
+  expect(
+    screen.getByRole('button', { name: /my computer/i }).querySelector('img')
+  ).toHaveAttribute('width', '40');
+});
+
+test('applies taskbar clock and button preferences', () => {
+  jest.useFakeTimers('modern');
+  jest.setSystemTime(new Date(2025, 0, 1, 13, 5, 9));
+  renderDesktop();
+
+  openStartMenuItem(/settings/i);
+  fireEvent.click(screen.getByRole('tab', { name: /taskbar/i }));
+  fireEvent.click(screen.getByLabelText(/show seconds/i));
+  fireEvent.click(screen.getByRole('button', { name: /icon only/i }));
+
+  expect(screen.getByTestId('taskbar-clock')).toHaveTextContent('13:05:09');
+  expect(screen.getByTestId('taskbar-window-list')).toHaveAttribute(
+    'data-button-mode',
+    'icon'
+  );
+});
+
 test('switches and persists the react95 theme from settings', () => {
   renderDesktop();
 
@@ -666,6 +704,41 @@ test('persists the session restore preference', () => {
   ).toBe(false);
 });
 
+test('hides and persists the boot log preference', () => {
+  renderDesktop();
+
+  expect(screen.getByLabelText(/boot sequence/i)).toBeInTheDocument();
+  openStartMenuItem(/settings/i);
+  fireEvent.click(screen.getByRole('tab', { name: /system/i }));
+  fireEvent.click(screen.getByLabelText(/show boot log/i));
+
+  expect(screen.queryByLabelText(/boot sequence/i)).not.toBeInTheDocument();
+  expect(
+    JSON.parse(window.localStorage.getItem(DESKTOP_STORAGE_KEY)).settings
+      .showBootLog
+  ).toBe(false);
+});
+
+test('resets appearance without changing system preferences', () => {
+  renderDesktop();
+
+  openStartMenuItem(/settings/i);
+  fireEvent.click(screen.getByRole('button', { name: /matrix/i }));
+  fireEvent.click(screen.getByRole('button', { name: /sunset/i }));
+  fireEvent.click(screen.getByRole('tab', { name: /system/i }));
+  fireEvent.click(screen.getByLabelText(/restore previous session/i));
+  fireEvent.click(screen.getByRole('button', { name: /reset appearance/i }));
+
+  const settings = JSON.parse(
+    window.localStorage.getItem(DESKTOP_STORAGE_KEY)
+  ).settings;
+  expect(settings).toMatchObject({
+    react95Theme: 'theSixtiesUSA',
+    restoreSession: false,
+    wallpaper: 'teal'
+  });
+});
+
 test('restores an open window from the previous desktop session', () => {
   window.localStorage.setItem(
     DESKTOP_STORAGE_KEY,
@@ -756,20 +829,12 @@ test('uses the desktop context menu for personalization actions', () => {
     clientY: 32
   });
 
-  expect(screen.getByText(/arrange icons/i)).toBeInTheDocument();
-
-  fireEvent.click(screen.getByText(/arrange icons/i));
-
-  expect(screen.getByTestId('desktop-surface')).toHaveClass(
-    'desktop-icons-grid'
-  );
-
-  fireEvent.contextMenu(screen.getByTestId('desktop-surface'), {
-    clientX: 24,
-    clientY: 32
-  });
+  expect(screen.queryByText(/arrange icons/i)).not.toBeInTheDocument();
   fireEvent.click(screen.getByText(/personalize/i));
 
+  expect(
+    screen.getByRole('tab', { name: /appearance/i })
+  ).toHaveAttribute('aria-selected', 'true');
   expect(screen.getByText(/wallpaper/i)).toBeInTheDocument();
 });
 

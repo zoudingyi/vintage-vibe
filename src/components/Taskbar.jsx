@@ -24,7 +24,10 @@ function Taskbar({
   onMinimizeWindow,
   onRestoreWindow,
   onOpenApp,
-  onShutdown
+  onShutdown,
+  clockFormat = '24h',
+  showSeconds = false,
+  taskbarButtonMode = 'label'
 }) {
   const [time, setTime] = useState('');
   const menuItemRefs = useRef([]);
@@ -35,31 +38,32 @@ function Taskbar({
   const startMenuApps = apps.filter(app => app.showInStartMenu);
 
   useEffect(() => {
+    function updateTime() {
+      const options = {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: clockFormat === '12h'
+      };
+
+      if (showSeconds) {
+        options.second = '2-digit';
+      }
+
+      setTime(new Intl.DateTimeFormat('en-US', options).format(new Date()));
+    }
+
     updateTime();
-    const intervalId = setInterval(updateTime, 1000);
+    const intervalId = setInterval(updateTime, showSeconds ? 1000 : 30000);
     return () => {
-      // 在组件销毁时执行清理操作
       clearInterval(intervalId);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [clockFormat, showSeconds]);
 
   useEffect(() => {
     if (open) {
       menuItemRefs.current[0]?.focus();
     }
   }, [open]);
-
-  function getCurrentTime() {
-    const now = new Date();
-    const options = { hour: 'numeric', minute: '2-digit', hour12: true };
-    return new Intl.DateTimeFormat('en-US', options).format(now);
-  }
-
-  function updateTime() {
-    const currentTime = getCurrentTime();
-    setTime(currentTime);
-  }
 
   function handleWindowButtonClick(windowState) {
     if (windowState.status === 'minimized') {
@@ -176,7 +180,11 @@ function Taskbar({
             <Handle size={28} style={{ margin: 'auto 4px auto 7px' }} />
           </span>
 
-          <div className="taskbar-window-list">
+          <div
+            className="taskbar-window-list"
+            data-button-mode={taskbarButtonMode}
+            data-testid="taskbar-window-list"
+          >
             {windows.map(windowState => {
               const app = appsById[windowState.appId];
 
@@ -186,7 +194,7 @@ function Taskbar({
 
               return (
                 <Button
-                  className="taskbar-window-button"
+                  className={`taskbar-window-button taskbar-window-button-${taskbarButtonMode}`}
                   active={
                     activeWindowId === windowState.id &&
                     windowState.status !== 'minimized'
@@ -247,7 +255,14 @@ function Taskbar({
           <div style={{ marginRight: 'auto' }}></div>
 
           <Tooltip text="08/24/1995" enterDelay={100} leaveDelay={300}>
-            <div className="taskbar-date">{time}</div>
+            <div
+              className="taskbar-date"
+              data-clock-format={clockFormat}
+              data-show-seconds={showSeconds}
+              data-testid="taskbar-clock"
+            >
+              {time}
+            </div>
           </Tooltip>
         </div>
       </Toolbar>

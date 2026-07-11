@@ -15,7 +15,8 @@ import {
   loadDesktopData,
   saveDesktopData
 } from '@/desktop/desktopStorage';
-const CONTEXT_MENU_SIZE = { height: 184, width: 156 };
+const CONTEXT_MENU_SIZE = { height: 154, width: 156 };
+const DESKTOP_ICON_PIXELS = { large: 40, medium: 32, small: 24 };
 
 function getContextMenuPosition(x, y) {
   const margin = 8;
@@ -49,7 +50,7 @@ function DesktopShell({ initialDesktopData }) {
   const [openStartMenu, setOpenStartMenu] = useState(false);
   const [shutdown, setShutdown] = useState(false);
   const [contextMenu, setContextMenu] = useState(null);
-  const [showBootLog, setShowBootLog] = useState(true);
+  const [bootLogDismissed, setBootLogDismissed] = useState(false);
   const [selectedDesktopAppId, setSelectedDesktopAppId] = useState(null);
   const desktopIconRefs = React.useRef({});
   const [desktopSettings, setDesktopSettings] = useState(
@@ -162,11 +163,6 @@ function DesktopShell({ initialDesktopData }) {
     }));
   }
 
-  function arrangeDesktopIcons() {
-    updateDesktopSettings({ iconLayout: 'grid' });
-    setContextMenu(null);
-  }
-
   function openPersonalization() {
     openApp('settings');
     setContextMenu(null);
@@ -174,6 +170,16 @@ function DesktopShell({ initialDesktopData }) {
 
   function resetDesktopSettings() {
     setDesktopSettings(DEFAULT_DESKTOP_SETTINGS);
+  }
+
+  function resetDesktopAppearance() {
+    updateDesktopSettings({
+      animationMode: DEFAULT_DESKTOP_SETTINGS.animationMode,
+      react95Theme: DEFAULT_DESKTOP_SETTINGS.react95Theme,
+      scanlineIntensity: DEFAULT_DESKTOP_SETTINGS.scanlineIntensity,
+      scanlines: DEFAULT_DESKTOP_SETTINGS.scanlines,
+      wallpaper: DEFAULT_DESKTOP_SETTINGS.wallpaper
+    });
   }
 
   function handleDesktopIconKeyDown(event, appId) {
@@ -238,7 +244,7 @@ function DesktopShell({ initialDesktopData }) {
         style={desktopThemeStyle}
       >
         <div
-          className={`desktop desktop-wallpaper-${desktopSettings.wallpaper} desktop-icons-${desktopSettings.iconLayout}`}
+          className={`desktop desktop-wallpaper-${desktopSettings.wallpaper} desktop-icons-${desktopSettings.iconLayout} desktop-icon-size-${desktopSettings.iconSize}`}
           data-testid="desktop-surface"
           onClick={() => {
             setOpenStartMenu(false);
@@ -275,7 +281,12 @@ function DesktopShell({ initialDesktopData }) {
               }}
               key={app.id}
             >
-              <img src={app.icon} width={32} height={32} alt="" />
+              <img
+                src={app.icon}
+                width={DESKTOP_ICON_PIXELS[desktopSettings.iconSize]}
+                height={DESKTOP_ICON_PIXELS[desktopSettings.iconSize]}
+                alt=""
+              />
               <span>{app.title}</span>
             </Button>
           ))}
@@ -301,10 +312,11 @@ function DesktopShell({ initialDesktopData }) {
                 appProps={{
                   desktopSettings,
                   onOpenApp: openApp,
-                  onArrangeDesktopIcons: arrangeDesktopIcons,
                   onClearDesktopSession: clearSession,
                   onDesktopSettingsChange: updateDesktopSettings,
-                  onResetDesktopSettings: resetDesktopSettings
+                  onResetAppearance: resetDesktopAppearance,
+                  onResetDesktopSettings: resetDesktopSettings,
+                  windowCount: windows.length
                 }}
                 key={windowState.id}
               />
@@ -317,7 +329,6 @@ function DesktopShell({ initialDesktopData }) {
               onClick={event => event.stopPropagation()}
               role="menu"
             >
-              <button onClick={arrangeDesktopIcons}>Arrange Icons</button>
               <button
                 onClick={() => {
                   cascadeWindows();
@@ -349,13 +360,13 @@ function DesktopShell({ initialDesktopData }) {
               <button onClick={() => setContextMenu(null)}>Refresh</button>
             </div>
           )}
-          {showBootLog && (
+          {desktopSettings.showBootLog && !bootLogDismissed && (
             <div className="boot-sequence" aria-label="Boot sequence">
               <strong>Vintage BIOS 0.95</strong>
               <p>Memory check: 640K OK</p>
               <p>Loading desktop shell...</p>
               <p>Boot sequence complete.</p>
-              <button onClick={() => setShowBootLog(false)}>
+              <button onClick={() => setBootLogDismissed(true)}>
                 Dismiss boot log
               </button>
             </div>
@@ -378,6 +389,9 @@ function DesktopShell({ initialDesktopData }) {
           onRestoreWindow={restoreWindow}
           onOpenApp={openApp}
           onShutdown={() => setShutdown(true)}
+          clockFormat={desktopSettings.clockFormat}
+          showSeconds={desktopSettings.showSeconds}
+          taskbarButtonMode={desktopSettings.taskbarButtonMode}
         />
       </Wrapper>
     </ThemeProvider>

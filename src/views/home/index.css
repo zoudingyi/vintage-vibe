@@ -171,6 +171,19 @@
   filter: grayscale(100%) sepia(100%) hue-rotate(-120deg) brightness(80%);
 }
 
+.desktop-icon-size-small .desktop-application-item {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 14px;
+  font-size: 0.9em;
+}
+
+.desktop-icon-size-large .desktop-application-item {
+  width: 88px;
+  height: 88px;
+  margin-bottom: 24px;
+}
+
 .shutdown-screen {
   display: flex;
   height: 100%;

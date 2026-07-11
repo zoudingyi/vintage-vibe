@@ -50,6 +50,22 @@
   white-space: nowrap;
 }
 
+.taskbar-window-button-icon {
+  flex-basis: 40px;
+  min-width: 38px;
+  max-width: 44px;
+  justify-content: center;
+  padding: 4px;
+}
+
+.taskbar-window-button-icon img {
+  margin-right: 0;
+}
+
+.taskbar-window-button-icon span {
+  display: none;
+}
+
 .social-link {
   display: flex;
   justify-content: center;
