@@ -99,7 +99,7 @@ const appRegistry = [
     showInStartMenu: true,
     component: SettingsApp,
     defaultPosition: { x: 168, y: 96 },
-    windowSize: { width: 420 }
+    windowSize: { height: 560, width: 520 }
   },
   {
     id: 'terminal',

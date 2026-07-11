@@ -282,6 +282,7 @@ function DesktopShell({ initialDesktopData }) {
               key={app.id}
             >
               <img
+                data-testid={`desktop-icon-${app.id}`}
                 src={app.icon}
                 width={DESKTOP_ICON_PIXELS[desktopSettings.iconSize]}
                 height={DESKTOP_ICON_PIXELS[desktopSettings.iconSize]}

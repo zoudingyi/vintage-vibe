@@ -578,9 +578,10 @@ test('applies desktop icon layout and size preferences', () => {
     'desktop-icons-grid',
     'desktop-icon-size-large'
   );
-  expect(
-    screen.getByRole('button', { name: /my computer/i }).querySelector('img')
-  ).toHaveAttribute('width', '40');
+  expect(screen.getByTestId('desktop-icon-my-computer')).toHaveAttribute(
+    'width',
+    '40'
+  );
 });
 
 test('applies taskbar clock and button preferences', () => {

@@ -10,6 +10,8 @@ Vintage Vibe is a playable React portfolio that combines a Windows 95-inspired d
 - Responsive full-screen windows and single-tap app launching on compact or touch devices.
 - Persistent themes, window geometry, and optional session restore.
 - Eight curated react95 system themes with live color previews.
+- Four-page Settings app for appearance, desktop icons, taskbar, and system behavior.
+- Seven wallpapers, including an original local Pixel Clouds background.
 - Profile, project explorer, media player, settings, terminal, guestbook, and system applications.
 - Reduced-motion support and versioned local-storage recovery.
 
@@ -40,7 +42,14 @@ Application source lives in `src/desktop/apps/`, while `src/desktop/appRegistry.
 
 ## Local data
 
-Desktop settings and restorable window sessions are stored in the browser under a versioned `vintage-vibe-desktop-state` key. The Settings app can disable restoration, clear only the window session, or reset personalization. Guestbook entries use a separate local key and remain private to the current browser.
+Desktop settings and restorable window sessions are stored in the browser under a versioned `vintage-vibe-desktop-state` key. The Settings app can disable restoration, clear only the window session, reset appearance, or reset every preference. Guestbook entries use a separate local key and remain private to the current browser.
+
+## Settings pages
+
+- **Appearance** controls the react95 theme, wallpaper, scanlines, scanline strength, and animation behavior.
+- **Desktop** controls column/grid icon layout and small/medium/large icon sizing.
+- **Taskbar** controls 12/24-hour clock formatting, seconds, and icon-only window buttons.
+- **System** controls session restore, the boot log, scoped resets, and window-session cleanup.
 
 ## System themes
 

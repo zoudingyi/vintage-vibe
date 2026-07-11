@@ -120,7 +120,9 @@
 
 .desktop-wallpaper-clouds {
   background-color: #61a9d8;
-  background-image: linear-gradient(#4a8fc3 0%, #8bc9e7 68%, #d8eef5 100%);
+  background-image: url('../../assets/images/pixel-clouds.png');
+  background-position: center;
+  background-size: cover;
 }
 
 .desktop-icons-grid {
@@ -341,8 +343,10 @@
 
 .settings-app {
   display: flex;
+  height: 100%;
   flex-direction: column;
   min-height: 0;
+  overflow: hidden;
 }
 
 .settings-app > strong {
@@ -354,7 +358,8 @@
 }
 
 .settings-tab-body {
-  min-height: 410px;
+  min-height: 0;
+  flex: 1 1 auto;
   overflow: auto;
 }
 

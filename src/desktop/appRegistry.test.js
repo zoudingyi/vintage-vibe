@@ -18,9 +18,9 @@ test('registers complete desktop app metadata with unique ids', () => {
         showInStartMenu: expect.any(Boolean),
         showOnDesktop: expect.any(Boolean),
         title: expect.any(String),
-        windowSize: {
+        windowSize: expect.objectContaining({
           width: expect.any(Number)
-        }
+        })
       })
     );
   });
