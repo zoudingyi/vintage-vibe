@@ -19,6 +19,7 @@ test('migrates legacy desktop settings into versioned data', () => {
   expect(desktopData).toMatchObject({
     settings: {
       accent: 'green',
+      react95Theme: 'matrix',
       wallpaper: 'sunset'
     },
     version: 1
@@ -57,4 +58,19 @@ test('drops malformed windows from a stored desktop session', () => {
     activeWindowId: null,
     windows: []
   });
+});
+
+test('falls back when a stored react95 theme is unsupported', () => {
+  window.localStorage.setItem(
+    DESKTOP_STORAGE_KEY,
+    JSON.stringify({
+      version: 1,
+      settings: { react95Theme: 'missing-theme' },
+      session: { activeWindowId: null, windows: [] }
+    })
+  );
+
+  const desktopData = loadDesktopData(window.localStorage);
+
+  expect(desktopData.settings.react95Theme).toBe('theSixtiesUSA');
 });

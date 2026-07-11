@@ -1,3 +1,8 @@
+import {
+  DEFAULT_DESKTOP_THEME_ID,
+  getDesktopThemeOption
+} from './themeRegistry';
+
 export const DESKTOP_STORAGE_KEY = 'vintage-vibe-desktop-state';
 export const LEGACY_SETTINGS_STORAGE_KEY = 'vintage-vibe-desktop-settings';
 export const DESKTOP_STORAGE_VERSION = 1;
@@ -5,9 +10,16 @@ export const DESKTOP_STORAGE_VERSION = 1;
 export const DEFAULT_DESKTOP_SETTINGS = {
   accent: 'purple',
   iconLayout: 'column',
+  react95Theme: DEFAULT_DESKTOP_THEME_ID,
   restoreSession: true,
   scanlines: true,
   wallpaper: 'teal'
+};
+
+const legacyAccentThemes = {
+  amber: 'candy',
+  green: 'matrix',
+  purple: DEFAULT_DESKTOP_THEME_ID
 };
 
 export const DEFAULT_DESKTOP_SESSION = {
@@ -60,6 +72,11 @@ function normalizeSession(session) {
 }
 
 function normalizeSettings(settings) {
+  const requestedThemeId =
+    typeof settings?.react95Theme === 'string'
+      ? settings.react95Theme
+      : legacyAccentThemes[settings?.accent];
+
   return {
     accent: ['purple', 'green', 'amber'].includes(settings?.accent)
       ? settings.accent
@@ -67,6 +84,7 @@ function normalizeSettings(settings) {
     iconLayout: ['column', 'grid'].includes(settings?.iconLayout)
       ? settings.iconLayout
       : DEFAULT_DESKTOP_SETTINGS.iconLayout,
+    react95Theme: getDesktopThemeOption(requestedThemeId).id,
     restoreSession:
       typeof settings?.restoreSession === 'boolean'
         ? settings.restoreSession
