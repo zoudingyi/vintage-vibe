@@ -160,8 +160,93 @@
   outline: 1px dotted white;
   background: var(--desktop-accent-dark);
 }
+
+.desktop[data-icon-glow='soft']
+  .desktop-application-item[data-selected='true']
+  img {
+  filter: drop-shadow(0 0 3px #4efcff) drop-shadow(0 0 7px #ff3fb4)
+    saturate(1.25);
+  animation: desktop-icon-soft-pulse 1.8s ease-in-out infinite alternate;
+}
+
+.desktop[data-icon-glow='soft']
+  .desktop-application-item[data-selected='true']
+  span {
+  color: #fff;
+  text-shadow: 0 0 4px #4efcff, 0 0 8px #ff3fb4, 1px 1px #160018;
+  box-shadow: 0 0 8px rgba(255, 63, 180, 0.55);
+}
+
+.desktop[data-icon-glow='pixel']
+  .desktop-application-item[data-selected='true']
+  img {
+  image-rendering: pixelated;
+  filter: drop-shadow(-3px 0 0 #43f6ff) drop-shadow(3px 0 0 #ff3b9d);
+  transform: translateY(-1px);
+}
+
+.desktop[data-icon-glow='pixel']
+  .desktop-application-item[data-selected='true']
+  span {
+  color: #fff;
+  text-shadow: -2px 0 #43f6ff, 2px 0 #ff3b9d;
+  box-shadow: -2px 0 #43f6ff, 2px 0 #ff3b9d;
+}
+
+.desktop[data-icon-glow='frame']
+  .desktop-application-item[data-selected='true'] {
+  position: relative;
+}
+
+.desktop[data-icon-glow='frame']
+  .desktop-application-item[data-selected='true']::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  pointer-events: none;
+  border: 2px solid #4efcff;
+  box-shadow: 3px 3px 0 #ff3fb4, 0 0 8px #4efcff,
+    0 0 12px rgba(255, 63, 180, 0.8) inset;
+  animation: desktop-icon-frame-blink 1.2s steps(2, end) infinite;
+}
+
+.desktop[data-icon-glow='frame']
+  .desktop-application-item[data-selected='true']
+  span {
+  outline: none;
+  background: rgba(16, 0, 39, 0.86);
+  color: #fff;
+  text-shadow: 1px 0 #4efcff, -1px 0 #ff3fb4;
+}
+
 .desktop-application-item:active img {
   filter: grayscale(100%) sepia(100%) hue-rotate(-120deg) brightness(80%);
+}
+
+@keyframes desktop-icon-soft-pulse {
+  from {
+    filter: drop-shadow(0 0 2px #4efcff) drop-shadow(0 0 4px #ff3fb4)
+      saturate(1.1);
+  }
+  to {
+    filter: drop-shadow(0 0 5px #4efcff) drop-shadow(0 0 10px #ff3fb4)
+      saturate(1.35);
+  }
+}
+
+@keyframes desktop-icon-frame-blink {
+  50% {
+    border-color: #ff3fb4;
+    box-shadow: -3px 3px 0 #4efcff, 0 0 10px #ff3fb4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desktop[data-icon-glow] .desktop-application-item,
+  .desktop[data-icon-glow] .desktop-application-item::before,
+  .desktop[data-icon-glow] .desktop-application-item img {
+    animation: none !important;
+  }
 }
 
 .desktop-icon-size-small .desktop-application-item {

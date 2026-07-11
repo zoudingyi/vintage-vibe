@@ -226,6 +226,25 @@ function DesktopSettings({ desktopSettings, onDesktopSettingsChange }) {
           ))}
         </div>
       </Fieldset>
+      <Fieldset label="Selection Glow">
+        <div className="settings-choice-row">
+          {[
+            ['soft', 'Soft Dual Bloom'],
+            ['pixel', 'Pixel RGB Split'],
+            ['frame', 'Neon Frame']
+          ].map(([value, label]) => (
+            <ChoiceButton
+              active={desktopSettings.iconGlowEffect === value}
+              key={value}
+              onClick={() =>
+                onDesktopSettingsChange({ iconGlowEffect: value })
+              }
+            >
+              {label}
+            </ChoiceButton>
+          ))}
+        </div>
+      </Fieldset>
       <p className="settings-help-text">
         Icons follow the selected layout. Free-position dragging is not enabled.
       </p>

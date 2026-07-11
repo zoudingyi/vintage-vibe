@@ -9,6 +9,7 @@ export const DESKTOP_STORAGE_VERSION = 1;
 
 export const DEFAULT_DESKTOP_SETTINGS = {
   clockFormat: '24h',
+  iconGlowEffect: 'soft',
   iconLayout: 'column',
   iconSize: 'medium',
   react95Theme: DEFAULT_DESKTOP_THEME_ID,
@@ -86,6 +87,11 @@ function normalizeSettings(settings) {
     clockFormat: ['12h', '24h'].includes(settings?.clockFormat)
       ? settings.clockFormat
       : DEFAULT_DESKTOP_SETTINGS.clockFormat,
+    iconGlowEffect: ['soft', 'pixel', 'frame'].includes(
+      settings?.iconGlowEffect
+    )
+      ? settings.iconGlowEffect
+      : DEFAULT_DESKTOP_SETTINGS.iconGlowEffect,
     iconLayout: ['column', 'grid'].includes(settings?.iconLayout)
       ? settings.iconLayout
       : DEFAULT_DESKTOP_SETTINGS.iconLayout,

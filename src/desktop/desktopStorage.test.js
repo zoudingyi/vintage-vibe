@@ -83,6 +83,7 @@ test('loads supported multi-page desktop settings', () => {
       settings: {
         animationMode: 'reduced',
         clockFormat: '12h',
+        iconGlowEffect: 'frame',
         iconLayout: 'grid',
         iconSize: 'large',
         scanlineIntensity: 'strong',
@@ -99,6 +100,7 @@ test('loads supported multi-page desktop settings', () => {
 
   expect(desktopData.settings).toMatchObject({
     clockFormat: '12h',
+    iconGlowEffect: 'frame',
     iconLayout: 'grid',
     iconSize: 'large',
     scanlineIntensity: 'strong',
@@ -118,6 +120,7 @@ test('falls back from unsupported multi-page desktop settings', () => {
       settings: {
         animationMode: 'sometimes',
         clockFormat: 'analog',
+        iconGlowEffect: 'none',
         iconSize: 'huge',
         scanlineIntensity: 'blinding',
         showBootLog: 'yes',
@@ -133,6 +136,7 @@ test('falls back from unsupported multi-page desktop settings', () => {
 
   expect(desktopData.settings).toMatchObject({
     clockFormat: '24h',
+    iconGlowEffect: 'soft',
     iconSize: 'medium',
     scanlineIntensity: 'normal',
     showBootLog: true,

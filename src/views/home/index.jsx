@@ -242,6 +242,7 @@ function DesktopShell({ initialDesktopData }) {
       >
         <div
           className={`desktop desktop-wallpaper-${desktopSettings.wallpaper} desktop-icons-${desktopSettings.iconLayout} desktop-icon-size-${desktopSettings.iconSize}`}
+          data-icon-glow={desktopSettings.iconGlowEffect}
           data-testid="desktop-surface"
           onClick={() => {
             setOpenStartMenu(false);

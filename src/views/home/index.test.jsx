@@ -617,6 +617,34 @@ test('applies desktop icon layout and size preferences', () => {
   );
 });
 
+test('selects and persists a desktop icon glow effect', () => {
+  renderDesktop();
+
+  expect(screen.getByTestId('desktop-surface')).toHaveAttribute(
+    'data-icon-glow',
+    'soft'
+  );
+  openStartMenuItem(/settings/i);
+  fireEvent.click(screen.getByRole('tab', { name: /desktop/i }));
+  fireEvent.click(
+    screen.getByRole('button', { name: /pixel rgb split/i })
+  );
+  fireEvent.click(screen.getByRole('button', { name: /my computer/i }));
+
+  expect(screen.getByTestId('desktop-surface')).toHaveAttribute(
+    'data-icon-glow',
+    'pixel'
+  );
+  expect(screen.getByRole('button', { name: /my computer/i })).toHaveAttribute(
+    'data-selected',
+    'true'
+  );
+  expect(
+    JSON.parse(window.localStorage.getItem(DESKTOP_STORAGE_KEY)).settings
+      .iconGlowEffect
+  ).toBe('pixel');
+});
+
 test('applies taskbar clock and button preferences', () => {
   jest.useFakeTimers('modern');
   jest.setSystemTime(new Date(2025, 0, 1, 13, 5, 9));
