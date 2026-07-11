@@ -11,7 +11,7 @@ Vintage Vibe is a playable React portfolio that combines a Windows 95-inspired d
 - Persistent themes, window geometry, and optional session restore.
 - Eight curated react95 system themes with live color previews.
 - Four-page Settings app for appearance, desktop icons, taskbar, and system behavior.
-- Seven wallpapers, including an original local Pixel Clouds background.
+- Eight wallpapers, including an animated Neon Horizon and a local Pixel Clouds background.
 - Profile, project explorer, media player, settings, terminal, guestbook, and system applications.
 - Reduced-motion support and versioned local-storage recovery.
 
@@ -47,7 +47,7 @@ Desktop settings and restorable window sessions are stored in the browser under 
 ## Settings pages
 
 - **Appearance** controls the react95 theme, wallpaper, scanlines, and scanline strength with a live CRT monitor preview.
-- **Desktop** controls column/grid icon layout and small/medium/large icon sizing.
+- **Desktop** controls column/grid icon layout, small/medium/large icon sizing, and three selectable icon selection effects.
 - **Taskbar** controls 12/24-hour clock formatting, seconds, and icon-only window buttons.
 - **System** controls session restore, the boot log, scoped resets, and window-session cleanup.
 
@@ -56,3 +56,5 @@ Desktop settings and restorable window sessions are stored in the browser under 
 Settings includes Windows 95, Sixties USA, Vapor Teal, Candy, Lilac, Matrix, Modern Dark, and High Contrast themes. The selected react95 theme updates windows, controls, menus, the taskbar, and matching desktop accent colors, while wallpaper remains independently configurable.
 
 The Terminal app also accepts `theme original`, `theme vapor`, `theme candy`, `theme lilac`, `theme matrix`, `theme dark`, and `theme contrast`. Legacy `purple`, `green`, and `amber` aliases remain supported.
+
+Hidden vaporwave presets are available through `aesthetic` (Vapor Teal, Neon Horizon, strong scanlines), `mallsoft` (Candy, Pixel Clouds, subtle scanlines), `vhs on`, `vhs off`, and `sunset`. They intentionally remain absent from Terminal `help` output.

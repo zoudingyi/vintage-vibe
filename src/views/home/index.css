@@ -81,6 +81,7 @@
 
 .desktop-wallpaper-neon-horizon {
   position: relative;
+  isolation: isolate;
   overflow: hidden;
   background-color: #180032;
   background-image: radial-gradient(
@@ -102,6 +103,7 @@
   bottom: -14%;
   left: -20%;
   height: 48%;
+  z-index: -1;
   pointer-events: none;
   background-image: repeating-linear-gradient(
       90deg,
