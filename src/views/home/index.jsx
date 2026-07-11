@@ -210,6 +210,8 @@ function DesktopShell({ initialDesktopData }) {
       <ThemeProvider theme={desktopTheme}>
         <Wrapper
           className="desktop-environment-wrapper"
+          data-animation-mode={desktopSettings.animationMode}
+          data-scanline-intensity={desktopSettings.scanlineIntensity}
           data-scanlines={desktopSettings.scanlines}
           data-testid="desktop-environment"
           style={desktopThemeStyle}
@@ -229,6 +231,8 @@ function DesktopShell({ initialDesktopData }) {
     <ThemeProvider theme={desktopTheme}>
       <Wrapper
         className="desktop-environment-wrapper"
+        data-animation-mode={desktopSettings.animationMode}
+        data-scanline-intensity={desktopSettings.scanlineIntensity}
         data-scanlines={desktopSettings.scanlines}
         data-testid="desktop-environment"
         style={desktopThemeStyle}

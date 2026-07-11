@@ -10,13 +10,13 @@
 **Goal**: Reorganize Settings with accessible React95 tabs and expand theme, wallpaper, scanline, and animation controls.
 **Success Criteria**: Four tabs are keyboard accessible; seven wallpapers and visual effects update immediately and persist.
 **Tests**: Tab switching, wallpaper selection, scanline intensity, animation mode, and persistence.
-**Status**: In Progress
+**Status**: Complete
 
 ## Stage 3: Desktop, Taskbar, and System
 **Goal**: Add meaningful icon layout/size, taskbar clock/button, boot log, and reset controls.
 **Success Criteria**: Each setting changes visible behavior; misleading arrange controls are removed; reset scopes are distinct.
 **Tests**: Layout and size, clock modes, boot log preference, session clearing, appearance reset, and full reset.
-**Status**: Not Started
+**Status**: In Progress
 
 ## Stage 4: Wallpaper Asset and Regression
 **Goal**: Add an original Pixel Clouds wallpaper and complete responsive, accessibility, and quality verification.

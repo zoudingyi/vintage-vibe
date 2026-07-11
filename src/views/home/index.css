@@ -39,6 +39,23 @@
   display: none;
 }
 
+.desktop-environment-wrapper[data-scanline-intensity='subtle']::after {
+  opacity: 0.35;
+}
+
+.desktop-environment-wrapper[data-scanline-intensity='strong']::after {
+  opacity: 0.9;
+}
+
+.desktop-environment-wrapper[data-animation-mode='reduced'] *,
+.desktop-environment-wrapper[data-animation-mode='reduced'] *::before,
+.desktop-environment-wrapper[data-animation-mode='reduced'] *::after {
+  scroll-behavior: auto !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
 .desktop {
   display: flex;
   flex-direction: column;
@@ -69,6 +86,41 @@
 .desktop-wallpaper-sunset {
   background-color: #35164d;
   background-image: linear-gradient(#25134c 0%, #8c2f63 55%, #e06d4f 100%);
+}
+
+.desktop-wallpaper-midnight {
+  background-color: #020b28;
+  background-image: linear-gradient(
+      rgba(77, 125, 190, 0.16) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(77, 125, 190, 0.16) 1px, transparent 1px),
+    radial-gradient(circle at 72% 22%, #234a85 0, transparent 42%);
+  background-size: 24px 24px, 24px 24px, 100% 100%;
+}
+
+.desktop-wallpaper-checkerboard {
+  background-color: #351b52;
+  background-image: linear-gradient(45deg, #1e102f 25%, transparent 25%),
+    linear-gradient(-45deg, #1e102f 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #1e102f 75%),
+    linear-gradient(-45deg, transparent 75%, #1e102f 75%);
+  background-position: 0 0, 0 16px, 16px -16px, -16px 0;
+  background-size: 32px 32px;
+}
+
+.desktop-wallpaper-circuit {
+  background-color: #082c22;
+  background-image: linear-gradient(90deg, transparent 22px, #1a8060 23px),
+    linear-gradient(transparent 22px, #1a8060 23px),
+    radial-gradient(circle, #7dffc3 2px, transparent 3px);
+  background-position: 0 0, 0 0, 21px 21px;
+  background-size: 46px 46px;
+}
+
+.desktop-wallpaper-clouds {
+  background-color: #61a9d8;
+  background-image: linear-gradient(#4a8fc3 0%, #8bc9e7 68%, #d8eef5 100%);
 }
 
 .desktop-icons-grid {
@@ -277,7 +329,24 @@
 .settings-app {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  min-height: 0;
+}
+
+.settings-app > strong {
+  margin-bottom: 12px;
+}
+
+.settings-tabs {
+  flex: none;
+}
+
+.settings-tab-body {
+  min-height: 410px;
+  overflow: auto;
+}
+
+.settings-tab-body fieldset + fieldset {
+  margin-top: 12px;
 }
 
 .settings-choice-row {
@@ -290,6 +359,27 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
+}
+
+.settings-wallpaper-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.settings-wallpaper-choice {
+  display: flex;
+  min-width: 0;
+  min-height: 64px;
+  flex-direction: column;
+  gap: 4px;
+  padding: 5px;
+}
+
+.settings-wallpaper-preview {
+  height: 34px;
+  align-self: stretch;
+  border: 1px solid black;
 }
 
 .settings-theme-choice {
@@ -320,6 +410,28 @@
   align-items: center;
   gap: 6px;
   margin-bottom: 12px;
+}
+
+.settings-control-label {
+  display: block;
+  margin: 2px 0 6px;
+}
+
+.settings-choice-row + .settings-control-label {
+  margin-top: 12px;
+}
+
+.settings-help-text {
+  margin: 0;
+  line-height: 1.35;
+}
+
+.settings-action-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .terminal-app {

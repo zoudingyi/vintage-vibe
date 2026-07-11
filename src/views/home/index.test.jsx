@@ -499,6 +499,69 @@ test('persists wallpaper settings from the settings app', () => {
   ).toBe('starfield');
 });
 
+test('switches between settings pages', () => {
+  renderDesktop();
+
+  openStartMenuItem(/settings/i);
+
+  expect(screen.getByRole('tab', { name: /appearance/i })).toHaveAttribute(
+    'aria-selected',
+    'true'
+  );
+  fireEvent.click(screen.getByRole('tab', { name: /desktop/i }));
+
+  expect(screen.getByRole('tabpanel')).toHaveTextContent(/icon layout/i);
+  expect(screen.queryByText(/^wallpaper$/i)).not.toBeInTheDocument();
+});
+
+test('moves between settings pages with arrow keys', () => {
+  renderDesktop();
+
+  openStartMenuItem(/settings/i);
+
+  const appearanceTab = screen.getByRole('tab', { name: /appearance/i });
+  const desktopTab = screen.getByRole('tab', { name: /desktop/i });
+  fireEvent.focus(appearanceTab);
+  fireEvent.keyDown(appearanceTab, { key: 'ArrowRight' });
+
+  expect(desktopTab).toHaveFocus();
+  expect(desktopTab).toHaveAttribute('aria-selected', 'true');
+});
+
+test('selects and persists an expanded wallpaper option', () => {
+  renderDesktop();
+
+  openStartMenuItem(/settings/i);
+  fireEvent.click(
+    screen.getByRole('button', { name: /pixel checkerboard/i })
+  );
+
+  expect(screen.getByTestId('desktop-surface')).toHaveClass(
+    'desktop-wallpaper-checkerboard'
+  );
+  expect(
+    JSON.parse(window.localStorage.getItem(DESKTOP_STORAGE_KEY)).settings
+      .wallpaper
+  ).toBe('checkerboard');
+});
+
+test('applies visual effect preferences from appearance settings', () => {
+  renderDesktop();
+
+  openStartMenuItem(/settings/i);
+  fireEvent.click(screen.getByRole('button', { name: /strong/i }));
+  fireEvent.click(screen.getByRole('button', { name: /reduced/i }));
+
+  expect(screen.getByTestId('desktop-environment')).toHaveAttribute(
+    'data-scanline-intensity',
+    'strong'
+  );
+  expect(screen.getByTestId('desktop-environment')).toHaveAttribute(
+    'data-animation-mode',
+    'reduced'
+  );
+});
+
 test('switches and persists the react95 theme from settings', () => {
   renderDesktop();
 
@@ -527,8 +590,14 @@ test('shows the active theme and resets it to the default', () => {
   fireEvent.click(matrixTheme);
   expect(matrixTheme).toHaveAttribute('aria-pressed', 'true');
 
-  fireEvent.click(screen.getByRole('button', { name: /^reset$/i }));
-  expect(defaultTheme).toHaveAttribute('aria-pressed', 'true');
+  fireEvent.click(screen.getByRole('tab', { name: /system/i }));
+  fireEvent.click(
+    screen.getByRole('button', { name: /reset all settings/i })
+  );
+  fireEvent.click(screen.getByRole('tab', { name: /appearance/i }));
+  expect(
+    screen.getByRole('button', { name: /sixties usa/i })
+  ).toHaveAttribute('aria-pressed', 'true');
 });
 
 test('loads persisted desktop settings', () => {
@@ -575,7 +644,10 @@ test('clears the current window session from settings', () => {
 
   fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
   openStartMenuItem(/settings/i);
-  fireEvent.click(screen.getByRole('button', { name: /clear session/i }));
+  fireEvent.click(screen.getByRole('tab', { name: /system/i }));
+  fireEvent.click(
+    screen.getByRole('button', { name: /clear window session/i })
+  );
 
   expect(screen.queryByText(/system properties/i)).not.toBeInTheDocument();
   expect(screen.queryByText(/^settings$/i)).not.toBeInTheDocument();
@@ -585,6 +657,7 @@ test('persists the session restore preference', () => {
   renderDesktop();
 
   openStartMenuItem(/settings/i);
+  fireEvent.click(screen.getByRole('tab', { name: /system/i }));
   fireEvent.click(screen.getByLabelText(/restore previous session/i));
 
   expect(
