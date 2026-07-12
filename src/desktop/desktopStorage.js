@@ -12,12 +12,14 @@ export const DEFAULT_DESKTOP_SETTINGS = {
   iconGlowEffect: 'soft',
   iconLayout: 'column',
   iconSize: 'medium',
+  masterVolume: 25,
   react95Theme: DEFAULT_DESKTOP_THEME_ID,
   restoreSession: true,
   scanlineIntensity: 'normal',
   scanlines: true,
   showBootLog: true,
   showSeconds: false,
+  soundEnabled: false,
   taskbarButtonMode: 'label',
   wallpaper: 'sunset'
 };
@@ -98,6 +100,12 @@ function normalizeSettings(settings) {
     iconSize: ['small', 'medium', 'large'].includes(settings?.iconSize)
       ? settings.iconSize
       : DEFAULT_DESKTOP_SETTINGS.iconSize,
+    masterVolume:
+      isFiniteNumber(settings?.masterVolume) &&
+      settings.masterVolume >= 0 &&
+      settings.masterVolume <= 100
+        ? settings.masterVolume
+        : DEFAULT_DESKTOP_SETTINGS.masterVolume,
     react95Theme: getDesktopThemeOption(requestedThemeId).id,
     restoreSession:
       typeof settings?.restoreSession === 'boolean'
@@ -120,6 +128,10 @@ function normalizeSettings(settings) {
       typeof settings?.showSeconds === 'boolean'
         ? settings.showSeconds
         : DEFAULT_DESKTOP_SETTINGS.showSeconds,
+    soundEnabled:
+      typeof settings?.soundEnabled === 'boolean'
+        ? settings.soundEnabled
+        : DEFAULT_DESKTOP_SETTINGS.soundEnabled,
     taskbarButtonMode: ['label', 'icon'].includes(
       settings?.taskbarButtonMode
     )

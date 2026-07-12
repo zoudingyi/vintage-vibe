@@ -8,6 +8,7 @@ import { DesktopProvider, useDesktop } from '@/desktop/DesktopProvider';
 import appRegistry from '@/desktop/appRegistry';
 import { getDesktopThemeOption } from '@/desktop/themeRegistry';
 import useCompactDesktop from '@/desktop/useCompactDesktop';
+import { playTestTone } from '@/desktop/audioEngine';
 import {
   DEFAULT_DESKTOP_SESSION,
   DEFAULT_DESKTOP_SETTINGS,
@@ -163,6 +164,10 @@ function DesktopShell({ initialDesktopData }) {
     }));
   }
 
+  function playAudioTestTone() {
+    return playTestTone(desktopSettings);
+  }
+
   function openPersonalization() {
     openApp('settings');
     setContextMenu(null);
@@ -311,6 +316,7 @@ function DesktopShell({ initialDesktopData }) {
                 appProps={{
                   desktopSettings,
                   onOpenApp: openApp,
+                  onPlayTestSound: playAudioTestTone,
                   onClearDesktopSession: clearSession,
                   onDesktopSettingsChange: updateDesktopSettings,
                   onResetAppearance: resetDesktopAppearance,

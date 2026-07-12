@@ -4,6 +4,8 @@ import { theSixtiesUSA } from 'react95/dist/themes';
 import Home from './index';
 import { DESKTOP_STORAGE_KEY } from '@/desktop/desktopStorage';
 
+const originalAudioContext = window.AudioContext;
+
 function renderDesktop() {
   return render(
     <ThemeProvider theme={theSixtiesUSA}>
@@ -23,6 +25,7 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.useRealTimers();
+  window.AudioContext = originalAudioContext;
 });
 
 test('opens, minimizes, restores, and closes a desktop app window', () => {
@@ -516,6 +519,82 @@ test('switches between settings pages', () => {
 
   expect(screen.getByRole('tabpanel')).toHaveTextContent(/icon layout/i);
   expect(screen.queryByText(/^wallpaper$/i)).not.toBeInTheDocument();
+});
+
+test('updates and persists global audio preferences from settings', () => {
+  renderDesktop();
+
+  openStartMenuItem(/settings/i);
+  fireEvent.click(screen.getByRole('tab', { name: /audio/i }));
+
+  const soundToggle = screen.getByLabelText(/enable sound/i);
+  const volumeControl = screen.getByLabelText(/master volume/i);
+
+  expect(soundToggle).not.toBeChecked();
+  expect(volumeControl).toHaveValue('25');
+
+  fireEvent.click(soundToggle);
+  fireEvent.change(volumeControl, { target: { value: '40' } });
+
+  expect(
+    JSON.parse(window.localStorage.getItem(DESKTOP_STORAGE_KEY)).settings
+  ).toMatchObject({ masterVolume: 40, soundEnabled: true });
+});
+
+test('plays a test sound through the global audio controls', () => {
+  const gain = {
+    connect: jest.fn(),
+    gain: {
+      exponentialRampToValueAtTime: jest.fn(),
+      setValueAtTime: jest.fn()
+    }
+  };
+  const oscillator = {
+    connect: jest.fn(),
+    frequency: { setValueAtTime: jest.fn() },
+    start: jest.fn(),
+    stop: jest.fn()
+  };
+  const audioContext = {
+    createGain: jest.fn(() => gain),
+    createOscillator: jest.fn(() => oscillator),
+    currentTime: 2,
+    destination: {}
+  };
+  window.AudioContext = jest.fn(() => audioContext);
+
+  renderDesktop();
+  openStartMenuItem(/settings/i);
+  fireEvent.click(screen.getByRole('tab', { name: /audio/i }));
+
+  const testSoundButton = screen.getByRole('button', { name: /test sound/i });
+  expect(testSoundButton).toBeDisabled();
+
+  fireEvent.click(screen.getByLabelText(/enable sound/i));
+  fireEvent.change(screen.getByLabelText(/master volume/i), {
+    target: { value: '40' }
+  });
+  fireEvent.click(testSoundButton);
+
+  expect(window.AudioContext).toHaveBeenCalledTimes(1);
+  expect(gain.gain.setValueAtTime).toHaveBeenCalledWith(0.4, 2);
+  expect(oscillator.start).toHaveBeenCalledWith(2);
+  expect(oscillator.stop).toHaveBeenCalledWith(2.25);
+  expect(screen.getByRole('status')).toHaveTextContent(/test sound played/i);
+});
+
+test('reports when test sound is unsupported without crashing', () => {
+  window.AudioContext = undefined;
+
+  renderDesktop();
+  openStartMenuItem(/settings/i);
+  fireEvent.click(screen.getByRole('tab', { name: /audio/i }));
+  fireEvent.click(screen.getByLabelText(/enable sound/i));
+  fireEvent.click(screen.getByRole('button', { name: /test sound/i }));
+
+  expect(screen.getByRole('status')).toHaveTextContent(
+    /audio is not supported/i
+  );
 });
 
 test('moves between settings pages with arrow keys', () => {

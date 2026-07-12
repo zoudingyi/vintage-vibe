@@ -8,6 +8,15 @@ beforeEach(() => {
   window.localStorage.clear();
 });
 
+test('defaults global audio preferences to muted at a low volume', () => {
+  const desktopData = loadDesktopData(window.localStorage);
+
+  expect(desktopData.settings).toMatchObject({
+    masterVolume: 25,
+    soundEnabled: false
+  });
+});
+
 test('migrates legacy desktop settings into versioned data', () => {
   window.localStorage.setItem(
     LEGACY_SETTINGS_STORAGE_KEY,
@@ -86,9 +95,11 @@ test('loads supported multi-page desktop settings', () => {
         iconGlowEffect: 'frame',
         iconLayout: 'grid',
         iconSize: 'large',
+        masterVolume: 40,
         scanlineIntensity: 'strong',
         showBootLog: false,
         showSeconds: true,
+        soundEnabled: true,
         taskbarButtonMode: 'icon',
         wallpaper: 'neon-horizon'
       },
@@ -103,9 +114,11 @@ test('loads supported multi-page desktop settings', () => {
     iconGlowEffect: 'frame',
     iconLayout: 'grid',
     iconSize: 'large',
+    masterVolume: 40,
     scanlineIntensity: 'strong',
     showBootLog: false,
     showSeconds: true,
+    soundEnabled: true,
     taskbarButtonMode: 'icon',
     wallpaper: 'neon-horizon'
   });
@@ -122,9 +135,11 @@ test('falls back from unsupported multi-page desktop settings', () => {
         clockFormat: 'analog',
         iconGlowEffect: 'none',
         iconSize: 'huge',
+        masterVolume: 101,
         scanlineIntensity: 'blinding',
         showBootLog: 'yes',
         showSeconds: 1,
+        soundEnabled: 'yes',
         taskbarButtonMode: 'both',
         wallpaper: 'missing'
       },
@@ -138,9 +153,11 @@ test('falls back from unsupported multi-page desktop settings', () => {
     clockFormat: '24h',
     iconGlowEffect: 'soft',
     iconSize: 'medium',
+    masterVolume: 25,
     scanlineIntensity: 'normal',
     showBootLog: true,
     showSeconds: false,
+    soundEnabled: false,
     taskbarButtonMode: 'label',
     wallpaper: 'sunset'
   });

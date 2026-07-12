@@ -20,6 +20,7 @@ const settingsTabs = [
   { id: 'appearance', label: 'Appearance' },
   { id: 'desktop', label: 'Desktop' },
   { id: 'taskbar', label: 'Taskbar' },
+  { id: 'audio', label: 'Audio' },
   { id: 'system', label: 'System' }
 ];
 
@@ -301,6 +302,66 @@ function TaskbarSettings({ desktopSettings, onDesktopSettingsChange }) {
   );
 }
 
+function AudioSettings({
+  desktopSettings,
+  onDesktopSettingsChange,
+  onPlayTestSound
+}) {
+  const [audioNotice, setAudioNotice] = React.useState(null);
+
+  function handleTestSound() {
+    const result = onPlayTestSound();
+
+    setAudioNotice(
+      result === 'played'
+        ? 'Test sound played.'
+        : 'Audio is not supported in this browser.'
+    );
+  }
+
+  return (
+    <Fieldset label="Global Audio">
+      <SettingsCheckbox
+        checked={desktopSettings.soundEnabled}
+        onChange={event =>
+          onDesktopSettingsChange({ soundEnabled: event.target.checked })
+        }
+      >
+        Enable Sound
+      </SettingsCheckbox>
+      <label className="settings-volume-control">
+        <span>Master Volume: {desktopSettings.masterVolume}%</span>
+        <input
+          aria-label="Master Volume"
+          max="100"
+          min="0"
+          onChange={event =>
+            onDesktopSettingsChange({
+              masterVolume: Number(event.target.value)
+            })
+          }
+          type="range"
+          value={desktopSettings.masterVolume}
+        />
+      </label>
+      <p className="settings-help-text">
+        Every application uses these controls. Sound starts muted.
+      </p>
+      <div className="settings-audio-test">
+        <Button
+          disabled={
+            !desktopSettings.soundEnabled || desktopSettings.masterVolume === 0
+          }
+          onClick={handleTestSound}
+        >
+          Test Sound
+        </Button>
+        {audioNotice && <span role="status">{audioNotice}</span>}
+      </div>
+    </Fieldset>
+  );
+}
+
 function SystemSettings({
   desktopSettings,
   onClearDesktopSession,
@@ -350,6 +411,7 @@ export default function SettingsApp({
   desktopSettings,
   onClearDesktopSession,
   onDesktopSettingsChange,
+  onPlayTestSound,
   onResetAppearance,
   onResetDesktopSettings,
   windowCount = 0
@@ -399,6 +461,13 @@ export default function SettingsApp({
       <TaskbarSettings
         desktopSettings={desktopSettings}
         onDesktopSettingsChange={onDesktopSettingsChange}
+      />
+    ),
+    audio: (
+      <AudioSettings
+        desktopSettings={desktopSettings}
+        onDesktopSettingsChange={onDesktopSettingsChange}
+        onPlayTestSound={onPlayTestSound}
       />
     ),
     system: (
