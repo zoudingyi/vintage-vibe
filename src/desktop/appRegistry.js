@@ -17,6 +17,7 @@ import {
   RecycleBinApp,
   SettingsApp,
   TerminalApp,
+  VaporwaveRadioPrototype,
   VideosApp
 } from './apps';
 
@@ -100,6 +101,16 @@ const appRegistry = [
     component: SettingsApp,
     defaultPosition: { x: 168, y: 96 },
     windowSize: { height: 560, width: 520 }
+  },
+  {
+    id: 'vaporwave-radio-prototype',
+    title: 'Vaporwave Radio (Prototype)',
+    icon: musicIcon,
+    showOnDesktop: false,
+    showInStartMenu: process.env.NODE_ENV !== 'production',
+    component: VaporwaveRadioPrototype,
+    defaultPosition: { x: 88, y: 28 },
+    windowSize: { height: 540, width: 720 }
   },
   {
     id: 'terminal',

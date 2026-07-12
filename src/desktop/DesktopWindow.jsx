@@ -149,6 +149,7 @@ function DesktopWindow({
         $height={windowState.size.height}
         $width={windowState.size.width}
         data-active={active}
+        data-full-screen={fullScreen}
         ref={nodeRef}
         style={{
           display: windowState.status === 'minimized' ? 'none' : undefined,
