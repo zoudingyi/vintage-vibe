@@ -441,7 +441,6 @@
 
 .profile-app p,
 .projects-app p,
-.media-player-app p,
 .settings-app p,
 .terminal-app p,
 .guestbook-app p {
@@ -473,39 +472,6 @@
   display: flex;
   gap: 12px;
   margin-top: 14px;
-}
-
-.media-player-app {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.media-player-display {
-  padding: 10px;
-  min-height: 96px;
-}
-
-.media-player-controls {
-  display: flex;
-  gap: 8px;
-}
-
-.media-player-track {
-  display: block;
-  width: 100%;
-  padding: 4px 6px;
-  border: 0;
-  color: inherit;
-  background: transparent;
-  text-align: left;
-  font: inherit;
-}
-
-.media-player-track:focus,
-.media-player-track:hover {
-  outline: 1px dotted black;
-  background: var(--desktop-accent);
 }
 
 .settings-app {

@@ -10,7 +10,6 @@ import mailIcon from '@/assets/icons/mail.png';
 import {
   FolderApp,
   GuestbookApp,
-  MediaPlayerApp,
   MyComputerApp,
   ProfileApp,
   ProjectsApp,
@@ -43,14 +42,14 @@ const appRegistry = [
     windowSize: { width: 420 }
   },
   {
-    id: 'media-player',
-    title: 'Media Player',
+    id: 'vaporwave-radio',
+    title: 'Vaporwave Radio',
     icon: musicIcon,
     showOnDesktop: true,
     showInStartMenu: true,
-    component: MediaPlayerApp,
+    component: VaporwaveRadioApp,
     defaultPosition: { x: 168, y: 96 },
-    windowSize: { width: 420 }
+    windowSize: { height: 540, width: 720 }
   },
   {
     id: 'my-videos',
@@ -101,16 +100,6 @@ const appRegistry = [
     component: SettingsApp,
     defaultPosition: { x: 168, y: 96 },
     windowSize: { height: 560, width: 520 }
-  },
-  {
-    id: 'vaporwave-radio',
-    title: 'Vaporwave Radio',
-    icon: musicIcon,
-    showOnDesktop: false,
-    showInStartMenu: true,
-    component: VaporwaveRadioApp,
-    defaultPosition: { x: 88, y: 28 },
-    windowSize: { height: 540, width: 720 }
   },
   {
     id: 'terminal',

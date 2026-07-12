@@ -16,7 +16,7 @@ function renderDesktop() {
 
 function openStartMenuItem(name) {
   fireEvent.click(screen.getByRole('button', { name: /start/i }));
-  fireEvent.click(screen.getByText(name));
+  fireEvent.click(within(screen.getByRole('menu')).getByText(name));
 }
 
 beforeEach(() => {
@@ -53,20 +53,22 @@ test('opens, minimizes, restores, and closes a desktop app window', () => {
 test('preserves application state while its window is minimized', () => {
   renderDesktop();
 
-  fireEvent.doubleClick(screen.getByRole('button', { name: /media player/i }));
-  fireEvent.click(screen.getByRole('button', { name: /play track/i }));
-  fireEvent.click(screen.getByRole('button', { name: /next track/i }));
-  fireEvent.click(screen.getByLabelText(/minimize media player/i));
-  fireEvent.click(screen.getByRole('button', { name: /restore media player/i }));
+  fireEvent.doubleClick(
+    screen.getByRole('button', { name: /vaporwave radio/i })
+  );
+  fireEvent.click(screen.getByRole('button', { name: /play preview/i }));
+  fireEvent.click(screen.getByRole('button', { name: /next station/i }));
+  fireEvent.click(screen.getByLabelText(/minimize vaporwave radio/i));
+  fireEvent.click(
+    screen.getByRole('button', { name: /restore vaporwave radio/i })
+  );
 
   expect(
-    screen.getByRole('button', { name: /pause track/i })
+    screen.getByRole('button', { name: /pause preview/i })
   ).toBeInTheDocument();
   expect(
-    within(screen.getByRole('region', { name: /now playing/i })).getByText(
-      /neon file explorer/i
-    )
-  ).toBeInTheDocument();
+    screen.getByRole('button', { name: /101.9 dream channel/i })
+  ).toHaveAttribute('aria-pressed', 'true');
 });
 
 test('activates the next visible window after closing the active window', () => {
@@ -388,14 +390,14 @@ test('navigates and opens start menu apps with the keyboard', () => {
 
   fireEvent.click(screen.getByRole('button', { name: /start/i }));
 
-  const mediaPlayerItem = screen.getByRole('menuitem', {
-    name: /media player/i
+  const radioItem = screen.getByRole('menuitem', {
+    name: /vaporwave radio/i
   });
   const profileItem = screen.getByRole('menuitem', { name: /profile/i });
 
-  expect(mediaPlayerItem).toHaveFocus();
+  expect(radioItem).toHaveFocus();
 
-  fireEvent.keyDown(mediaPlayerItem, { key: 'ArrowDown' });
+  fireEvent.keyDown(radioItem, { key: 'ArrowDown' });
   expect(profileItem).toHaveFocus();
 
   fireEvent.keyDown(profileItem, { key: 'Enter' });
@@ -468,27 +470,6 @@ test('opens a project detail with external links', () => {
     'href',
     'https://github.com/zoudingyi/vintage-vibe'
   );
-});
-
-test('controls the media player playlist', () => {
-  renderDesktop();
-
-  fireEvent.doubleClick(screen.getByRole('button', { name: /media player/i }));
-
-  const display = screen.getByRole('region', { name: /now playing/i });
-
-  expect(display).toHaveTextContent(/midnight boot sequence/i);
-
-  fireEvent.click(screen.getByRole('button', { name: /play track/i }));
-
-  expect(
-    screen.getByRole('button', { name: /pause track/i })
-  ).toBeInTheDocument();
-  expect(display).toHaveTextContent(/playing/i);
-
-  fireEvent.click(screen.getByRole('button', { name: /next track/i }));
-
-  expect(within(display).getByText(/neon file explorer/i)).toBeInTheDocument();
 });
 
 test('persists wallpaper settings from the settings app', () => {
@@ -1023,11 +1004,13 @@ test('opens desktop apps with one tap in compact desktop mode', () => {
   });
 
   renderDesktop();
-  fireEvent.click(screen.getByRole('button', { name: /media player/i }));
+  fireEvent.click(screen.getByRole('button', { name: /vaporwave radio/i }));
 
   window.matchMedia = originalMatchMedia;
 
-  expect(screen.getByText(/now playing/i)).toBeVisible();
+  expect(
+    screen.getByRole('region', { name: /cassette deck radio mode/i })
+  ).toBeVisible();
 });
 
 test('reports when corrupted desktop data is reset', () => {

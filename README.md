@@ -14,7 +14,7 @@ Planned visual effects, audio features, and desktop applications are tracked in 
 - Eight curated react95 system themes with live color previews.
 - Five-page Settings app for appearance, desktop icons, taskbar, audio, and system behavior.
 - Eight wallpapers, including an animated Neon Horizon and a local Pixel Clouds background.
-- Profile, project explorer, Vaporwave Radio, media player, settings, terminal, guestbook, and system applications.
+- Profile, project explorer, Vaporwave Radio, My Videos, settings, terminal, guestbook, and system applications.
 - Reduced-motion support and versioned local-storage recovery.
 
 ## Keyboard shortcuts

@@ -25,3 +25,23 @@ test('registers complete desktop app metadata with unique ids', () => {
     );
   });
 });
+
+test('uses Vaporwave Radio as the desktop music shortcut', () => {
+  const radioApp = appRegistry.find(app => app.id === 'vaporwave-radio');
+
+  expect(appRegistry.some(app => app.id === 'media-player')).toBe(false);
+  expect(radioApp).toMatchObject({
+    defaultPosition: { x: 168, y: 96 },
+    showInStartMenu: true,
+    showOnDesktop: true
+  });
+  expect(
+    appRegistry.filter(app => app.showOnDesktop).map(app => app.id)
+  ).toEqual([
+    'my-computer',
+    'my-folder',
+    'vaporwave-radio',
+    'my-videos',
+    'recycle-bin'
+  ]);
+});

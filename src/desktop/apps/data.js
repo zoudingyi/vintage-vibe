@@ -18,21 +18,3 @@ export const projects = [
     demo: 'https://github.com/zoudingyi/vintage-vibe'
   }
 ];
-
-export const playlist = [
-  {
-    title: 'Midnight Boot Sequence',
-    artist: 'Vintage Vibe Radio',
-    length: '02:48'
-  },
-  {
-    title: 'Neon File Explorer',
-    artist: 'Vintage Vibe Radio',
-    length: '03:12'
-  },
-  {
-    title: 'Shutdown Chime',
-    artist: 'Vintage Vibe Radio',
-    length: '01:44'
-  }
-];
