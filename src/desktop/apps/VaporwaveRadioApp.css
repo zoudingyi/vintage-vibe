@@ -174,9 +174,10 @@
   width: 230px;
   height: 48px;
   margin: 12px auto 0;
+  gap: 5px;
   grid-template-columns: 42px 1fr 42px;
   align-items: center;
-  padding: 3px 12px;
+  padding: 3px;
   border: 2px solid #352245;
   border-radius: 24px;
   background: #171221;
@@ -190,6 +191,7 @@
 .radio-reel {
   width: 34px;
   height: 34px;
+  margin-left: 4px;
   border: 6px dotted #e8e3db;
   border-radius: 50%;
   background: #26202f;
@@ -497,10 +499,10 @@
 .radio-c-crt {
   position: relative;
   display: flex;
-  min-height: 220px;
+  min-height: 234px;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   overflow: hidden;
   border: 3px ridge #736a80;
   border-radius: 18px / 10px;
@@ -510,41 +512,152 @@
   font-family: monospace;
   text-align: center;
   text-shadow: 0 0 8px rgba(93, 255, 211, 0.7);
+  padding: 8px 10px;
 }
 
 .radio-c-crt strong {
-  margin: 16px 0 8px;
+  max-width: 100%;
+  margin: 3px 0 5px;
+  overflow: hidden;
   color: #ff7bd8;
-  font-size: 22px;
+  font-size: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .radio-c-crt p {
-  margin: 10px 0 0;
+  margin: 5px 0 2px;
   font-size: 10px;
 }
 
-.radio-c-wave {
-  display: flex;
+.radio-c-oscilloscope {
+  position: relative;
   width: 100%;
-  height: 42px;
-  align-items: center;
-  justify-content: space-between;
-  overflow: hidden;
-}
-
-.radio-c-wave i {
-  width: 3px;
-  height: 10px;
+  height: 112px;
   flex: none;
-  background: #78faff;
-  box-shadow: 0 0 5px rgba(120, 250, 255, 0.8);
-  opacity: 0.45;
-  transform: translateY(var(--wave));
-  transition: transform 70ms linear, opacity 120ms ease;
+  overflow: hidden;
+  border: 1px solid #3c8f79;
+  border-radius: 12px / 7px;
+  background: #020a08;
+  box-shadow:
+    inset 0 0 22px rgba(70, 255, 200, 0.16),
+    0 0 7px rgba(72, 255, 213, 0.18);
 }
 
-.radio-c-wave[data-active='true'] i {
+.radio-c-oscilloscope svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.radio-c-grid {
+  fill: url('#radio-crt-grid');
+  stroke: rgba(74, 255, 206, 0.12);
+}
+
+.radio-c-grid-line {
+  fill: none;
+  stroke: rgba(76, 255, 210, 0.14);
+  stroke-width: 0.7;
+}
+
+.radio-c-divider {
+  stroke: rgba(117, 255, 221, 0.32);
+  stroke-dasharray: 4 4;
+  stroke-width: 0.8;
+}
+
+.radio-c-trace {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.6;
+  opacity: 0.55;
+  vector-effect: non-scaling-stroke;
+}
+
+.radio-c-trace.is-channel-one {
+  stroke: #72fff0;
+  filter: drop-shadow(0 0 3px #26f7da);
+}
+
+.radio-c-trace.is-channel-two {
+  stroke: #ff78db;
+  filter: drop-shadow(0 0 3px #ff42c6);
+}
+
+.radio-c-oscilloscope[data-active='true'] .radio-c-trace {
   opacity: 1;
+}
+
+.radio-c-channel-label,
+.radio-c-timebase {
+  position: absolute;
+  z-index: 1;
+  font-size: 8px;
+  line-height: 1;
+  text-shadow: 0 0 4px currentColor;
+}
+
+.radio-c-channel-label {
+  left: 5px;
+}
+
+.radio-c-channel-label.is-channel-one {
+  top: 5px;
+  color: #72fff0;
+}
+
+.radio-c-channel-label.is-channel-two {
+  top: 56px;
+  color: #ff78db;
+}
+
+.radio-c-timebase {
+  right: 5px;
+  bottom: 4px;
+  color: #a8e9d8;
+}
+
+.radio-c-spectrum {
+  display: grid;
+  width: 100%;
+  height: 30px;
+  flex: none;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 3px;
+  margin-top: 4px;
+  padding: 2px 4px;
+  border: 1px solid rgba(117, 255, 219, 0.3);
+  background: rgba(0, 8, 6, 0.78);
+}
+
+.radio-c-spectrum span {
+  display: grid;
+  min-width: 0;
+  grid-template-rows: 1fr 7px;
+  justify-items: center;
+}
+
+.radio-c-spectrum i {
+  width: 72%;
+  height: var(--band);
+  min-height: 2px;
+  align-self: end;
+  background: linear-gradient(to top, #5effd3 0 66%, #ffe982 67% 82%, #ff72d6 83%);
+  box-shadow: 0 0 4px rgba(91, 255, 211, 0.55);
+  opacity: 0.45;
+  transition: height 70ms linear, opacity 120ms ease;
+}
+
+.radio-c-spectrum[data-active='true'] i {
+  opacity: 1;
+}
+
+.radio-c-spectrum small {
+  color: #63b9a4;
+  font-size: 6px;
+  line-height: 7px;
 }
 
 .radio-c-log {
@@ -666,7 +779,7 @@
     transition: none;
   }
 
-  .radio-c-wave i {
+  .radio-c-spectrum i {
     transition: none;
   }
 }

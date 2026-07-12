@@ -48,6 +48,26 @@ function formatPlaybackTime(seconds) {
   ).padStart(2, '0')}`;
 }
 
+function buildOscilloscopePoints(samples, baseline) {
+  const width = 320;
+  const amplitude = 24;
+
+  return samples
+    .map((sample, index) => {
+      const x = (index * width) / Math.max(samples.length - 1, 1);
+      const y = baseline + sample * amplitude;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(' ');
+}
+
+function compactSpectrumBands(bands) {
+  return Array.from({ length: 8 }, (_, index) => {
+    const pair = bands.slice(index * 2, index * 2 + 2);
+    return pair.reduce((total, band) => total + band, 0) / pair.length;
+  });
+}
+
 function usePrefersReducedMotion() {
   const query = '(prefers-reduced-motion: reduce)';
   const [reducedMotion, setReducedMotion] = React.useState(
@@ -285,6 +305,8 @@ function BroadcastTerminalRadio({
   onSelect,
   onToggle
 }) {
+  const spectrumBands = compactSpectrumBands(visualization.bands);
+
   return (
     <section className="radio-mode radio-mode-c" aria-label="Broadcast Terminal radio mode">
       <header className="radio-c-header">
@@ -317,16 +339,54 @@ function BroadcastTerminalRadio({
             <span>TUNED TO {station.frequency} MHz</span>
             <strong>{station.title.toUpperCase()}</strong>
             <div
-              aria-label="Live audio waveform"
-              className="radio-c-wave"
+              aria-label="Dual channel CRT oscilloscope"
+              className="radio-c-oscilloscope"
               data-active={visualizationActive}
               role="img"
             >
-              {visualization.waveform.map((sample, index) => (
-                <i
-                  key={index}
-                  style={{ '--wave': `${Math.round(sample * 18)}px` }}
+              <svg aria-hidden="true" preserveAspectRatio="none" viewBox="0 0 320 120">
+                <defs>
+                  <pattern
+                    height="20"
+                    id="radio-crt-grid"
+                    patternUnits="userSpaceOnUse"
+                    width="32"
+                  >
+                    <path className="radio-c-grid-line" d="M 32 0 L 0 0 0 20" />
+                  </pattern>
+                </defs>
+                <rect className="radio-c-grid" height="120" width="320" />
+                <line
+                  className="radio-c-divider"
+                  x1="0"
+                  x2="320"
+                  y1="60"
+                  y2="60"
                 />
+                <polyline
+                  className="radio-c-trace is-channel-one"
+                  points={buildOscilloscopePoints(visualization.waveforms[0], 30)}
+                />
+                <polyline
+                  className="radio-c-trace is-channel-two"
+                  points={buildOscilloscopePoints(visualization.waveforms[1], 90)}
+                />
+              </svg>
+              <span className="radio-c-channel-label is-channel-one">CH1</span>
+              <span className="radio-c-channel-label is-channel-two">CH2</span>
+              <span className="radio-c-timebase">TIME/DIV 10ms</span>
+            </div>
+            <div
+              aria-label="8-band spectrum"
+              className="radio-c-spectrum"
+              data-active={visualizationActive}
+              role="img"
+            >
+              {spectrumBands.map((band, index) => (
+                <span key={index}>
+                  <i style={{ '--band': `${Math.round(band * 100)}%` }} />
+                  <small>{index + 1}</small>
+                </span>
               ))}
             </div>
             <p>

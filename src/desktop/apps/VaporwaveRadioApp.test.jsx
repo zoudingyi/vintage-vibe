@@ -29,24 +29,42 @@ let playMedia;
 
 function installAudioAnalyser({
   fillFrequencyData = data => data.fill(255),
+  fillLeftTimeData = data => data.fill(0),
+  fillRightTimeData = data => data.fill(0),
   fillTimeData = data => data.fill(128)
 } = {}) {
-  const analyser = {
-    connect: jest.fn(),
-    disconnect: jest.fn(),
-    fftSize: 32,
-    frequencyBinCount: 16,
-    getByteFrequencyData: fillFrequencyData,
-    getByteTimeDomainData: fillTimeData,
-    smoothingTimeConstant: 0
-  };
+  function createAnalyser(getByteTimeDomainData, getByteFrequencyData = jest.fn()) {
+    return {
+      connect: jest.fn(),
+      disconnect: jest.fn(),
+      fftSize: 32,
+      frequencyBinCount: 16,
+      getByteFrequencyData,
+      getByteTimeDomainData,
+      smoothingTimeConstant: 0
+    };
+  }
+  const analyser = createAnalyser(fillTimeData, fillFrequencyData);
+  const channelAnalysers = [
+    createAnalyser(fillLeftTimeData),
+    createAnalyser(fillRightTimeData)
+  ];
   const source = {
+    connect: jest.fn(),
+    disconnect: jest.fn()
+  };
+  const splitter = {
     connect: jest.fn(),
     disconnect: jest.fn()
   };
   const audioContext = {
     close: jest.fn(),
-    createAnalyser: jest.fn(() => analyser),
+    createAnalyser: jest
+      .fn()
+      .mockReturnValueOnce(analyser)
+      .mockReturnValueOnce(channelAnalysers[0])
+      .mockReturnValueOnce(channelAnalysers[1]),
+    createChannelSplitter: jest.fn(() => splitter),
     createMediaElementSource: jest.fn(() => source),
     destination: {},
     resume: jest.fn(),
@@ -54,7 +72,7 @@ function installAudioAnalyser({
   };
   window.AudioContext = jest.fn(() => audioContext);
 
-  return { analyser, audioContext, source };
+  return { analyser, audioContext, channelAnalysers, source, splitter };
 }
 
 beforeEach(() => {
@@ -269,13 +287,10 @@ test('drives the Night Drive spectrum from live frequency bands', () => {
   expect(bars[15]).toHaveStyle('--bar: 32px');
 });
 
-test('draws the Broadcast Terminal waveform from live audio samples', () => {
+test('renders a dual-channel CRT oscilloscope with an 8-band spectrum', () => {
   installAudioAnalyser({
-    fillTimeData: data => {
-      data.forEach((_, index) => {
-        data[index] = index % 2 === 0 ? 0 : 255;
-      });
-    }
+    fillLeftTimeData: data => data.fill(0),
+    fillRightTimeData: data => data.fill(255)
   });
   renderRadio({
     ...enabledAudioSettings,
@@ -284,11 +299,19 @@ test('draws the Broadcast Terminal waveform from live audio samples', () => {
 
   fireEvent.click(screen.getByRole('button', { name: /play music/i }));
 
-  const waveform = screen.getByRole('img', { name: /live audio waveform/i });
-  const points = waveform.querySelectorAll('i');
-  expect(waveform).toHaveAttribute('data-active', 'true');
-  expect(points).toHaveLength(24);
-  expect(points[0]).toHaveStyle('--wave: -18px');
+  const oscilloscope = screen.getByRole('img', {
+    name: /dual channel crt oscilloscope/i
+  });
+  const traces = oscilloscope.querySelectorAll('polyline');
+  const spectrum = screen.getByRole('img', { name: /8-band spectrum/i });
+  const spectrumBars = spectrum.querySelectorAll('i');
+
+  expect(oscilloscope).toHaveAttribute('data-active', 'true');
+  expect(traces).toHaveLength(2);
+  expect(traces[0]).not.toHaveAttribute('points', traces[1].getAttribute('points'));
+  expect(oscilloscope).toHaveTextContent(/ch1.*ch2.*time\/div/i);
+  expect(spectrumBars).toHaveLength(8);
+  expect(spectrumBars[0]).toHaveStyle('--band: 100%');
 });
 
 test('keeps visualization static when reduced motion is preferred', () => {

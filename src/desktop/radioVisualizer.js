@@ -1,7 +1,7 @@
 export const EMPTY_RADIO_VISUALIZATION = {
   bands: Array(16).fill(0),
   levels: [0, 0],
-  waveform: Array(24).fill(0)
+  waveforms: [Array(64).fill(0), Array(64).fill(0)]
 };
 
 function compactSamples(data, count, transform) {
@@ -13,8 +13,10 @@ function compactSamples(data, count, transform) {
   });
 }
 
-function average(values) {
-  return values.reduce((total, value) => total + value, 0) / values.length;
+function rootMeanSquare(values) {
+  return Math.sqrt(
+    values.reduce((total, value) => total + value ** 2, 0) / values.length
+  );
 }
 
 export function createRadioVisualizer({
@@ -26,12 +28,14 @@ export function createRadioVisualizer({
 }) {
   let analyser = null;
   let audioContext = null;
+  let channelAnalysers = [];
+  let channelTimeData = [];
   let destroyed = false;
   let frameId = null;
   let frequencyData = null;
   let running = false;
   let source = null;
-  let timeData = null;
+  let splitter = null;
   let unsupported = false;
 
   function initialize() {
@@ -51,15 +55,32 @@ export function createRadioVisualizer({
       analyser.smoothingTimeConstant = 0.72;
       source.connect(analyser);
       analyser.connect(audioContext.destination);
+      splitter = audioContext.createChannelSplitter(2);
+      channelAnalysers = [
+        audioContext.createAnalyser(),
+        audioContext.createAnalyser()
+      ];
+      channelAnalysers.forEach((channelAnalyser, channelIndex) => {
+        channelAnalyser.fftSize = 128;
+        channelAnalyser.smoothingTimeConstant = 0.68;
+        splitter.connect(channelAnalyser, channelIndex);
+      });
+      source.connect(splitter);
       frequencyData = new Uint8Array(analyser.frequencyBinCount);
-      timeData = new Uint8Array(analyser.fftSize);
+      channelTimeData = channelAnalysers.map(
+        channelAnalyser => new Uint8Array(channelAnalyser.fftSize)
+      );
     } catch {
       source?.disconnect();
       analyser?.disconnect();
+      channelAnalysers.forEach(channelAnalyser => channelAnalyser.disconnect());
+      splitter?.disconnect();
       audioContext?.close();
       source = null;
       analyser = null;
+      channelAnalysers = [];
       audioContext = null;
+      splitter = null;
       unsupported = true;
       return false;
     }
@@ -69,21 +90,19 @@ export function createRadioVisualizer({
 
   function sample() {
     analyser.getByteFrequencyData(frequencyData);
-    analyser.getByteTimeDomainData(timeData);
+    channelAnalysers.forEach((channelAnalyser, channelIndex) =>
+      channelAnalyser.getByteTimeDomainData(channelTimeData[channelIndex])
+    );
 
     const bands = compactSamples(frequencyData, 16, value => value / 255);
-    const evenBands = bands.filter((_, index) => index % 2 === 0);
-    const oddBands = bands.filter((_, index) => index % 2 === 1);
-    const waveform = compactSamples(
-      timeData,
-      24,
-      value => (value - 128) / 128
+    const waveforms = channelTimeData.map(data =>
+      compactSamples(data, 64, value => (value - 128) / 128)
     );
 
     onFrame({
       bands,
-      levels: [average(evenBands), average(oddBands)],
-      waveform
+      levels: waveforms.map(rootMeanSquare),
+      waveforms
     });
     frameId = requestFrame(sample);
   }
@@ -129,6 +148,8 @@ export function createRadioVisualizer({
     stop();
     source?.disconnect();
     analyser?.disconnect();
+    channelAnalysers.forEach(channelAnalyser => channelAnalyser.disconnect());
+    splitter?.disconnect();
     audioContext?.close();
     destroyed = true;
   }

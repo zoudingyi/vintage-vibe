@@ -21,9 +21,14 @@ test('samples normalized audio data into a compact visualization frame', () => {
     connect: jest.fn(),
     disconnect: jest.fn()
   };
+  const splitter = {
+    connect: jest.fn(),
+    disconnect: jest.fn()
+  };
   const audioContext = {
     close: jest.fn(),
     createAnalyser: jest.fn(() => analyser),
+    createChannelSplitter: jest.fn(() => splitter),
     createMediaElementSource: jest.fn(() => source),
     destination: {},
     resume: jest.fn(),
@@ -49,7 +54,7 @@ test('samples normalized audio data into a compact visualization frame', () => {
     expect.objectContaining({
       bands: expect.any(Array),
       levels: expect.any(Array),
-      waveform: expect.any(Array)
+      waveforms: expect.any(Array)
     })
   );
 
@@ -58,9 +63,67 @@ test('samples normalized audio data into a compact visualization frame', () => {
   expect(frame.bands[0]).toBe(0);
   expect(frame.bands[8]).toBe(1);
   expect(frame.levels).toHaveLength(2);
-  expect(frame.waveform[0]).toBe(-1);
-  expect(frame.waveform).toContain(0);
+  expect(frame.waveforms[0][0]).toBe(-1);
+  expect(frame.waveforms[0]).toContain(0);
   expect(requestFrame).toHaveBeenCalledTimes(1);
+});
+
+test('samples independent left and right channel waveforms and levels', () => {
+  const createAnalyser = fillTimeData => ({
+    connect: jest.fn(),
+    disconnect: jest.fn(),
+    fftSize: 64,
+    frequencyBinCount: 32,
+    getByteFrequencyData: jest.fn(data => data.fill(128)),
+    getByteTimeDomainData: jest.fn(fillTimeData),
+    smoothingTimeConstant: 0
+  });
+  const spectrumAnalyser = createAnalyser(data => data.fill(128));
+  const leftAnalyser = createAnalyser(data => data.fill(0));
+  const rightAnalyser = createAnalyser(data => data.fill(128));
+  const source = {
+    connect: jest.fn(),
+    disconnect: jest.fn()
+  };
+  const splitter = {
+    connect: jest.fn(),
+    disconnect: jest.fn()
+  };
+  const audioContext = {
+    close: jest.fn(),
+    createAnalyser: jest
+      .fn()
+      .mockReturnValueOnce(spectrumAnalyser)
+      .mockReturnValueOnce(leftAnalyser)
+      .mockReturnValueOnce(rightAnalyser),
+    createChannelSplitter: jest.fn(() => splitter),
+    createMediaElementSource: jest.fn(() => source),
+    destination: {},
+    resume: jest.fn(),
+    state: 'running'
+  };
+  const onFrame = jest.fn();
+  const visualizer = createRadioVisualizer({
+    AudioContextClass: jest.fn(() => audioContext),
+    audio: document.createElement('audio'),
+    cancelFrame: jest.fn(),
+    onFrame,
+    requestFrame: jest.fn(() => 91)
+  });
+
+  visualizer.start();
+
+  const frame = onFrame.mock.calls[0][0];
+  expect(audioContext.createChannelSplitter).toHaveBeenCalledWith(2);
+  expect(splitter.connect).toHaveBeenCalledWith(leftAnalyser, 0);
+  expect(splitter.connect).toHaveBeenCalledWith(rightAnalyser, 1);
+  expect(frame.waveforms).toHaveLength(2);
+  expect(frame.waveforms[0]).toHaveLength(64);
+  expect(frame.waveforms[1]).toHaveLength(64);
+  expect(frame.waveforms[0][0]).toBe(-1);
+  expect(frame.waveforms[1][0]).toBe(0);
+  expect(frame.levels[0]).toBe(1);
+  expect(frame.levels[1]).toBe(0);
 });
 
 test('stops sampling and releases the media graph without rebuilding it', () => {
@@ -77,9 +140,14 @@ test('stops sampling and releases the media graph without rebuilding it', () => 
     connect: jest.fn(),
     disconnect: jest.fn()
   };
+  const splitter = {
+    connect: jest.fn(),
+    disconnect: jest.fn()
+  };
   const audioContext = {
     close: jest.fn(),
     createAnalyser: jest.fn(() => analyser),
+    createChannelSplitter: jest.fn(() => splitter),
     createMediaElementSource: jest.fn(() => source),
     destination: {},
     resume: jest.fn(),
@@ -108,10 +176,11 @@ test('stops sampling and releases the media graph without rebuilding it', () => 
   expect(onFrame).toHaveBeenLastCalledWith({
     bands: Array(16).fill(0),
     levels: [0, 0],
-    waveform: Array(24).fill(0)
+    waveforms: [Array(64).fill(0), Array(64).fill(0)]
   });
   expect(source.disconnect).toHaveBeenCalledTimes(1);
-  expect(analyser.disconnect).toHaveBeenCalledTimes(1);
+  expect(analyser.disconnect).toHaveBeenCalledTimes(3);
+  expect(splitter.disconnect).toHaveBeenCalledTimes(1);
   expect(audioContext.close).toHaveBeenCalledTimes(1);
 });
 
