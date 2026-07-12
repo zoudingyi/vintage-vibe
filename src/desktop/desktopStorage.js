@@ -20,7 +20,7 @@ export const DEFAULT_DESKTOP_SETTINGS = {
   scanlines: true,
   showBootLog: true,
   showSeconds: false,
-  soundEnabled: false,
+  soundEnabled: true,
   taskbarButtonMode: 'label',
   wallpaper: 'sunset'
 };

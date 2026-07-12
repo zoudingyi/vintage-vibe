@@ -8,12 +8,12 @@ beforeEach(() => {
   window.localStorage.clear();
 });
 
-test('defaults global audio preferences to muted at a low volume', () => {
+test('defaults global audio preferences to enabled at a low volume', () => {
   const desktopData = loadDesktopData(window.localStorage);
 
   expect(desktopData.settings).toMatchObject({
     masterVolume: 25,
-    soundEnabled: false
+    soundEnabled: true
   });
 });
 
@@ -167,7 +167,7 @@ test('falls back from unsupported multi-page desktop settings', () => {
     scanlineIntensity: 'normal',
     showBootLog: true,
     showSeconds: false,
-    soundEnabled: false,
+    soundEnabled: true,
     taskbarButtonMode: 'label',
     wallpaper: 'sunset'
   });

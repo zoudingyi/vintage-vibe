@@ -1,5 +1,9 @@
 import React from 'react';
 import { Button, Panel } from 'react95';
+import {
+  createRadioVisualizer,
+  EMPTY_RADIO_VISUALIZATION
+} from '@/desktop/radioVisualizer';
 import './VaporwaveRadioApp.css';
 
 const stations = [
@@ -44,6 +48,37 @@ function formatPlaybackTime(seconds) {
   ).padStart(2, '0')}`;
 }
 
+function usePrefersReducedMotion() {
+  const query = '(prefers-reduced-motion: reduce)';
+  const [reducedMotion, setReducedMotion] = React.useState(
+    () => window.matchMedia?.(query).matches || false
+  );
+
+  React.useEffect(() => {
+    if (!window.matchMedia) {
+      return undefined;
+    }
+
+    const mediaQuery = window.matchMedia(query);
+    const updatePreference = event => setReducedMotion(event.matches);
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', updatePreference);
+    } else {
+      mediaQuery.addListener?.(updatePreference);
+    }
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener('change', updatePreference);
+      } else {
+        mediaQuery.removeListener?.(updatePreference);
+      }
+    };
+  }, []);
+
+  return reducedMotion;
+}
+
 function TransportControls({ playing, onNext, onPrevious, onToggle }) {
   return (
     <div className="radio-mode-transport" aria-label="Playback controls">
@@ -85,6 +120,8 @@ function CassetteDeckRadio({
   station,
   timeLabel,
   playing,
+  visualization,
+  visualizationActive,
   onNext,
   onPrevious,
   onSelect,
@@ -128,9 +165,17 @@ function CassetteDeckRadio({
 
       <div className="radio-a-readout">
         <span>{playing ? 'PLAY' : 'STANDBY'}</span>
-        <div className="radio-a-levels" aria-hidden="true">
-          {[2, 4, 7, 9, 6, 8, 4, 3, 7, 5, 8, 3].map((height, index) => (
-            <i key={index} style={{ '--level': height }} />
+        <div
+          aria-label="Dual VU meters"
+          className="radio-a-levels"
+          data-active={visualizationActive}
+          role="img"
+        >
+          {visualization.levels.map((level, index) => (
+            <span key={index}>
+              <b>{index === 0 ? 'L' : 'R'}</b>
+              <i style={{ '--level': `${Math.round(level * 100)}%` }} />
+            </span>
           ))}
         </div>
         <span>NR ON</span>
@@ -157,6 +202,8 @@ function NightDriveRadio({
   station,
   timeLabel,
   playing,
+  visualization,
+  visualizationActive,
   onNext,
   onPrevious,
   onSelect,
@@ -198,10 +245,18 @@ function NightDriveRadio({
           </div>
         </div>
 
-        <div className={`radio-b-spectrum${playing ? ' is-playing' : ''}`} aria-hidden="true">
-          {[5, 11, 7, 16, 10, 20, 14, 8, 18, 12, 7, 15, 10, 5].map(
-            (height, index) => <i key={index} style={{ '--bar': `${height}px` }} />
-          )}
+        <div
+          aria-label="Live frequency spectrum"
+          className="radio-b-spectrum"
+          data-active={visualizationActive}
+          role="img"
+        >
+          {visualization.bands.map((band, index) => (
+            <i
+              key={index}
+              style={{ '--bar': `${Math.round(3 + band * 29)}px` }}
+            />
+          ))}
         </div>
         <TransportControls
           onNext={onNext}
@@ -223,6 +278,8 @@ function BroadcastTerminalRadio({
   station,
   timeLabel,
   playing,
+  visualization,
+  visualizationActive,
   onNext,
   onPrevious,
   onSelect,
@@ -259,8 +316,18 @@ function BroadcastTerminalRadio({
             <span className="radio-c-scanline" aria-hidden="true" />
             <span>TUNED TO {station.frequency} MHz</span>
             <strong>{station.title.toUpperCase()}</strong>
-            <div className="radio-c-wave" aria-hidden="true">
-              ▂▃▅▆▃▁▃▇▅▂▁▅▇▃▂▆▅▂▁▃▆▇▅▂
+            <div
+              aria-label="Live audio waveform"
+              className="radio-c-wave"
+              data-active={visualizationActive}
+              role="img"
+            >
+              {visualization.waveform.map((sample, index) => (
+                <i
+                  key={index}
+                  style={{ '--wave': `${Math.round(sample * 18)}px` }}
+                />
+              ))}
             </div>
             <p>
               {station.artist} · {playing
@@ -296,21 +363,28 @@ function BroadcastTerminalRadio({
 
 export default function VaporwaveRadioApp({ desktopSettings }) {
   const radioAppearance = desktopSettings.radioAppearance;
+  const reducedMotion = usePrefersReducedMotion();
   const audioRef = React.useRef(null);
   const resumeAfterTuneRef = React.useRef(false);
+  const visualizerRef = React.useRef(null);
   const [activeStationId, setActiveStationId] = React.useState('midnight');
   const [currentTime, setCurrentTime] = React.useState(0);
   const [duration, setDuration] = React.useState(0);
   const [playbackNotice, setPlaybackNotice] = React.useState('');
   const [playing, setPlaying] = React.useState(false);
+  const [visualization, setVisualization] = React.useState(
+    EMPTY_RADIO_VISUALIZATION
+  );
   const stationIndex = stations.findIndex(station => station.id === activeStationId);
   const station = stations[stationIndex];
   const reportPlaybackError = React.useCallback(() => {
+    visualizerRef.current?.stop();
     setPlaying(false);
     setPlaybackNotice(`Could not load ${station.name}. Try another station.`);
   }, [station.name]);
   const reportPlaybackRejection = React.useCallback(
     error => {
+      visualizerRef.current?.stop();
       setPlaying(false);
       if (error?.name === 'NotAllowedError') {
         setPlaybackNotice('Browser blocked playback. Click Play again.');
@@ -324,6 +398,26 @@ export default function VaporwaveRadioApp({ desktopSettings }) {
     },
     [station.name]
   );
+
+  React.useEffect(() => {
+    visualizerRef.current = createRadioVisualizer({
+      AudioContextClass: window.AudioContext || window.webkitAudioContext,
+      audio: audioRef.current,
+      cancelFrame: window.cancelAnimationFrame,
+      onFrame: setVisualization,
+      requestFrame: window.requestAnimationFrame
+    });
+
+    return () => visualizerRef.current?.destroy();
+  }, []);
+
+  React.useEffect(() => {
+    if (reducedMotion) {
+      visualizerRef.current?.stop();
+    } else if (playing) {
+      visualizerRef.current?.start();
+    }
+  }, [playing, reducedMotion]);
   const requestPlayback = React.useCallback(
     audio => {
       try {
@@ -392,6 +486,9 @@ export default function VaporwaveRadioApp({ desktopSettings }) {
     }
 
     setPlaybackNotice('');
+    if (!reducedMotion) {
+      visualizerRef.current?.start();
+    }
     requestPlayback(audio);
   }
 
@@ -412,7 +509,9 @@ export default function VaporwaveRadioApp({ desktopSettings }) {
     station,
     timeLabel: `${formatPlaybackTime(currentTime)} / ${formatPlaybackTime(
       duration
-    )}`
+    )}`,
+    visualization,
+    visualizationActive: playing && !reducedMotion
   };
 
   return (
@@ -421,10 +520,16 @@ export default function VaporwaveRadioApp({ desktopSettings }) {
         onEnded={restartBroadcast}
         onError={reportPlaybackError}
         onLoadedMetadata={event => setDuration(event.currentTarget.duration)}
-        onPause={() => setPlaying(false)}
+        onPause={() => {
+          visualizerRef.current?.stop();
+          setPlaying(false);
+        }}
         onPlay={() => {
           setPlaybackNotice('');
           setPlaying(true);
+          if (!reducedMotion) {
+            visualizerRef.current?.start();
+          }
         }}
         onTimeUpdate={event => setCurrentTime(event.currentTarget.currentTime)}
         preload="metadata"

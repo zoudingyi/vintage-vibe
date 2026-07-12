@@ -3,6 +3,9 @@ import { ThemeProvider } from 'styled-components';
 import { theSixtiesUSA } from 'react95/dist/themes';
 import VaporwaveRadioApp from './VaporwaveRadioApp';
 
+const originalAudioContext = window.AudioContext;
+const originalMatchMedia = window.matchMedia;
+
 const enabledAudioSettings = {
   masterVolume: 40,
   radioAppearance: 'cassette',
@@ -24,6 +27,36 @@ function renderRadio(desktopSettings = enabledAudioSettings) {
 let pauseMedia;
 let playMedia;
 
+function installAudioAnalyser({
+  fillFrequencyData = data => data.fill(255),
+  fillTimeData = data => data.fill(128)
+} = {}) {
+  const analyser = {
+    connect: jest.fn(),
+    disconnect: jest.fn(),
+    fftSize: 32,
+    frequencyBinCount: 16,
+    getByteFrequencyData: fillFrequencyData,
+    getByteTimeDomainData: fillTimeData,
+    smoothingTimeConstant: 0
+  };
+  const source = {
+    connect: jest.fn(),
+    disconnect: jest.fn()
+  };
+  const audioContext = {
+    close: jest.fn(),
+    createAnalyser: jest.fn(() => analyser),
+    createMediaElementSource: jest.fn(() => source),
+    destination: {},
+    resume: jest.fn(),
+    state: 'running'
+  };
+  window.AudioContext = jest.fn(() => audioContext);
+
+  return { analyser, audioContext, source };
+}
+
 beforeEach(() => {
   playMedia = jest
     .spyOn(window.HTMLMediaElement.prototype, 'play')
@@ -40,6 +73,8 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.restoreAllMocks();
+  window.AudioContext = originalAudioContext;
+  window.matchMedia = originalMatchMedia;
 });
 
 test('plays and pauses the tuned station through the browser audio player', () => {
@@ -199,4 +234,81 @@ test('clears a stale playback error after tuning another station', async () => {
   );
 
   expect(screen.queryByRole('status')).not.toBeInTheDocument();
+});
+
+test('drives the Cassette Deck VU meters from live audio samples', () => {
+  installAudioAnalyser();
+  renderRadio();
+
+  fireEvent.click(screen.getByRole('button', { name: /play music/i }));
+
+  const meters = screen.getByRole('img', { name: /dual vu meters/i });
+  const meterLevels = meters.querySelectorAll('i');
+  expect(meters).toHaveAttribute('data-active', 'true');
+  expect(meterLevels).toHaveLength(2);
+  expect(meterLevels[0]).toHaveStyle('--level: 100%');
+  expect(meterLevels[1]).toHaveStyle('--level: 100%');
+});
+
+test('drives the Night Drive spectrum from live frequency bands', () => {
+  installAudioAnalyser();
+  renderRadio({
+    ...enabledAudioSettings,
+    radioAppearance: 'night-drive'
+  });
+
+  fireEvent.click(screen.getByRole('button', { name: /play music/i }));
+
+  const spectrum = screen.getByRole('img', {
+    name: /live frequency spectrum/i
+  });
+  const bars = spectrum.querySelectorAll('i');
+  expect(spectrum).toHaveAttribute('data-active', 'true');
+  expect(bars).toHaveLength(16);
+  expect(bars[0]).toHaveStyle('--bar: 32px');
+  expect(bars[15]).toHaveStyle('--bar: 32px');
+});
+
+test('draws the Broadcast Terminal waveform from live audio samples', () => {
+  installAudioAnalyser({
+    fillTimeData: data => {
+      data.forEach((_, index) => {
+        data[index] = index % 2 === 0 ? 0 : 255;
+      });
+    }
+  });
+  renderRadio({
+    ...enabledAudioSettings,
+    radioAppearance: 'broadcast'
+  });
+
+  fireEvent.click(screen.getByRole('button', { name: /play music/i }));
+
+  const waveform = screen.getByRole('img', { name: /live audio waveform/i });
+  const points = waveform.querySelectorAll('i');
+  expect(waveform).toHaveAttribute('data-active', 'true');
+  expect(points).toHaveLength(24);
+  expect(points[0]).toHaveStyle('--wave: -18px');
+});
+
+test('keeps visualization static when reduced motion is preferred', () => {
+  window.matchMedia = jest.fn(() => ({
+    addEventListener: jest.fn(),
+    matches: true,
+    removeEventListener: jest.fn()
+  }));
+  installAudioAnalyser();
+  renderRadio({
+    ...enabledAudioSettings,
+    radioAppearance: 'night-drive'
+  });
+
+  fireEvent.click(screen.getByRole('button', { name: /play music/i }));
+
+  const spectrum = screen.getByRole('img', {
+    name: /live frequency spectrum/i
+  });
+  expect(window.AudioContext).not.toHaveBeenCalled();
+  expect(spectrum).toHaveAttribute('data-active', 'false');
+  expect(spectrum.querySelector('i')).toHaveStyle('--bar: 3px');
 });

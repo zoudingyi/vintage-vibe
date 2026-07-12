@@ -370,7 +370,7 @@ function AudioSettings({
           />
         </label>
         <p className="settings-help-text">
-          Every application uses these controls. Sound starts muted.
+          Every application uses these controls. Sound starts at 25% volume.
         </p>
         <div className="settings-audio-test">
           <Button

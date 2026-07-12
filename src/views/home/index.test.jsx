@@ -25,9 +25,12 @@ function enableGlobalSound() {
   fireEvent.click(
     within(settingsWindow).getByRole('tab', { name: /audio/i })
   );
-  fireEvent.click(
-    within(settingsWindow).getByRole('checkbox', { name: /enable sound/i })
-  );
+  const soundToggle = within(settingsWindow).getByRole('checkbox', {
+    name: /enable sound/i
+  });
+  if (!soundToggle.checked) {
+    fireEvent.click(soundToggle);
+  }
   fireEvent.click(within(settingsWindow).getByLabelText(/close settings/i));
 }
 
@@ -535,9 +538,14 @@ test('updates and persists global audio preferences from settings', () => {
   const soundToggle = screen.getByLabelText(/enable sound/i);
   const volumeControl = screen.getByLabelText(/master volume/i);
 
-  expect(soundToggle).not.toBeChecked();
+  expect(soundToggle).toBeChecked();
   expect(volumeControl).toHaveValue('25');
 
+  fireEvent.click(soundToggle);
+  expect(
+    JSON.parse(window.localStorage.getItem(DESKTOP_STORAGE_KEY)).settings
+      .soundEnabled
+  ).toBe(false);
   fireEvent.click(soundToggle);
   fireEvent.change(volumeControl, { target: { value: '40' } });
 
@@ -573,9 +581,8 @@ test('plays a test sound through the global audio controls', () => {
   fireEvent.click(screen.getByRole('tab', { name: /audio/i }));
 
   const testSoundButton = screen.getByRole('button', { name: /test sound/i });
-  expect(testSoundButton).toBeDisabled();
+  expect(testSoundButton).toBeEnabled();
 
-  fireEvent.click(screen.getByLabelText(/enable sound/i));
   fireEvent.change(screen.getByLabelText(/master volume/i), {
     target: { value: '40' }
   });
@@ -594,7 +601,6 @@ test('reports when test sound is unsupported without crashing', () => {
   renderDesktop();
   openStartMenuItem(/settings/i);
   fireEvent.click(screen.getByRole('tab', { name: /audio/i }));
-  fireEvent.click(screen.getByLabelText(/enable sound/i));
   fireEvent.click(screen.getByRole('button', { name: /test sound/i }));
 
   expect(screen.getByRole('status')).toHaveTextContent(

@@ -232,17 +232,39 @@
 .radio-a-levels {
   display: flex;
   height: 24px;
-  align-items: flex-end;
-  gap: 3px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
   padding: 3px;
   border: 1px solid #4e4163;
   background: #0a0810;
 }
 
+.radio-a-levels span {
+  display: grid;
+  grid-template-columns: 10px 1fr;
+  align-items: center;
+  gap: 3px;
+}
+
+.radio-a-levels b {
+  color: #ff79d1;
+  font-size: 7px;
+}
+
 .radio-a-levels i {
-  height: calc(var(--level) * 2px);
-  flex: 1;
-  background: linear-gradient(#ff66cb, #54f5ee);
+  position: relative;
+  height: 5px;
+  overflow: hidden;
+  background: #241b35;
+}
+
+.radio-a-levels i::after {
+  position: absolute;
+  inset: 0;
+  width: var(--level);
+  background: linear-gradient(90deg, #54f5ee 0 72%, #fff26d 72% 90%, #ff66cb 90%);
+  content: '';
 }
 
 /* Variant B — immersive night drive */
@@ -400,12 +422,11 @@
   height: var(--bar);
   background: linear-gradient(#ff69cf, #65f8ff);
   opacity: 0.45;
+  transition: height 80ms linear, opacity 120ms ease;
 }
 
-.radio-b-spectrum.is-playing i {
+.radio-b-spectrum[data-active='true'] i {
   opacity: 1;
-  animation: radio-spectrum 0.8s ease-in-out infinite alternate;
-  animation-delay: calc(var(--bar) * -20ms);
 }
 
 /* Variant C — functional broadcast terminal */
@@ -503,11 +524,27 @@
 }
 
 .radio-c-wave {
-  max-width: 90%;
+  display: flex;
+  width: 100%;
+  height: 42px;
+  align-items: center;
+  justify-content: space-between;
   overflow: hidden;
-  color: #78faff;
-  font-size: 16px;
-  white-space: nowrap;
+}
+
+.radio-c-wave i {
+  width: 3px;
+  height: 10px;
+  flex: none;
+  background: #78faff;
+  box-shadow: 0 0 5px rgba(120, 250, 255, 0.8);
+  opacity: 0.45;
+  transform: translateY(var(--wave));
+  transition: transform 70ms linear, opacity 120ms ease;
+}
+
+.radio-c-wave[data-active='true'] i {
+  opacity: 1;
 }
 
 .radio-c-log {
@@ -534,10 +571,6 @@
 
 @keyframes radio-reel-spin {
   to { transform: rotate(360deg); }
-}
-
-@keyframes radio-spectrum {
-  to { transform: scaleY(0.45); }
 }
 
 @media (max-width: 720px) {
@@ -625,8 +658,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .radio-reel.is-spinning,
-  .radio-b-spectrum.is-playing i {
+  .radio-reel.is-spinning {
     animation: none;
+  }
+
+  .radio-b-spectrum i {
+    transition: none;
+  }
+
+  .radio-c-wave i {
+    transition: none;
   }
 }
