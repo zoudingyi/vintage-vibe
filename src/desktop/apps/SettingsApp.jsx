@@ -24,6 +24,12 @@ const settingsTabs = [
   { id: 'system', label: 'System' }
 ];
 
+const radioAppearanceOptions = [
+  { id: 'cassette', label: 'Cassette Deck' },
+  { id: 'night-drive', label: 'Night Drive' },
+  { id: 'broadcast', label: 'Broadcast Terminal' }
+];
+
 function ChoiceButton({ active, children, onClick }) {
   return (
     <Button
@@ -86,6 +92,24 @@ function WallpaperChoice({ active, onClick, option }) {
       <span
         aria-hidden="true"
         className={`settings-wallpaper-preview desktop-wallpaper-${option.id}`}
+      />
+      <span>{option.label}</span>
+    </Button>
+  );
+}
+
+function RadioAppearanceChoice({ active, onClick, option }) {
+  return (
+    <Button
+      active={active ? true : undefined}
+      aria-label={option.label}
+      aria-pressed={active}
+      className="settings-radio-appearance-choice"
+      onClick={onClick}
+    >
+      <span
+        aria-hidden="true"
+        className={`settings-radio-appearance-preview is-${option.id}`}
       />
       <span>{option.label}</span>
     </Button>
@@ -320,45 +344,62 @@ function AudioSettings({
   }
 
   return (
-    <Fieldset label="Global Audio">
-      <SettingsCheckbox
-        checked={desktopSettings.soundEnabled}
-        onChange={event =>
-          onDesktopSettingsChange({ soundEnabled: event.target.checked })
-        }
-      >
-        Enable Sound
-      </SettingsCheckbox>
-      <label className="settings-volume-control">
-        <span>Master Volume: {desktopSettings.masterVolume}%</span>
-        <input
-          aria-label="Master Volume"
-          max="100"
-          min="0"
+    <>
+      <Fieldset label="Global Audio">
+        <SettingsCheckbox
+          checked={desktopSettings.soundEnabled}
           onChange={event =>
-            onDesktopSettingsChange({
-              masterVolume: Number(event.target.value)
-            })
+            onDesktopSettingsChange({ soundEnabled: event.target.checked })
           }
-          type="range"
-          value={desktopSettings.masterVolume}
-        />
-      </label>
-      <p className="settings-help-text">
-        Every application uses these controls. Sound starts muted.
-      </p>
-      <div className="settings-audio-test">
-        <Button
-          disabled={
-            !desktopSettings.soundEnabled || desktopSettings.masterVolume === 0
-          }
-          onClick={handleTestSound}
         >
-          Test Sound
-        </Button>
-        {audioNotice && <span role="status">{audioNotice}</span>}
-      </div>
-    </Fieldset>
+          Enable Sound
+        </SettingsCheckbox>
+        <label className="settings-volume-control">
+          <span>Master Volume: {desktopSettings.masterVolume}%</span>
+          <input
+            aria-label="Master Volume"
+            max="100"
+            min="0"
+            onChange={event =>
+              onDesktopSettingsChange({
+                masterVolume: Number(event.target.value)
+              })
+            }
+            type="range"
+            value={desktopSettings.masterVolume}
+          />
+        </label>
+        <p className="settings-help-text">
+          Every application uses these controls. Sound starts muted.
+        </p>
+        <div className="settings-audio-test">
+          <Button
+            disabled={
+              !desktopSettings.soundEnabled ||
+              desktopSettings.masterVolume === 0
+            }
+            onClick={handleTestSound}
+          >
+            Test Sound
+          </Button>
+          {audioNotice && <span role="status">{audioNotice}</span>}
+        </div>
+      </Fieldset>
+      <Fieldset label="Radio Appearance">
+        <div className="settings-radio-appearance-grid">
+          {radioAppearanceOptions.map(option => (
+            <RadioAppearanceChoice
+              active={desktopSettings.radioAppearance === option.id}
+              key={option.id}
+              onClick={() =>
+                onDesktopSettingsChange({ radioAppearance: option.id })
+              }
+              option={option}
+            />
+          ))}
+        </div>
+      </Fieldset>
+    </>
   );
 }
 

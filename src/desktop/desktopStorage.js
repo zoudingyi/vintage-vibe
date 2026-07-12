@@ -13,6 +13,7 @@ export const DEFAULT_DESKTOP_SETTINGS = {
   iconLayout: 'column',
   iconSize: 'medium',
   masterVolume: 25,
+  radioAppearance: 'cassette',
   react95Theme: DEFAULT_DESKTOP_THEME_ID,
   restoreSession: true,
   scanlineIntensity: 'normal',
@@ -106,6 +107,11 @@ function normalizeSettings(settings) {
       settings.masterVolume <= 100
         ? settings.masterVolume
         : DEFAULT_DESKTOP_SETTINGS.masterVolume,
+    radioAppearance: ['cassette', 'night-drive', 'broadcast'].includes(
+      settings?.radioAppearance
+    )
+      ? settings.radioAppearance
+      : DEFAULT_DESKTOP_SETTINGS.radioAppearance,
     react95Theme: getDesktopThemeOption(requestedThemeId).id,
     restoreSession:
       typeof settings?.restoreSession === 'boolean'

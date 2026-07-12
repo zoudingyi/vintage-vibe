@@ -1,15 +1,6 @@
 import React from 'react';
-import { createPortal } from 'react-dom';
 import { Button, Panel } from 'react95';
-import { useSearchParams } from 'react-router-dom';
-import './VaporwaveRadioPrototype.css';
-
-// PROTOTYPE: Three Vaporwave Radio directions, switchable via ?variant= on /home.
-const variants = [
-  { id: 'A', name: 'Cassette Deck' },
-  { id: 'B', name: 'Night Drive' },
-  { id: 'C', name: 'Broadcast Terminal' }
-];
+import './VaporwaveRadioApp.css';
 
 const stations = [
   { frequency: '88.7', id: 'mirage', name: 'Palm Mirage' },
@@ -19,7 +10,7 @@ const stations = [
 
 function TransportControls({ playing, onNext, onPrevious, onToggle }) {
   return (
-    <div className="radio-prototype-transport" aria-label="Playback controls">
+    <div className="radio-mode-transport" aria-label="Playback controls">
       <Button aria-label="Previous station" onClick={onPrevious}>
         ◀◀
       </Button>
@@ -36,7 +27,7 @@ function TransportControls({ playing, onNext, onPrevious, onToggle }) {
 function StationButtons({ activeStationId, onSelect, vertical = false }) {
   return (
     <div
-      className={`radio-prototype-stations${vertical ? ' is-vertical' : ''}`}
+      className={`radio-mode-stations${vertical ? ' is-vertical' : ''}`}
       aria-label="Station presets"
     >
       {stations.map(station => (
@@ -54,9 +45,16 @@ function StationButtons({ activeStationId, onSelect, vertical = false }) {
   );
 }
 
-function VariantA({ station, playing, onNext, onPrevious, onSelect, onToggle }) {
+function CassetteDeckRadio({
+  station,
+  playing,
+  onNext,
+  onPrevious,
+  onSelect,
+  onToggle
+}) {
   return (
-    <section className="radio-prototype radio-prototype-a" aria-label="Cassette Deck variant">
+    <section className="radio-mode radio-mode-a" aria-label="Cassette Deck radio mode">
       <header className="radio-a-header">
         <div>
           <span className="radio-kicker">VAPORWAVE STEREO SYSTEM</span>
@@ -104,7 +102,7 @@ function VariantA({ station, playing, onNext, onPrevious, onSelect, onToggle }) 
       />
       <StationButtons activeStationId={station.id} onSelect={onSelect} />
 
-      <footer className="radio-prototype-state">
+      <footer className="radio-mode-state">
         <span>DECK A</span>
         <span>{station.name}</span>
         <span>{playing ? 'TAPE RUNNING' : 'TAPE STOPPED'}</span>
@@ -113,9 +111,16 @@ function VariantA({ station, playing, onNext, onPrevious, onSelect, onToggle }) 
   );
 }
 
-function VariantB({ station, playing, onNext, onPrevious, onSelect, onToggle }) {
+function NightDriveRadio({
+  station,
+  playing,
+  onNext,
+  onPrevious,
+  onSelect,
+  onToggle
+}) {
   return (
-    <section className="radio-prototype radio-prototype-b" aria-label="Night Drive variant">
+    <section className="radio-mode radio-mode-b" aria-label="Night Drive radio mode">
       <aside className="radio-b-tuner">
         <span className="radio-kicker">CITY BAND</span>
         <h2>夜間通信</h2>
@@ -156,7 +161,7 @@ function VariantB({ station, playing, onNext, onPrevious, onSelect, onToggle }) 
           onToggle={onToggle}
           playing={playing}
         />
-        <footer className="radio-prototype-state">
+        <footer className="radio-mode-state">
           <span>CRUISE MODE</span>
           <span>{playing ? 'BROADCAST ONLINE' : 'PARKED'}</span>
           <span>00:{playing ? '42' : '00'} / ∞</span>
@@ -166,9 +171,16 @@ function VariantB({ station, playing, onNext, onPrevious, onSelect, onToggle }) 
   );
 }
 
-function VariantC({ station, playing, onNext, onPrevious, onSelect, onToggle }) {
+function BroadcastTerminalRadio({
+  station,
+  playing,
+  onNext,
+  onPrevious,
+  onSelect,
+  onToggle
+}) {
   return (
-    <section className="radio-prototype radio-prototype-c" aria-label="Broadcast Terminal variant">
+    <section className="radio-mode radio-mode-c" aria-label="Broadcast Terminal radio mode">
       <header className="radio-c-header">
         <span>VVR-95 NETWORK CONSOLE</span>
         <span className="radio-c-on-air">● {playing ? 'ON AIR' : 'STANDBY'}</span>
@@ -215,7 +227,7 @@ function VariantC({ station, playing, onNext, onPrevious, onSelect, onToggle }) 
         </div>
       </div>
 
-      <footer className="radio-prototype-state">
+      <footer className="radio-mode-state">
         <span>CH {station.frequency}</span>
         <span>LOCAL MEMORY ONLY</span>
         <span>{station.name}</span>
@@ -224,83 +236,19 @@ function VariantC({ station, playing, onNext, onPrevious, onSelect, onToggle }) 
   );
 }
 
-function PrototypeSwitcher({ currentVariant, onChange }) {
-  const currentIndex = variants.findIndex(variant => variant.id === currentVariant);
-
-  React.useEffect(() => {
-    function handleKeyDown(event) {
-      const target = event.target;
-      const editing =
-        ['INPUT', 'TEXTAREA', 'SELECT'].includes(target?.tagName) ||
-        target?.isContentEditable;
-
-      if (editing || !['ArrowLeft', 'ArrowRight'].includes(event.key)) {
-        return;
-      }
-
-      event.preventDefault();
-      const direction = event.key === 'ArrowLeft' ? -1 : 1;
-      const nextIndex =
-        (currentIndex + direction + variants.length) % variants.length;
-      onChange(variants[nextIndex].id);
-    }
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex, onChange]);
-
-  if (process.env.NODE_ENV === 'production') {
-    return null;
-  }
-
-  const current = variants[currentIndex];
-
-  return createPortal(
-    <div className="prototype-switcher" aria-label="Radio prototype variants">
-      <button
-        aria-label="Previous radio design"
-        onClick={() => onChange(variants[(currentIndex + 2) % variants.length].id)}
-      >
-        ←
-      </button>
-      <span>{current.id} — {current.name}</span>
-      <button
-        aria-label="Next radio design"
-        onClick={() => onChange(variants[(currentIndex + 1) % variants.length].id)}
-      >
-        →
-      </button>
-    </div>,
-    document.body
-  );
-}
-
-export default function VaporwaveRadioPrototype() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const requestedVariant = searchParams.get('variant')?.toUpperCase();
-  const currentVariant = variants.some(variant => variant.id === requestedVariant)
-    ? requestedVariant
-    : 'A';
+export default function VaporwaveRadioApp({ desktopSettings }) {
+  const radioAppearance = desktopSettings.radioAppearance;
   const [activeStationId, setActiveStationId] = React.useState('midnight');
   const [playing, setPlaying] = React.useState(false);
   const stationIndex = stations.findIndex(station => station.id === activeStationId);
   const station = stations[stationIndex];
-
-  const changeVariant = React.useCallback(
-    nextVariant => {
-      const nextSearchParams = new URLSearchParams(searchParams);
-      nextSearchParams.set('variant', nextVariant);
-      setSearchParams(nextSearchParams, { replace: true });
-    },
-    [searchParams, setSearchParams]
-  );
 
   function changeStation(direction) {
     const nextIndex = (stationIndex + direction + stations.length) % stations.length;
     setActiveStationId(stations[nextIndex].id);
   }
 
-  const variantProps = {
+  const modeProps = {
     onNext: () => changeStation(1),
     onPrevious: () => changeStation(-1),
     onSelect: setActiveStationId,
@@ -310,11 +258,16 @@ export default function VaporwaveRadioPrototype() {
   };
 
   return (
-    <div className="vaporwave-radio-prototype">
-      {currentVariant === 'A' && <VariantA {...variantProps} />}
-      {currentVariant === 'B' && <VariantB {...variantProps} />}
-      {currentVariant === 'C' && <VariantC {...variantProps} />}
-      <PrototypeSwitcher currentVariant={currentVariant} onChange={changeVariant} />
+    <div className="vaporwave-radio-app">
+      {radioAppearance === 'cassette' && (
+        <CassetteDeckRadio {...modeProps} />
+      )}
+      {radioAppearance === 'night-drive' && (
+        <NightDriveRadio {...modeProps} />
+      )}
+      {radioAppearance === 'broadcast' && (
+        <BroadcastTerminalRadio {...modeProps} />
+      )}
     </div>
   );
 }

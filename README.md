@@ -14,7 +14,7 @@ Planned visual effects, audio features, and desktop applications are tracked in 
 - Eight curated react95 system themes with live color previews.
 - Five-page Settings app for appearance, desktop icons, taskbar, audio, and system behavior.
 - Eight wallpapers, including an animated Neon Horizon and a local Pixel Clouds background.
-- Profile, project explorer, media player, settings, terminal, guestbook, and system applications.
+- Profile, project explorer, Vaporwave Radio, media player, settings, terminal, guestbook, and system applications.
 - Reduced-motion support and versioned local-storage recovery.
 
 ## Keyboard shortcuts
@@ -51,7 +51,7 @@ Desktop settings and restorable window sessions are stored in the browser under 
 - **Appearance** controls the react95 theme, wallpaper, scanlines, and scanline strength with a live CRT monitor preview.
 - **Desktop** controls column/grid icon layout, small/medium/large icon sizing, and three selectable icon selection effects.
 - **Taskbar** controls 12/24-hour clock formatting, seconds, and icon-only window buttons.
-- **Audio** controls the global sound switch and master volume, with a synthesized test tone.
+- **Audio** controls the global sound switch, master volume, synthesized test tone, and three persistent Vaporwave Radio appearances.
 - **System** controls session restore, the boot log, scoped resets, and window-session cleanup.
 
 ## System themes

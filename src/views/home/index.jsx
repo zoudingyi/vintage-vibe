@@ -179,6 +179,7 @@ function DesktopShell({ initialDesktopData }) {
 
   function resetDesktopAppearance() {
     updateDesktopSettings({
+      radioAppearance: DEFAULT_DESKTOP_SETTINGS.radioAppearance,
       react95Theme: DEFAULT_DESKTOP_SETTINGS.react95Theme,
       scanlineIntensity: DEFAULT_DESKTOP_SETTINGS.scanlineIntensity,
       scanlines: DEFAULT_DESKTOP_SETTINGS.scanlines,

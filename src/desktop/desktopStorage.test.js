@@ -17,6 +17,12 @@ test('defaults global audio preferences to muted at a low volume', () => {
   });
 });
 
+test('defaults the radio appearance to Cassette Deck', () => {
+  const desktopData = loadDesktopData(window.localStorage);
+
+  expect(desktopData.settings.radioAppearance).toBe('cassette');
+});
+
 test('migrates legacy desktop settings into versioned data', () => {
   window.localStorage.setItem(
     LEGACY_SETTINGS_STORAGE_KEY,
@@ -96,6 +102,7 @@ test('loads supported multi-page desktop settings', () => {
         iconLayout: 'grid',
         iconSize: 'large',
         masterVolume: 40,
+        radioAppearance: 'broadcast',
         scanlineIntensity: 'strong',
         showBootLog: false,
         showSeconds: true,
@@ -115,6 +122,7 @@ test('loads supported multi-page desktop settings', () => {
     iconLayout: 'grid',
     iconSize: 'large',
     masterVolume: 40,
+    radioAppearance: 'broadcast',
     scanlineIntensity: 'strong',
     showBootLog: false,
     showSeconds: true,
@@ -136,6 +144,7 @@ test('falls back from unsupported multi-page desktop settings', () => {
         iconGlowEffect: 'none',
         iconSize: 'huge',
         masterVolume: 101,
+        radioAppearance: 'hologram',
         scanlineIntensity: 'blinding',
         showBootLog: 'yes',
         showSeconds: 1,
@@ -154,6 +163,7 @@ test('falls back from unsupported multi-page desktop settings', () => {
     iconGlowEffect: 'soft',
     iconSize: 'medium',
     masterVolume: 25,
+    radioAppearance: 'cassette',
     scanlineIntensity: 'normal',
     showBootLog: true,
     showSeconds: false,

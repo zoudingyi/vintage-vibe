@@ -1,4 +1,4 @@
-.vaporwave-radio-prototype {
+.vaporwave-radio-app {
   height: 100%;
   min-width: 0;
   min-height: 100%;
@@ -6,12 +6,7 @@
   font-family: 'ms_sans_serif', sans-serif;
 }
 
-.react-draggable[data-full-screen='true'] .vaporwave-radio-prototype {
-  height: calc(100vh - 180px);
-  min-height: calc(100vh - 180px);
-}
-
-.radio-prototype {
+.radio-mode {
   position: relative;
   min-height: 100%;
   overflow: hidden;
@@ -19,7 +14,7 @@
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
 }
 
-.radio-prototype h2 {
+.radio-mode h2 {
   margin: 2px 0 0;
   font-size: 20px;
   letter-spacing: 1px;
@@ -31,27 +26,27 @@
   letter-spacing: 1.5px;
 }
 
-.radio-prototype-transport {
+.radio-mode-transport {
   display: flex;
   justify-content: center;
   gap: 8px;
 }
 
-.radio-prototype-transport button {
+.radio-mode-transport button {
   min-width: 64px;
 }
 
-.radio-prototype-stations {
+.radio-mode-stations {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
 
-.radio-prototype-stations.is-vertical {
+.radio-mode-stations.is-vertical {
   grid-template-columns: 1fr;
 }
 
-.radio-prototype-stations button {
+.radio-mode-stations button {
   display: flex;
   min-width: 0;
   flex-direction: column;
@@ -60,12 +55,12 @@
   text-align: left;
 }
 
-.radio-prototype-stations button span {
+.radio-mode-stations button span {
   font-size: 14px;
   font-weight: bold;
 }
 
-.radio-prototype-stations button small {
+.radio-mode-stations button small {
   max-width: 100%;
   overflow: hidden;
   font-size: 9px;
@@ -73,7 +68,7 @@
   white-space: nowrap;
 }
 
-.radio-prototype-state {
+.radio-mode-state {
   display: flex;
   justify-content: space-between;
   gap: 8px;
@@ -83,7 +78,7 @@
 }
 
 /* Variant A — physical cassette deck */
-.radio-prototype-a {
+.radio-mode-a {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -207,7 +202,7 @@
   font-size: 10px;
 }
 
-.radio-prototype-a > .radio-prototype-state {
+.radio-mode-a > .radio-mode-state {
   margin-top: auto;
 }
 
@@ -228,7 +223,7 @@
 }
 
 /* Variant B — immersive night drive */
-.radio-prototype-b {
+.radio-mode-b {
   display: grid;
   grid-template-columns: 180px minmax(0, 1fr);
   background: #09051b;
@@ -275,7 +270,7 @@
   box-shadow: inset 0 0 30px rgba(255, 62, 197, 0.22);
 }
 
-.radio-b-main > .radio-prototype-state {
+.radio-b-main > .radio-mode-state {
   margin-top: auto;
 }
 
@@ -391,7 +386,7 @@
 }
 
 /* Variant C — functional broadcast terminal */
-.radio-prototype-c {
+.radio-mode-c {
   display: flex;
   flex-direction: column;
   background: #171421;
@@ -508,42 +503,10 @@
   line-height: 1.35;
 }
 
-.radio-prototype-c > .radio-prototype-state {
+.radio-mode-c > .radio-mode-state {
   padding: 7px 12px;
   border-top: 1px solid #4a4058;
   background: #252033;
-}
-
-.prototype-switcher {
-  position: fixed;
-  bottom: 58px;
-  left: 50%;
-  z-index: 12000;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px 9px;
-  border: 2px solid #67f8ff;
-  border-radius: 999px;
-  color: #fff;
-  background: #160a2d;
-  box-shadow: 0 0 0 2px #ff6bcf, 0 7px 22px rgba(0, 0, 0, 0.55);
-  font: 12px 'ms_sans_serif', sans-serif;
-  transform: translateX(-50%);
-}
-
-.prototype-switcher button {
-  width: 28px;
-  height: 24px;
-  border: 1px solid #67f8ff;
-  color: #fff;
-  background: #522374;
-  font: inherit;
-}
-
-.prototype-switcher span {
-  min-width: 150px;
-  text-align: center;
 }
 
 @keyframes radio-reel-spin {
@@ -555,16 +518,16 @@
 }
 
 @media (max-width: 720px) {
-  .radio-prototype {
+  .radio-mode {
     min-height: 100%;
   }
 
-  .radio-prototype-b,
+  .radio-mode-b,
   .radio-c-layout {
     grid-template-columns: 1fr;
   }
 
-  .radio-prototype-b {
+  .radio-mode-b {
     grid-template-rows: auto 1fr;
   }
 
@@ -573,8 +536,8 @@
     border-bottom: 1px solid #e45fc0;
   }
 
-  .radio-b-tuner .radio-prototype-stations,
-  .radio-c-directory .radio-prototype-stations {
+  .radio-b-tuner .radio-mode-stations,
+  .radio-c-directory .radio-mode-stations {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
@@ -602,7 +565,7 @@
 }
 
 @media (max-width: 470px) {
-  .radio-prototype-a {
+  .radio-mode-a {
     padding: 10px;
   }
 
@@ -627,22 +590,15 @@
     grid-template-columns: 48px 1fr 48px;
   }
 
-  .radio-prototype-transport button {
+  .radio-mode-transport button {
     min-width: 0;
     flex: 1;
   }
 
-  .radio-prototype-stations button small {
+  .radio-mode-stations button small {
     display: none;
   }
 
-  .prototype-switcher {
-    bottom: 54px;
-  }
-
-  .prototype-switcher span {
-    min-width: 126px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -7,5 +7,5 @@ export { default as ProjectsApp } from './ProjectsApp';
 export { default as RecycleBinApp } from './RecycleBinApp';
 export { default as SettingsApp } from './SettingsApp';
 export { default as TerminalApp } from './TerminalApp';
-export { default as VaporwaveRadioPrototype } from './VaporwaveRadioPrototype';
+export { default as VaporwaveRadioApp } from './VaporwaveRadioApp';
 export { default as VideosApp } from './VideosApp';

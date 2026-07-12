@@ -597,6 +597,63 @@ test('reports when test sound is unsupported without crashing', () => {
   );
 });
 
+test('switches and persists the Radio appearance from Settings', () => {
+  renderDesktop();
+
+  openStartMenuItem(/vaporwave radio/i);
+  expect(
+    screen.getByRole('region', { name: /cassette deck/i })
+  ).toBeInTheDocument();
+
+  openStartMenuItem(/settings/i);
+  const settingsWindow = screen.getByRole('dialog', { name: /settings/i });
+  fireEvent.click(
+    within(settingsWindow).getByRole('tab', { name: /audio/i })
+  );
+  fireEvent.click(
+    within(settingsWindow).getByRole('button', { name: /night drive/i })
+  );
+
+  expect(
+    screen.getByRole('region', { name: /night drive/i })
+  ).toBeInTheDocument();
+  expect(
+    JSON.parse(window.localStorage.getItem(DESKTOP_STORAGE_KEY)).settings
+      .radioAppearance
+  ).toBe('night-drive');
+});
+
+test('preserves Radio playback state while changing appearance', () => {
+  renderDesktop();
+
+  openStartMenuItem(/vaporwave radio/i);
+  const radioWindow = screen.getByRole('dialog', {
+    name: /vaporwave radio/i
+  });
+  fireEvent.click(
+    within(radioWindow).getByRole('button', { name: /play preview/i })
+  );
+  fireEvent.click(
+    within(radioWindow).getByRole('button', { name: /88.7 palm mirage/i })
+  );
+
+  openStartMenuItem(/settings/i);
+  const settingsWindow = screen.getByRole('dialog', { name: /settings/i });
+  fireEvent.click(
+    within(settingsWindow).getByRole('tab', { name: /audio/i })
+  );
+  fireEvent.click(
+    within(settingsWindow).getByRole('button', {
+      name: /broadcast terminal/i
+    })
+  );
+
+  expect(
+    within(radioWindow).getByRole('button', { name: /pause preview/i })
+  ).toBeInTheDocument();
+  expect(within(radioWindow).getByText('PALM MIRAGE')).toBeInTheDocument();
+});
+
 test('moves between settings pages with arrow keys', () => {
   renderDesktop();
 
@@ -884,6 +941,8 @@ test('resets appearance without changing system preferences', () => {
   openStartMenuItem(/settings/i);
   fireEvent.click(screen.getByRole('button', { name: /matrix/i }));
   fireEvent.click(screen.getByRole('button', { name: /sunset/i }));
+  fireEvent.click(screen.getByRole('tab', { name: /audio/i }));
+  fireEvent.click(screen.getByRole('button', { name: /night drive/i }));
   fireEvent.click(screen.getByRole('tab', { name: /system/i }));
   fireEvent.click(screen.getByLabelText(/restore previous session/i));
   fireEvent.click(screen.getByRole('button', { name: /reset appearance/i }));
@@ -892,6 +951,7 @@ test('resets appearance without changing system preferences', () => {
     window.localStorage.getItem(DESKTOP_STORAGE_KEY)
   ).settings;
   expect(settings).toMatchObject({
+    radioAppearance: 'cassette',
     react95Theme: 'theSixtiesUSA',
     restoreSession: false,
     wallpaper: 'sunset'
