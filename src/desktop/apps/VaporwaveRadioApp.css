@@ -1,9 +1,26 @@
 .vaporwave-radio-app {
+  position: relative;
   height: 100%;
   min-width: 0;
   min-height: 100%;
   color: #f9eaff;
   font-family: 'ms_sans_serif', sans-serif;
+}
+
+.radio-playback-notice {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  left: 10px;
+  z-index: 2;
+  margin: 0;
+  padding: 5px 8px;
+  border: 1px solid #ff79d1;
+  color: #fff1a8;
+  background: rgba(24, 10, 41, 0.94);
+  box-shadow: 0 0 12px rgba(255, 91, 202, 0.32);
+  font-size: 10px;
+  text-align: center;
 }
 
 .radio-mode {
@@ -24,6 +41,12 @@
   color: #65f8ff;
   font-size: 10px;
   letter-spacing: 1.5px;
+}
+
+.radio-track-time {
+  font-family: monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
 }
 
 .radio-mode-transport {

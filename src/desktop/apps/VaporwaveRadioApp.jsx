@@ -3,10 +3,46 @@ import { Button, Panel } from 'react95';
 import './VaporwaveRadioApp.css';
 
 const stations = [
-  { frequency: '88.7', id: 'mirage', name: 'Palm Mirage' },
-  { frequency: '94.2', id: 'midnight', name: 'Midnight Plaza' },
-  { frequency: '101.9', id: 'dream', name: 'Dream Channel' }
+  {
+    artist: 'SHAMBARA',
+    audioSrc: '/audio/palm-mirage/SHAMBARA - Solid Dance.mp3',
+    frequency: '88.7',
+    id: 'mirage',
+    name: 'Palm Mirage',
+    title: 'Solid Dance'
+  },
+  {
+    artist: '松原みき',
+    audioSrc:
+      '/audio/midnight-plaza/松原みき - 真夜中のドアStay With Me.mp3',
+    frequency: '94.2',
+    id: 'midnight',
+    name: 'Midnight Plaza',
+    title: '真夜中のドア Stay With Me'
+  },
+  {
+    artist: '山下達郎',
+    audioSrc: '/audio/dream-channel/山下達郎 - Ride On Time.mp3',
+    frequency: '101.9',
+    id: 'dream',
+    name: 'Dream Channel',
+    title: 'Ride On Time'
+  }
 ];
+
+function formatPlaybackTime(seconds) {
+  if (!Number.isFinite(seconds) || seconds < 0) {
+    return '00:00';
+  }
+
+  const wholeSeconds = Math.floor(seconds);
+  const minutes = Math.floor(wholeSeconds / 60);
+  const remainingSeconds = wholeSeconds % 60;
+
+  return `${String(minutes).padStart(2, '0')}:${String(
+    remainingSeconds
+  ).padStart(2, '0')}`;
+}
 
 function TransportControls({ playing, onNext, onPrevious, onToggle }) {
   return (
@@ -14,7 +50,7 @@ function TransportControls({ playing, onNext, onPrevious, onToggle }) {
       <Button aria-label="Previous station" onClick={onPrevious}>
         ◀◀
       </Button>
-      <Button aria-label={playing ? 'Pause preview' : 'Play preview'} onClick={onToggle}>
+      <Button aria-label={playing ? 'Pause music' : 'Play music'} onClick={onToggle}>
         {playing ? 'Ⅱ PAUSE' : '▶ PLAY'}
       </Button>
       <Button aria-label="Next station" onClick={onNext}>
@@ -47,6 +83,7 @@ function StationButtons({ activeStationId, onSelect, vertical = false }) {
 
 function CassetteDeckRadio({
   station,
+  timeLabel,
   playing,
   onNext,
   onPrevious,
@@ -65,10 +102,15 @@ function CassetteDeckRadio({
 
       <Panel className="radio-a-cassette-bay" variant="well">
         <div className="radio-a-cassette">
-          <div className="radio-a-label">
-            <span>VINTAGE VIBE // SIDE A</span>
-            <strong>{station.name}</strong>
-            <span>STEREO · HIGH BIAS · 90</span>
+          <div
+            aria-label="Now playing"
+            className="radio-a-label"
+            role="region"
+          >
+            <span>{station.name} · SIDE A</span>
+            <strong>{station.title}</strong>
+            <span>{station.artist} · STEREO · HIGH BIAS</span>
+            <span className="radio-track-time">{timeLabel}</span>
           </div>
           <div className="radio-a-tape-window" aria-hidden="true">
             <span className={playing ? 'radio-reel is-spinning' : 'radio-reel'} />
@@ -113,6 +155,7 @@ function CassetteDeckRadio({
 
 function NightDriveRadio({
   station,
+  timeLabel,
   playing,
   onNext,
   onPrevious,
@@ -143,10 +186,15 @@ function NightDriveRadio({
             <i /><i /><i /><i /><i /><i /><i />
           </div>
           <div className="radio-b-grid" aria-hidden="true" />
-          <div className="radio-b-overlay">
+          <div
+            aria-label="Now playing"
+            className="radio-b-overlay"
+            role="region"
+          >
             <span>LIVE FROM VIRTUAL BAY</span>
-            <strong>{station.name}</strong>
-            <span>{station.frequency} FM · NIGHT LOOP</span>
+            <strong>{station.title}</strong>
+            <span>{station.artist} · {station.frequency} FM</span>
+            <span className="radio-track-time">{timeLabel}</span>
           </div>
         </div>
 
@@ -164,7 +212,7 @@ function NightDriveRadio({
         <footer className="radio-mode-state">
           <span>CRUISE MODE</span>
           <span>{playing ? 'BROADCAST ONLINE' : 'PARKED'}</span>
-          <span>00:{playing ? '42' : '00'} / ∞</span>
+          <span>{timeLabel}</span>
         </footer>
       </div>
     </section>
@@ -173,6 +221,7 @@ function NightDriveRadio({
 
 function BroadcastTerminalRadio({
   station,
+  timeLabel,
   playing,
   onNext,
   onPrevious,
@@ -202,14 +251,23 @@ function BroadcastTerminalRadio({
         </Panel>
 
         <div className="radio-c-console">
-          <div className="radio-c-crt">
+          <div
+            aria-label="Now playing"
+            className="radio-c-crt"
+            role="region"
+          >
             <span className="radio-c-scanline" aria-hidden="true" />
             <span>TUNED TO {station.frequency} MHz</span>
-            <strong>{station.name.toUpperCase()}</strong>
+            <strong>{station.title.toUpperCase()}</strong>
             <div className="radio-c-wave" aria-hidden="true">
               ▂▃▅▆▃▁▃▇▅▂▁▅▇▃▂▆▅▂▁▃▆▇▅▂
             </div>
-            <p>{playing ? 'Receiving stereo broadcast…' : 'Carrier detected. Awaiting playback.'}</p>
+            <p>
+              {station.artist} · {playing
+                ? 'Receiving stereo broadcast…'
+                : 'Carrier detected. Awaiting playback.'}
+            </p>
+            <span className="radio-track-time">{timeLabel}</span>
           </div>
 
           <TransportControls
@@ -238,27 +296,146 @@ function BroadcastTerminalRadio({
 
 export default function VaporwaveRadioApp({ desktopSettings }) {
   const radioAppearance = desktopSettings.radioAppearance;
+  const audioRef = React.useRef(null);
+  const resumeAfterTuneRef = React.useRef(false);
   const [activeStationId, setActiveStationId] = React.useState('midnight');
+  const [currentTime, setCurrentTime] = React.useState(0);
+  const [duration, setDuration] = React.useState(0);
+  const [playbackNotice, setPlaybackNotice] = React.useState('');
   const [playing, setPlaying] = React.useState(false);
   const stationIndex = stations.findIndex(station => station.id === activeStationId);
   const station = stations[stationIndex];
+  const reportPlaybackError = React.useCallback(() => {
+    setPlaying(false);
+    setPlaybackNotice(`Could not load ${station.name}. Try another station.`);
+  }, [station.name]);
+  const reportPlaybackRejection = React.useCallback(
+    error => {
+      setPlaying(false);
+      if (error?.name === 'NotAllowedError') {
+        setPlaybackNotice('Browser blocked playback. Click Play again.');
+        return;
+      }
+      if (error?.name === 'NotSupportedError') {
+        setPlaybackNotice(`This browser cannot play ${station.name}.`);
+        return;
+      }
+      setPlaybackNotice(`Could not start ${station.name}. Try again.`);
+    },
+    [station.name]
+  );
+  const requestPlayback = React.useCallback(
+    audio => {
+      try {
+        const playRequest = audio.play();
+        playRequest?.catch(reportPlaybackRejection);
+      } catch (error) {
+        reportPlaybackRejection(error);
+      }
+    },
+    [reportPlaybackRejection]
+  );
+
+  React.useEffect(() => {
+    const audio = audioRef.current;
+
+    setCurrentTime(0);
+    setDuration(0);
+    if (resumeAfterTuneRef.current) {
+      resumeAfterTuneRef.current = false;
+      requestPlayback(audio);
+    }
+  }, [requestPlayback, station.audioSrc]);
+
+  React.useEffect(() => {
+    const audio = audioRef.current;
+    const soundAvailable =
+      desktopSettings.soundEnabled && desktopSettings.masterVolume > 0;
+
+    audio.volume = soundAvailable ? desktopSettings.masterVolume / 100 : 0;
+    if (!soundAvailable && playing) {
+      setPlaybackNotice('Playback paused by the global audio settings.');
+      audio.pause();
+    }
+  }, [
+    desktopSettings.masterVolume,
+    desktopSettings.soundEnabled,
+    playing
+  ]);
+
+  function selectStation(stationId) {
+    if (stationId === activeStationId) {
+      return;
+    }
+
+    resumeAfterTuneRef.current = playing;
+    setPlaybackNotice('');
+    setActiveStationId(stationId);
+  }
 
   function changeStation(direction) {
     const nextIndex = (stationIndex + direction + stations.length) % stations.length;
-    setActiveStationId(stations[nextIndex].id);
+    selectStation(stations[nextIndex].id);
+  }
+
+  function togglePlayback() {
+    const audio = audioRef.current;
+
+    if (playing) {
+      audio.pause();
+      return;
+    }
+
+    if (!desktopSettings.soundEnabled || desktopSettings.masterVolume === 0) {
+      setPlaybackNotice('Enable sound in Settings to start the broadcast.');
+      return;
+    }
+
+    setPlaybackNotice('');
+    requestPlayback(audio);
+  }
+
+  function restartBroadcast() {
+    const audio = audioRef.current;
+
+    audio.currentTime = 0;
+    setCurrentTime(0);
+    requestPlayback(audio);
   }
 
   const modeProps = {
     onNext: () => changeStation(1),
     onPrevious: () => changeStation(-1),
-    onSelect: setActiveStationId,
-    onToggle: () => setPlaying(current => !current),
+    onSelect: selectStation,
+    onToggle: togglePlayback,
     playing,
-    station
+    station,
+    timeLabel: `${formatPlaybackTime(currentTime)} / ${formatPlaybackTime(
+      duration
+    )}`
   };
 
   return (
     <div className="vaporwave-radio-app">
+      <audio
+        onEnded={restartBroadcast}
+        onError={reportPlaybackError}
+        onLoadedMetadata={event => setDuration(event.currentTarget.duration)}
+        onPause={() => setPlaying(false)}
+        onPlay={() => {
+          setPlaybackNotice('');
+          setPlaying(true);
+        }}
+        onTimeUpdate={event => setCurrentTime(event.currentTarget.currentTime)}
+        preload="metadata"
+        ref={audioRef}
+        src={station.audioSrc}
+      />
+      {playbackNotice && (
+        <p className="radio-playback-notice" role="status">
+          {playbackNotice}
+        </p>
+      )}
       {radioAppearance === 'cassette' && (
         <CassetteDeckRadio {...modeProps} />
       )}

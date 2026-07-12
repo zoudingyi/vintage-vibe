@@ -19,11 +19,33 @@ function openStartMenuItem(name) {
   fireEvent.click(within(screen.getByRole('menu')).getByText(name));
 }
 
+function enableGlobalSound() {
+  openStartMenuItem(/settings/i);
+  const settingsWindow = screen.getByRole('dialog', { name: /settings/i });
+  fireEvent.click(
+    within(settingsWindow).getByRole('tab', { name: /audio/i })
+  );
+  fireEvent.click(
+    within(settingsWindow).getByRole('checkbox', { name: /enable sound/i })
+  );
+  fireEvent.click(within(settingsWindow).getByLabelText(/close settings/i));
+}
+
+function mockSuccessfulMediaPlayback() {
+  return jest
+    .spyOn(window.HTMLMediaElement.prototype, 'play')
+    .mockImplementation(function play() {
+      fireEvent.play(this);
+      return Promise.resolve();
+    });
+}
+
 beforeEach(() => {
   window.localStorage.clear();
 });
 
 afterEach(() => {
+  jest.restoreAllMocks();
   jest.useRealTimers();
   window.AudioContext = originalAudioContext;
 });
@@ -51,12 +73,14 @@ test('opens, minimizes, restores, and closes a desktop app window', () => {
 });
 
 test('preserves application state while its window is minimized', () => {
+  mockSuccessfulMediaPlayback();
   renderDesktop();
+  enableGlobalSound();
 
   fireEvent.doubleClick(
     screen.getByRole('button', { name: /vaporwave radio/i })
   );
-  fireEvent.click(screen.getByRole('button', { name: /play preview/i }));
+  fireEvent.click(screen.getByRole('button', { name: /play music/i }));
   fireEvent.click(screen.getByRole('button', { name: /next station/i }));
   fireEvent.click(screen.getByLabelText(/minimize vaporwave radio/i));
   fireEvent.click(
@@ -64,7 +88,7 @@ test('preserves application state while its window is minimized', () => {
   );
 
   expect(
-    screen.getByRole('button', { name: /pause preview/i })
+    screen.getByRole('button', { name: /pause music/i })
   ).toBeInTheDocument();
   expect(
     screen.getByRole('button', { name: /101.9 dream channel/i })
@@ -605,14 +629,16 @@ test('switches and persists the Radio appearance from Settings', () => {
 });
 
 test('preserves Radio playback state while changing appearance', () => {
+  mockSuccessfulMediaPlayback();
   renderDesktop();
+  enableGlobalSound();
 
   openStartMenuItem(/vaporwave radio/i);
   const radioWindow = screen.getByRole('dialog', {
     name: /vaporwave radio/i
   });
   fireEvent.click(
-    within(radioWindow).getByRole('button', { name: /play preview/i })
+    within(radioWindow).getByRole('button', { name: /play music/i })
   );
   fireEvent.click(
     within(radioWindow).getByRole('button', { name: /88.7 palm mirage/i })
@@ -630,9 +656,11 @@ test('preserves Radio playback state while changing appearance', () => {
   );
 
   expect(
-    within(radioWindow).getByRole('button', { name: /pause preview/i })
+    within(radioWindow).getByRole('button', { name: /pause music/i })
   ).toBeInTheDocument();
-  expect(within(radioWindow).getByText('PALM MIRAGE')).toBeInTheDocument();
+  expect(
+    within(radioWindow).getByRole('region', { name: /now playing/i })
+  ).toHaveTextContent(/solid dance.*shambara/i);
 });
 
 test('moves between settings pages with arrow keys', () => {
