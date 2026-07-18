@@ -1,7 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import { theSixtiesUSA } from 'react95/dist/themes';
+import { playRadioCue } from '@/desktop/audioEngine';
 import VaporwaveRadioApp from './VaporwaveRadioApp';
+
+jest.mock('@/desktop/audioEngine', () => ({
+  ...jest.requireActual('@/desktop/audioEngine'),
+  playRadioCue: jest.fn()
+}));
 
 const originalAudioContext = window.AudioContext;
 const originalMatchMedia = window.matchMedia;
@@ -76,6 +82,7 @@ function installAudioAnalyser({
 }
 
 beforeEach(() => {
+  playRadioCue.mockClear();
   playMedia = jest
     .spyOn(window.HTMLMediaElement.prototype, 'play')
     .mockImplementation(function play() {
@@ -114,20 +121,23 @@ test('plays and pauses the tuned station through the browser audio player', () =
 });
 
 test('keeps broadcasting and shows the track after tuning another station', () => {
-  renderRadio();
+  const { container } = renderRadio();
+  const audio = container.querySelector('audio');
 
   fireEvent.click(screen.getByRole('button', { name: /play music/i }));
   fireEvent.click(
     screen.getByRole('button', { name: /88.7 palm mirage/i })
   );
+  fireEvent.loadedMetadata(audio);
 
   expect(
     screen.getByRole('button', { name: /88.7 palm mirage/i })
   ).toHaveAttribute('aria-pressed', 'true');
   expect(screen.getByRole('region', { name: /now playing/i })).toHaveTextContent(
-    /solid dance.*shambara/i
+    /love philter.*aevv.*01 \/ 06/i
   );
   expect(playMedia).toHaveBeenCalledTimes(2);
+  expect(playRadioCue).toHaveBeenCalledWith('tuning', enabledAudioSettings);
 });
 
 test('explains why playback cannot start when global sound is disabled', () => {
@@ -188,18 +198,109 @@ test('shows real elapsed time and duration from the tuned audio', () => {
   );
 });
 
-test('restarts the current station when its only track ends', () => {
+test('automatically plays the next track when the current track ends', () => {
   const { container } = renderRadio();
   const audio = container.querySelector('audio');
 
   fireEvent.click(screen.getByRole('button', { name: /play music/i }));
   fireEvent.ended(audio);
+  fireEvent.loadedMetadata(audio);
 
   expect(playMedia).toHaveBeenCalledTimes(2);
   expect(audio.currentTime).toBe(0);
+  expect(screen.getByRole('region', { name: /now playing/i })).toHaveTextContent(
+    /solid dance.*shambara.*02 \/ 10/i
+  );
   expect(
     screen.getByRole('button', { name: /pause music/i })
   ).toBeInTheDocument();
+});
+
+test('uses the three-second threshold and wraps previous and next tracks', () => {
+  const { container } = renderRadio();
+  const audio = container.querySelector('audio');
+  const nowPlaying = screen.getByRole('region', { name: /now playing/i });
+
+  fireEvent.click(screen.getByRole('button', { name: /next track/i }));
+  fireEvent.loadedMetadata(audio);
+  expect(nowPlaying).toHaveTextContent(/solid dance.*02 \/ 10/i);
+
+  Object.defineProperty(audio, 'currentTime', {
+    configurable: true,
+    value: 5,
+    writable: true
+  });
+  fireEvent.timeUpdate(audio);
+  fireEvent.click(screen.getByRole('button', { name: /previous track/i }));
+  expect(nowPlaying).toHaveTextContent(/solid dance.*02 \/ 10/i);
+  expect(audio.currentTime).toBe(0);
+
+  fireEvent.click(screen.getByRole('button', { name: /previous track/i }));
+  fireEvent.loadedMetadata(audio);
+  expect(nowPlaying).toHaveTextContent(/真夜中のドア.*01 \/ 10/i);
+
+  fireEvent.click(screen.getByRole('button', { name: /previous track/i }));
+  fireEvent.loadedMetadata(audio);
+  expect(nowPlaying).toHaveTextContent(/プラスティック・ラブ.*10 \/ 10/i);
+
+  fireEvent.click(screen.getByRole('button', { name: /next track/i }));
+  expect(playRadioCue).toHaveBeenCalledWith('tape-flip', enabledAudioSettings);
+  expect(playMedia).not.toHaveBeenCalled();
+});
+
+test('keeps playing after a manual track change', () => {
+  const { container } = renderRadio();
+  const audio = container.querySelector('audio');
+
+  fireEvent.click(screen.getByRole('button', { name: /play music/i }));
+  fireEvent.click(screen.getByRole('button', { name: /next track/i }));
+  fireEvent.loadedMetadata(audio);
+
+  expect(playMedia).toHaveBeenCalledTimes(2);
+  expect(screen.getByRole('button', { name: /pause music/i })).toBeInTheDocument();
+});
+
+test('restores each station track and progress after tuning away', () => {
+  const { container } = renderRadio();
+  const audio = container.querySelector('audio');
+  const nowPlaying = screen.getByRole('region', { name: /now playing/i });
+
+  fireEvent.click(screen.getByRole('button', { name: /next track/i }));
+  fireEvent.loadedMetadata(audio);
+  audio.currentTime = 45;
+  fireEvent.timeUpdate(audio);
+
+  fireEvent.click(screen.getByRole('button', { name: /88.7 palm mirage/i }));
+  fireEvent.loadedMetadata(audio);
+  fireEvent.click(screen.getByRole('button', { name: /next track/i }));
+  fireEvent.loadedMetadata(audio);
+  audio.currentTime = 18;
+  fireEvent.timeUpdate(audio);
+
+  fireEvent.click(screen.getByRole('button', { name: /94.2 midnight plaza/i }));
+  fireEvent.loadedMetadata(audio);
+  expect(nowPlaying).toHaveTextContent(/solid dance.*02 \/ 10.*00:45/i);
+  expect(audio.currentTime).toBe(45);
+
+  fireEvent.click(screen.getByRole('button', { name: /88.7 palm mirage/i }));
+  fireEvent.loadedMetadata(audio);
+  expect(nowPlaying).toHaveTextContent(/告白♡.*02 \/ 06.*00:18/i);
+  expect(audio.currentTime).toBe(18);
+});
+
+test.each([
+  ['cassette', /track 01 \/ 10/i],
+  ['night-drive', /01 \/ 10/i],
+  ['broadcast', /program 01 of 10/i]
+])('shows track position in the %s appearance', (radioAppearance, position) => {
+  renderRadio({
+    ...enabledAudioSettings,
+    radioAppearance
+  });
+
+  expect(screen.getByRole('region', { name: /now playing/i })).toHaveTextContent(
+    position
+  );
 });
 
 test('reports an audio loading failure without showing a false playing state', () => {

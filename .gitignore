@@ -11,6 +11,9 @@
 # production
 /build
 
+# local audio library (served from external storage in production)
+/public/audio/
+
 # misc
 .DS_Store
 .env.local

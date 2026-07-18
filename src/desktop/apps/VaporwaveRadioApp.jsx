@@ -4,35 +4,14 @@ import {
   createRadioVisualizer,
   EMPTY_RADIO_VISUALIZATION
 } from '@/desktop/radioVisualizer';
+import { playRadioCue } from '@/desktop/audioEngine';
+import {
+  createRadioPlaybackMemory,
+  radioStations
+} from '@/desktop/radioStations';
 import './VaporwaveRadioApp.css';
 
-const stations = [
-  {
-    artist: 'SHAMBARA',
-    audioSrc: '/audio/palm-mirage/SHAMBARA - Solid Dance.mp3',
-    frequency: '88.7',
-    id: 'mirage',
-    name: 'Palm Mirage',
-    title: 'Solid Dance'
-  },
-  {
-    artist: '松原みき',
-    audioSrc:
-      '/audio/midnight-plaza/松原みき - 真夜中のドアStay With Me.mp3',
-    frequency: '94.2',
-    id: 'midnight',
-    name: 'Midnight Plaza',
-    title: '真夜中のドア Stay With Me'
-  },
-  {
-    artist: '山下達郎',
-    audioSrc: '/audio/dream-channel/山下達郎 - Ride On Time.mp3',
-    frequency: '101.9',
-    id: 'dream',
-    name: 'Dream Channel',
-    title: 'Ride On Time'
-  }
-];
+const stations = radioStations;
 
 function formatPlaybackTime(seconds) {
   if (!Number.isFinite(seconds) || seconds < 0) {
@@ -102,13 +81,13 @@ function usePrefersReducedMotion() {
 function TransportControls({ playing, onNext, onPrevious, onToggle }) {
   return (
     <div className="radio-mode-transport" aria-label="Playback controls">
-      <Button aria-label="Previous station" onClick={onPrevious}>
+      <Button aria-label="Previous track" onClick={onPrevious}>
         ◀◀
       </Button>
       <Button aria-label={playing ? 'Pause music' : 'Play music'} onClick={onToggle}>
         {playing ? 'Ⅱ PAUSE' : '▶ PLAY'}
       </Button>
-      <Button aria-label="Next station" onClick={onNext}>
+      <Button aria-label="Next track" onClick={onNext}>
         ▶▶
       </Button>
     </div>
@@ -166,7 +145,9 @@ function CassetteDeckRadio({
           >
             <span>{station.name} · SIDE A</span>
             <strong>{station.title}</strong>
-            <span>{station.artist} · STEREO · HIGH BIAS</span>
+            <span>
+              {station.artist} · TRACK {station.trackPosition} · STEREO
+            </span>
             <span className="radio-track-time">{timeLabel}</span>
           </div>
           <div className="radio-a-tape-window" aria-hidden="true">
@@ -260,7 +241,9 @@ function NightDriveRadio({
           >
             <span>LIVE FROM VIRTUAL BAY</span>
             <strong>{station.title}</strong>
-            <span>{station.artist} · {station.frequency} FM</span>
+            <span>
+              {station.artist} · {station.frequency} FM · {station.trackPosition}
+            </span>
             <span className="radio-track-time">{timeLabel}</span>
           </div>
         </div>
@@ -394,6 +377,10 @@ function BroadcastTerminalRadio({
                 ? 'Receiving stereo broadcast…'
                 : 'Carrier detected. Awaiting playback.'}
             </p>
+            <span>
+              PROGRAM {String(station.trackNumber).padStart(2, '0')} OF{' '}
+              {String(station.trackCount).padStart(2, '0')}
+            </span>
             <span className="radio-track-time">{timeLabel}</span>
           </div>
 
@@ -425,9 +412,12 @@ export default function VaporwaveRadioApp({ desktopSettings }) {
   const radioAppearance = desktopSettings.radioAppearance;
   const reducedMotion = usePrefersReducedMotion();
   const audioRef = React.useRef(null);
-  const resumeAfterTuneRef = React.useRef(false);
+  const pendingSeekRef = React.useRef(0);
+  const playbackMemoryRef = React.useRef(createRadioPlaybackMemory());
+  const resumeAfterLoadRef = React.useRef(false);
   const visualizerRef = React.useRef(null);
   const [activeStationId, setActiveStationId] = React.useState('midnight');
+  const [activeTrackIndex, setActiveTrackIndex] = React.useState(0);
   const [currentTime, setCurrentTime] = React.useState(0);
   const [duration, setDuration] = React.useState(0);
   const [playbackNotice, setPlaybackNotice] = React.useState('');
@@ -435,8 +425,17 @@ export default function VaporwaveRadioApp({ desktopSettings }) {
   const [visualization, setVisualization] = React.useState(
     EMPTY_RADIO_VISUALIZATION
   );
-  const stationIndex = stations.findIndex(station => station.id === activeStationId);
-  const station = stations[stationIndex];
+  const station = stations.find(item => item.id === activeStationId);
+  const track = station.tracks[activeTrackIndex];
+  const stationDisplay = {
+    ...station,
+    ...track,
+    trackCount: station.tracks.length,
+    trackNumber: activeTrackIndex + 1,
+    trackPosition: `${String(activeTrackIndex + 1).padStart(2, '0')} / ${String(
+      station.tracks.length
+    ).padStart(2, '0')}`
+  };
   const reportPlaybackError = React.useCallback(() => {
     visualizerRef.current?.stop();
     setPlaying(false);
@@ -491,15 +490,9 @@ export default function VaporwaveRadioApp({ desktopSettings }) {
   );
 
   React.useEffect(() => {
-    const audio = audioRef.current;
-
-    setCurrentTime(0);
     setDuration(0);
-    if (resumeAfterTuneRef.current) {
-      resumeAfterTuneRef.current = false;
-      requestPlayback(audio);
-    }
-  }, [requestPlayback, station.audioSrc]);
+    setCurrentTime(pendingSeekRef.current);
+  }, [track.audioSrc]);
 
   React.useEffect(() => {
     const audio = audioRef.current;
@@ -522,14 +515,62 @@ export default function VaporwaveRadioApp({ desktopSettings }) {
       return;
     }
 
-    resumeAfterTuneRef.current = playing;
+    const audio = audioRef.current;
+    const targetMemory = playbackMemoryRef.current[stationId];
+
+    playbackMemoryRef.current[activeStationId] = {
+      currentTime: audio.currentTime,
+      trackIndex: activeTrackIndex
+    };
+    resumeAfterLoadRef.current = playing;
+    pendingSeekRef.current = targetMemory.currentTime;
     setPlaybackNotice('');
+    playRadioCue('tuning', desktopSettings);
+    visualizerRef.current?.stop();
+    setPlaying(false);
     setActiveStationId(stationId);
+    setActiveTrackIndex(targetMemory.trackIndex);
   }
 
-  function changeStation(direction) {
-    const nextIndex = (stationIndex + direction + stations.length) % stations.length;
-    selectStation(stations[nextIndex].id);
+  function selectTrack(trackIndex, forcePlayback = false) {
+    resumeAfterLoadRef.current = forcePlayback || playing;
+    pendingSeekRef.current = 0;
+    playbackMemoryRef.current[activeStationId] = {
+      currentTime: 0,
+      trackIndex
+    };
+    setPlaybackNotice('');
+    visualizerRef.current?.stop();
+    setPlaying(false);
+    setCurrentTime(0);
+    setDuration(0);
+    setActiveTrackIndex(trackIndex);
+  }
+
+  function changeTrack(direction, forcePlayback = false) {
+    const nextIndex =
+      (activeTrackIndex + direction + station.tracks.length) %
+      station.tracks.length;
+
+    if (direction > 0 && nextIndex === 0) {
+      playRadioCue('tape-flip', desktopSettings);
+    }
+    selectTrack(nextIndex, forcePlayback);
+  }
+
+  function playPreviousTrack() {
+    const audio = audioRef.current;
+
+    if (audio.currentTime > 3) {
+      audio.currentTime = 0;
+      playbackMemoryRef.current[activeStationId] = {
+        currentTime: 0,
+        trackIndex: activeTrackIndex
+      };
+      setCurrentTime(0);
+      return;
+    }
+    changeTrack(-1);
   }
 
   function togglePlayback() {
@@ -552,21 +593,45 @@ export default function VaporwaveRadioApp({ desktopSettings }) {
     requestPlayback(audio);
   }
 
-  function restartBroadcast() {
-    const audio = audioRef.current;
+  function handleLoadedMetadata(event) {
+    const audio = event.currentTarget;
+    const restoredTime = pendingSeekRef.current;
+    const safeTime =
+      Number.isFinite(audio.duration) && audio.duration > 0
+        ? Math.min(restoredTime, audio.duration)
+        : restoredTime;
 
-    audio.currentTime = 0;
-    setCurrentTime(0);
-    requestPlayback(audio);
+    audio.currentTime = safeTime;
+    playbackMemoryRef.current[activeStationId] = {
+      currentTime: safeTime,
+      trackIndex: activeTrackIndex
+    };
+    pendingSeekRef.current = 0;
+    setCurrentTime(safeTime);
+    setDuration(audio.duration);
+    if (resumeAfterLoadRef.current) {
+      resumeAfterLoadRef.current = false;
+      requestPlayback(audio);
+    }
+  }
+
+  function handleTimeUpdate(event) {
+    const nextTime = event.currentTarget.currentTime;
+
+    playbackMemoryRef.current[activeStationId] = {
+      currentTime: nextTime,
+      trackIndex: activeTrackIndex
+    };
+    setCurrentTime(nextTime);
   }
 
   const modeProps = {
-    onNext: () => changeStation(1),
-    onPrevious: () => changeStation(-1),
+    onNext: () => changeTrack(1),
+    onPrevious: playPreviousTrack,
     onSelect: selectStation,
     onToggle: togglePlayback,
     playing,
-    station,
+    station: stationDisplay,
     timeLabel: `${formatPlaybackTime(currentTime)} / ${formatPlaybackTime(
       duration
     )}`,
@@ -577,9 +642,9 @@ export default function VaporwaveRadioApp({ desktopSettings }) {
   return (
     <div className="vaporwave-radio-app">
       <audio
-        onEnded={restartBroadcast}
+        onEnded={() => changeTrack(1, true)}
         onError={reportPlaybackError}
-        onLoadedMetadata={event => setDuration(event.currentTarget.duration)}
+        onLoadedMetadata={handleLoadedMetadata}
         onPause={() => {
           visualizerRef.current?.stop();
           setPlaying(false);
@@ -591,10 +656,10 @@ export default function VaporwaveRadioApp({ desktopSettings }) {
             visualizerRef.current?.start();
           }
         }}
-        onTimeUpdate={event => setCurrentTime(event.currentTarget.currentTime)}
+        onTimeUpdate={handleTimeUpdate}
         preload="metadata"
         ref={audioRef}
-        src={station.audioSrc}
+        src={track.audioSrc}
       />
       {playbackNotice && (
         <p className="radio-playback-notice" role="status">

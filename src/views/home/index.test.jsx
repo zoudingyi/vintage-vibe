@@ -83,8 +83,13 @@ test('preserves application state while its window is minimized', () => {
   fireEvent.doubleClick(
     screen.getByRole('button', { name: /vaporwave radio/i })
   );
+  const radioWindow = screen.getByRole('dialog', {
+    name: /vaporwave radio/i
+  });
+  const audio = radioWindow.querySelector('audio');
   fireEvent.click(screen.getByRole('button', { name: /play music/i }));
-  fireEvent.click(screen.getByRole('button', { name: /next station/i }));
+  fireEvent.click(screen.getByRole('button', { name: /next track/i }));
+  fireEvent.loadedMetadata(audio);
   fireEvent.click(screen.getByLabelText(/minimize vaporwave radio/i));
   fireEvent.click(
     screen.getByRole('button', { name: /restore vaporwave radio/i })
@@ -94,7 +99,10 @@ test('preserves application state while its window is minimized', () => {
     screen.getByRole('button', { name: /pause music/i })
   ).toBeInTheDocument();
   expect(
-    screen.getByRole('button', { name: /101.9 dream channel/i })
+    within(radioWindow).getByRole('region', { name: /now playing/i })
+  ).toHaveTextContent(/solid dance.*02 \/ 10/i);
+  expect(
+    screen.getByRole('button', { name: /94.2 midnight plaza/i })
   ).toHaveAttribute('aria-pressed', 'true');
 });
 
@@ -649,6 +657,7 @@ test('preserves Radio playback state while changing appearance', () => {
   fireEvent.click(
     within(radioWindow).getByRole('button', { name: /88.7 palm mirage/i })
   );
+  fireEvent.loadedMetadata(radioWindow.querySelector('audio'));
 
   openStartMenuItem(/settings/i);
   const settingsWindow = screen.getByRole('dialog', { name: /settings/i });
@@ -666,7 +675,7 @@ test('preserves Radio playback state while changing appearance', () => {
   ).toBeInTheDocument();
   expect(
     within(radioWindow).getByRole('region', { name: /now playing/i })
-  ).toHaveTextContent(/solid dance.*shambara/i);
+  ).toHaveTextContent(/love philter.*aevv/i);
 });
 
 test('moves between settings pages with arrow keys', () => {
