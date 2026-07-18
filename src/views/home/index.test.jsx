@@ -425,11 +425,17 @@ test('navigates and opens start menu apps with the keyboard', () => {
 
   fireEvent.click(screen.getByRole('button', { name: /start/i }));
 
+  const browserItem = screen.getByRole('menuitem', {
+    name: /internet explorer/i
+  });
   const radioItem = screen.getByRole('menuitem', {
     name: /vaporwave radio/i
   });
   const profileItem = screen.getByRole('menuitem', { name: /profile/i });
 
+  expect(browserItem).toHaveFocus();
+
+  fireEvent.keyDown(browserItem, { key: 'ArrowDown' });
   expect(radioItem).toHaveFocus();
 
   fireEvent.keyDown(radioItem, { key: 'ArrowDown' });

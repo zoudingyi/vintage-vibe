@@ -1,5 +1,6 @@
 export { default as FolderApp } from './FolderApp';
 export { default as GuestbookApp } from './GuestbookApp';
+export { default as InternetExplorerApp } from './InternetExplorerApp';
 export { default as MyComputerApp } from './MyComputerApp';
 export { default as ProfileApp } from './ProfileApp';
 export { default as ProjectsApp } from './ProjectsApp';

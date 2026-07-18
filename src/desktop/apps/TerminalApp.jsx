@@ -114,7 +114,6 @@ export default function TerminalApp({ onDesktopSettingsChange, onOpenApp }) {
 
   return (
     <div className="terminal-app">
-      <strong>Terminal</strong>
       <div className="terminal-output" aria-label="Terminal output">
         {history.map((line, index) => (
           <p key={`${line}-${index}`}>{line}</p>

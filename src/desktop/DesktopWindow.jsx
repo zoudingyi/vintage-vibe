@@ -26,6 +26,7 @@ const WindowFrame = styled.div`
   }
 
   .desktop-window-content {
+    padding:0;
     flex: 1 1 auto;
     min-height: 0;
     max-height: ${({ $fullScreen }) =>

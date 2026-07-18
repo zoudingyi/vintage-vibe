@@ -40,8 +40,21 @@ test('uses Vaporwave Radio as the desktop music shortcut', () => {
   ).toEqual([
     'my-computer',
     'my-folder',
+    'internet-explorer',
     'vaporwave-radio',
     'my-videos',
     'recycle-bin'
   ]);
+});
+
+test('registers Internet Explorer as a desktop and Start menu application', () => {
+  const browserApp = appRegistry.find(app => app.id === 'internet-explorer');
+
+  expect(browserApp).toMatchObject({
+    showInStartMenu: true,
+    showOnDesktop: true,
+    title: 'Internet Explorer',
+    windowSize: { height: 540, width: 760 }
+  });
+  expect(browserApp.icon).toMatch(/internet_explorer\.png$/);
 });

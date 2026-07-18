@@ -1,5 +1,6 @@
 import computerIcon from '@/assets/icons/this_computer.png';
 import folderIcon from '@/assets/icons/folder_closed.png';
+import internetExplorerIcon from '@/assets/icons/internet_explorer.png';
 import musicIcon from '@/assets/icons/music.png';
 import moviesIcon from '@/assets/icons/movies.png';
 import recycleIcon from '@/assets/icons/recycle_bin_full.png';
@@ -10,6 +11,7 @@ import mailIcon from '@/assets/icons/mail.png';
 import {
   FolderApp,
   GuestbookApp,
+  InternetExplorerApp,
   MyComputerApp,
   ProfileApp,
   ProjectsApp,
@@ -42,6 +44,16 @@ const appRegistry = [
     windowSize: { width: 420 }
   },
   {
+    id: 'internet-explorer',
+    title: 'Internet Explorer',
+    icon: internetExplorerIcon,
+    showOnDesktop: true,
+    showInStartMenu: true,
+    component: InternetExplorerApp,
+    defaultPosition: { x: 112, y: 36 },
+    windowSize: { height: 540, width: 760 }
+  },
+  {
     id: 'vaporwave-radio',
     title: 'Vaporwave Radio',
     icon: musicIcon,
@@ -49,7 +61,7 @@ const appRegistry = [
     showInStartMenu: true,
     component: VaporwaveRadioApp,
     defaultPosition: { x: 168, y: 96 },
-    windowSize: { height: 540, width: 720 }
+    windowSize: { height: 570, width: 720 }
   },
   {
     id: 'my-videos',
