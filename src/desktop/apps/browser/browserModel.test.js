@@ -5,7 +5,8 @@ import {
   createBrowserState,
   loadBrowserState,
   resolveBrowserAddress,
-  saveBrowserState
+  saveBrowserState,
+  searchVaporNet
 } from './browserModel';
 
 beforeEach(() => {
@@ -29,6 +30,29 @@ test('resolves local aliases, search terms, external links, and unsafe protocols
     kind: 'blocked',
     reason: 'VaporNet blocked an unsafe or unsupported address.'
   });
+});
+
+test('indexes favorite records and radio selections on their local pages', () => {
+  expect(resolveBrowserAddress('favorites')).toEqual({
+    address: 'vintage://favorites',
+    kind: 'internal'
+  });
+  expect(searchVaporNet('vinyl')).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        address: 'vintage://favorites',
+        title: 'Favorite Records'
+      })
+    ])
+  );
+  expect(searchVaporNet('cassette')).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        address: 'vintage://radio',
+        title: 'Radio Station'
+      })
+    ])
+  );
 });
 
 test('keeps a browser-style history when navigating from the middle', () => {

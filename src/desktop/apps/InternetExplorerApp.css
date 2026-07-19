@@ -370,6 +370,84 @@
   gap: 10px;
 }
 
+.vapornet-now-panel {
+  max-width: 760px;
+  margin: 0 auto 16px;
+  border: 1px solid #2de2e6;
+  background: rgba(5, 4, 38, 0.94);
+  box-shadow: 5px 5px 0 rgba(247, 6, 207, 0.22);
+}
+
+.vapornet-now-heading {
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid #443f89;
+  font-family: 'Courier New', monospace;
+}
+
+.vapornet-now-heading > span {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #39ff14;
+  box-shadow: 0 0 8px #39ff14;
+}
+
+.vapornet-now-heading strong {
+  color: #fff200;
+  letter-spacing: 0.1em;
+}
+
+.vapornet-now-heading button {
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  color: #7df9ff;
+  background: transparent;
+  font: inherit;
+  text-decoration: underline;
+}
+
+.vapornet-now-heading button:hover,
+.vapornet-now-heading button:focus-visible {
+  color: #fff;
+  outline: 1px dashed #ff71ce;
+  outline-offset: 3px;
+}
+
+.vapornet-now-panel dl {
+  display: grid;
+  margin: 0;
+  padding: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px 18px;
+}
+
+.vapornet-now-panel dl > div {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(88px, auto) minmax(0, 1fr);
+  gap: 8px;
+}
+
+.vapornet-now-panel dt {
+  color: #ff71ce;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.vapornet-now-panel dd {
+  min-width: 0;
+  margin: 0;
+  color: #e9d7ff;
+  overflow-wrap: anywhere;
+}
+
 .vapornet-directory-card,
 .vapornet-search-result {
   display: flex;
@@ -470,6 +548,24 @@
   margin: 8px 0;
 }
 
+.vapornet-manifesto {
+  max-width: 760px;
+  margin: 18px auto 0;
+}
+
+.vapornet-manifesto ul {
+  display: grid;
+  margin: 4px 0;
+  padding-left: 24px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px 24px;
+}
+
+.vapornet-manifesto li {
+  padding-left: 3px;
+  line-height: 1.4;
+}
+
 .vapornet-project-card {
   color: #101010;
 }
@@ -522,16 +618,465 @@
   text-shadow: 0 0 9px currentColor;
 }
 
-.vapornet-links-list {
-  max-width: 620px;
-  margin: 0 auto 24px;
-  padding: 18px 40px;
-  border: 2px dashed #2de2e6;
-  background: rgba(9, 1, 49, 0.9);
+.vapornet-records-section {
+  max-width: 760px;
+  margin: 0 auto 22px;
 }
 
-.vapornet-links-list li {
+.vapornet-section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.vapornet-section-heading span {
+  color: #2de2e6;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.vapornet-section-heading h2 {
+  margin: 3px 0 0;
+}
+
+.vapornet-page .vapornet-radio-launch-panel {
+  display: flex;
+  margin-top: 14px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.vapornet-radio-launch-panel strong {
+  color: #000080;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+}
+
+.vapornet-radio-launch-panel p {
+  margin-bottom: 0;
+}
+
+.vapornet-radio-launch-panel button {
+  flex: 0 0 auto;
+}
+
+.vapornet-station-directory {
+  max-width: 760px;
+  margin: 24px auto 0;
+}
+
+.vapornet-station-directory-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.vapornet-station-directory-heading span,
+.vapornet-station-header div > span {
+  color: #2de2e6;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.vapornet-station-directory-heading h2 {
+  margin: 3px 0 0;
+}
+
+.vapornet-station-directory-heading > strong {
+  color: #39ff14;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.vapornet-station-list {
+  display: grid;
+  gap: 16px;
+}
+
+.vapornet-station-card {
+  --station-accent: #2de2e6;
+  min-width: 0;
+  overflow: hidden;
+  border: 4px ridge #a9a9ff;
+  background: rgba(4, 3, 30, 0.96);
+  box-shadow: inset 0 0 18px rgba(45, 226, 230, 0.12);
+}
+
+.vapornet-station-card.is-midnight {
+  --station-accent: #ff71ce;
+}
+
+.vapornet-station-card.is-dream {
+  --station-accent: #fff200;
+}
+
+.vapornet-station-header {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 106px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-bottom: 2px solid var(--station-accent);
+  background: linear-gradient(90deg, rgba(31, 25, 83, 0.96), rgba(9, 7, 35, 0.96));
+}
+
+.vapornet-station-frequency {
+  color: var(--station-accent);
+  font-family: 'Courier New', monospace;
+  font-size: 21px;
+  font-weight: bold;
+  text-shadow: 0 0 8px currentColor;
+  white-space: nowrap;
+}
+
+.vapornet-station-header h3 {
+  margin: 2px 0 0;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+}
+
+.vapornet-station-header > strong {
+  padding: 4px 7px;
+  border: 1px solid var(--station-accent);
+  color: var(--station-accent);
+  background: #090720;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.vapornet-station-tracks {
+  display: grid;
+  margin: 0;
+  padding: 1px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  list-style: none;
+  background: #393461;
+}
+
+.vapornet-station-tracks li {
+  display: grid;
+  min-width: 0;
+  min-height: 59px;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  color: #effcff;
+  background: linear-gradient(145deg, #19163e, #080817 78%);
+}
+
+.vapornet-station-tracks li > span {
+  align-self: stretch;
+  display: grid;
+  place-items: center;
+  border-right: 1px solid var(--station-accent);
+  color: var(--station-accent);
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+}
+
+.vapornet-station-tracks li div {
+  min-width: 0;
+}
+
+.vapornet-station-tracks li strong,
+.vapornet-station-tracks li div > span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.vapornet-station-tracks li strong {
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.vapornet-station-tracks li div > span {
+  margin-top: 4px;
+  color: #ff9cdd;
+  font-size: 11px;
+  line-height: 1.25;
+}
+
+.vapornet-page .vapornet-record-notice {
+  display: block;
+  max-width: 760px;
+  margin: 0 auto 22px;
+  padding: 12px 14px 13px;
+  color: #101010;
+}
+
+.vapornet-record-notice strong {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #000080;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.vapornet-record-notice strong::after {
+  flex: 1 1 auto;
+  min-width: 24px;
+  border-top: 1px dotted #6f4e91;
+  content: '';
+}
+
+.vapornet-record-notice span {
+  display: block;
+  margin-top: 7px;
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.vapornet-record-count {
+  color: #39ff14;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.vapornet-album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.vapornet-album-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  border: 2px outset #a9a9ff;
+  color: #effcff;
+  background: linear-gradient(145deg, #21184f, #080817 76%);
+  box-shadow: inset 0 0 0 1px rgba(45, 226, 230, 0.18);
+}
+
+.vapornet-album-artwork {
+  position: relative;
+  min-width: 0;
+  margin: 12px 12px 0;
+  aspect-ratio: 1.12 / 1;
+  isolation: isolate;
+}
+
+.vapornet-album-disc {
+  position: absolute;
+  top: 7%;
+  right: 0;
+  width: 78%;
+  aspect-ratio: 1;
+  border: 1px solid #09090c;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, #111 0 5%, #d02b78 5% 14%, #111 14% 18%, transparent 18%),
+    repeating-radial-gradient(circle, #16161a 0 2px, #2b2b32 3px 4px);
+  box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.55);
+  transform: translateX(-2%);
+  transition: transform 180ms ease-out;
+}
+
+.vapornet-album-disc i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ddd;
+  transform: translate(-50%, -50%);
+}
+
+.vapornet-album-artwork img {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 89%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  object-fit: cover;
+  box-shadow: 4px 5px 9px rgba(0, 0, 0, 0.48);
+}
+
+.vapornet-album-index {
+  position: absolute;
+  z-index: 2;
+  right: 13%;
+  bottom: 6%;
+  padding: 2px 5px;
+  border: 1px solid #080817;
+  color: #080817;
+  background: #fff200;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  font-weight: bold;
+}
+
+.vapornet-album-card:hover .vapornet-album-disc,
+.vapornet-album-card:focus-within .vapornet-album-disc {
+  transform: translateX(10%);
+}
+
+.vapornet-album-details {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  padding: 12px;
+}
+
+.vapornet-album-details > span,
+.vapornet-track-details > span {
+  color: #39ff14;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+.vapornet-album-details h3,
+.vapornet-track-details h3 {
+  margin: 7px 0 3px;
+  color: #7df9ff;
+  font-family: 'Courier New', monospace;
+  font-size: 17px;
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+}
+
+.vapornet-album-details > strong,
+.vapornet-track-details > strong {
+  color: #ff71ce;
+  font-size: 11px;
+  line-height: 1.25;
+}
+
+.vapornet-album-details dl,
+.vapornet-track-details dl {
   margin: 10px 0;
+  font-size: 10px;
+}
+
+.vapornet-album-details dl > div,
+.vapornet-track-details dl > div {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 6px;
+  margin-top: 3px;
+}
+
+.vapornet-album-details dt,
+.vapornet-track-details dt {
+  color: #a9a9ff;
+  font-family: 'Courier New', monospace;
+}
+
+.vapornet-album-details dd,
+.vapornet-track-details dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.vapornet-album-highlight {
+  display: grid;
+  gap: 3px;
+  margin: 0 0 10px;
+  padding: 7px 8px;
+  border-left: 2px solid #fff200;
+  background: rgba(255, 242, 0, 0.08);
+}
+
+.vapornet-album-highlight span {
+  color: #fff200;
+  font-family: 'Courier New', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+}
+
+.vapornet-album-highlight strong {
+  color: #fff;
+  font-size: 11px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.vapornet-album-note,
+.vapornet-track-details p {
+  margin: 0;
+  color: #d8d7f3;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.vapornet-tracks-section {
+  max-width: 760px;
+  margin: 28px auto 0;
+}
+
+.vapornet-tracks-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.vapornet-track-card {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px;
+  border: 2px outset #a9a9ff;
+  color: #effcff;
+  background: linear-gradient(115deg, #181440, #080817 76%);
+}
+
+.vapornet-track-artwork {
+  position: relative;
+  min-width: 0;
+}
+
+.vapornet-track-artwork img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, 0.66);
+  object-fit: cover;
+  box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.48);
+}
+
+.vapornet-track-artwork span {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  padding: 2px 5px;
+  color: #080817;
+  background: #2de2e6;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  font-weight: bold;
+}
+
+.vapornet-track-details {
+  min-width: 0;
 }
 
 .vapornet-link {
@@ -545,6 +1090,79 @@
 
 .vapornet-link:visited {
   color: #ff71ce;
+}
+
+.vapornet-curated-links {
+  display: grid;
+  max-width: 760px;
+  margin: 0 auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.vapornet-curated-link {
+  min-width: 0;
+  padding: 14px;
+  border: 2px outset #a9a9ff;
+  background: linear-gradient(135deg, #141249, #401058);
+}
+
+.vapornet-curated-link > span {
+  display: block;
+  margin-bottom: 7px;
+  color: #fff200;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.vapornet-curated-link .vapornet-link {
+  color: #7df9ff;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.vapornet-curated-link p {
+  margin: 10px 0 0;
+  color: #e9d7ff;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.vapornet-page .vapornet-personal-links {
+  display: flex;
+  max-width: 620px;
+  margin: 18px auto 0;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 10px 12px;
+  color: #101010;
+}
+
+.vapornet-personal-links strong {
+  color: #000080;
+  font-family: 'Courier New', monospace;
+}
+
+.vapornet-personal-links .vapornet-link {
+  padding-left: 10px;
+  border-left: 1px solid #808080;
+  color: #0000ee;
+}
+
+.vapornet-curated-stamp {
+  width: max-content;
+  margin: 22px auto 0;
+  padding: 4px 9px;
+  border: 2px dashed #ff71ce;
+  color: #ff71ce;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  transform: rotate(-2deg);
 }
 
 .vapornet-under-construction {
@@ -693,8 +1311,29 @@
 
   .vapornet-home-grid,
   .vapornet-two-column,
-  .vapornet-project-list {
+  .vapornet-project-list,
+  .vapornet-album-grid,
+  .vapornet-curated-links,
+  .vapornet-manifesto ul {
     grid-template-columns: 1fr;
+  }
+
+  .vapornet-station-tracks {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-tracks-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-now-panel dl {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-personal-links {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
 
   .ie-status-bar {
@@ -720,6 +1359,55 @@
   .vapornet-page {
     padding: 14px;
   }
+
+  .vapornet-now-heading {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .vapornet-now-heading button {
+    width: 100%;
+    margin-left: 16px;
+    text-align: left;
+  }
+
+  .vapornet-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .vapornet-page .vapornet-radio-launch-panel,
+  .vapornet-station-directory-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .vapornet-station-header {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .vapornet-station-frequency {
+    font-size: 17px;
+  }
+
+  .vapornet-station-header > strong {
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+
+  .vapornet-track-card {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-track-artwork {
+    width: min(180px, 100%);
+    justify-self: center;
+  }
+
+  .vapornet-record-count {
+    white-space: normal;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -727,5 +1415,9 @@
   .vapornet-new-badge,
   .vapornet-under-construction {
     animation: none;
+  }
+
+  .vapornet-album-disc {
+    transition: none;
   }
 }

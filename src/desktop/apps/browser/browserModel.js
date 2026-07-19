@@ -11,6 +11,13 @@ export const browserPages = {
     keywords: 'frontend react accessibility contact skills profile',
     title: 'About Me'
   },
+  favorites: {
+    address: 'vintage://favorites',
+    description: 'Core albums and defining tracks from a personal playlist.',
+    keywords:
+      'favorites records vinyl albums tracks playlist city pop aor boogie collection shelf catalogue',
+    title: 'Favorite Records'
+  },
   guestbook: {
     address: 'vintage://guestbook',
     description: 'Leave a message in the local desktop guestbook.',
@@ -43,8 +50,9 @@ export const browserPages = {
   },
   radio: {
     address: 'vintage://radio',
-    description: 'Tune in to the Vaporwave Radio desktop application.',
-    keywords: 'radio music vaporwave audio station broadcast',
+    description: 'Tune in to the broadcast and browse curated radio selections.',
+    keywords:
+      'radio music vaporwave audio station broadcast cassette curator city pop future funk',
     title: 'Radio Station'
   },
   search: {

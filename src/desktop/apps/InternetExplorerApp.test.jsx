@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import candy from 'react95/dist/themes/candy';
 import { theSixtiesUSA } from 'react95/dist/themes';
@@ -131,6 +131,164 @@ test('searches built-in pages and project data', () => {
     screen.getByRole('heading', { name: /search results/i })
   ).toBeInTheDocument();
   expect(screen.getByText('Vintage Vibe')).toBeInTheDocument();
+});
+
+test('preserves the edited now panel and opens the personal record archive', () => {
+  renderBrowser();
+
+  const nowOnline = screen.getByRole('region', { name: /now online/i });
+
+  expect(nowOnline).toHaveTextContent(/featured topics\s*sixties usa/i);
+  expect(nowOnline).toHaveTextContent(
+    /curator's pick\s*oh no, oh yes! - 中森明菜/i
+  );
+
+  fireEvent.click(
+    screen.getByRole('button', { name: /browse record shelf/i })
+  );
+
+  expect(
+    screen.getByRole('heading', { name: /favorite records/i })
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText(/a personal shelf of japanese city pop, aor, boogie/i)
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText(/profile: coastal light.*city nights/i)
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText(/female vocals, precise arrangements, deep album cuts/i)
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByText(/228-song personal listening archive/i)
+  ).not.toBeInTheDocument();
+  expect(
+    screen.queryByText(/all eight first-tier albums/i)
+  ).not.toBeInTheDocument();
+  const albums = screen.getByRole('region', { name: /core albums/i });
+  const tracks = screen.getByRole('region', { name: /favorite tracks/i });
+
+  expect(within(albums).getAllByRole('article')).toHaveLength(15);
+  [
+    /timely!!/i,
+    /ゴールデン☆ベスト 石井明美セレクション/i,
+    /crimson/i,
+    /miss\. g/i,
+    /quiet emotion/i,
+    /sexy robot/i,
+    /music greetings volume one/i,
+    /sachet/i
+  ].forEach(title => {
+    expect(
+      within(albums).getByRole('heading', { name: title })
+    ).toBeInTheDocument();
+  });
+  expect(
+    within(albums).getByRole('heading', {
+      name: /miroir.*鏡の向こう側に/i
+    })
+  ).toBeInTheDocument();
+  expect(
+    within(albums).queryByRole('heading', { name: /angel touch/i })
+  ).not.toBeInTheDocument();
+  expect(
+    within(albums).queryByRole('heading', { name: /cologne/i })
+  ).not.toBeInTheDocument();
+  expect(within(tracks).getAllByRole('article')).toHaveLength(20);
+  expect(
+    within(tracks).getByRole('heading', {
+      name: /4:00 a\.m\./i
+    })
+  ).toBeInTheDocument();
+  expect(within(tracks).getByText(/nocturnal boogie/i)).toBeInTheDocument();
+  [
+    /oh no, oh yes!/i,
+    /プラスティック・ラヴ/i,
+    /windy summer/i,
+    /熱帯夜/i,
+    /candy/i,
+    /so high so high/i,
+    /kissしたい -wanna kiss-/i,
+    /true lies/i,
+    /mr\. k/i,
+    /dress down/i
+  ].forEach(title => {
+    expect(
+      within(tracks).getByRole('heading', { name: title })
+    ).toBeInTheDocument();
+  });
+  expect(screen.queryByText(/demo pressing/i)).not.toBeInTheDocument();
+});
+
+test('lists every radio track grouped by station', () => {
+  renderBrowser();
+
+  fireEvent.click(screen.getByRole('button', { name: /radio station/i }));
+
+  expect(
+    screen.getByRole('heading', { name: /vaporwave radio/i })
+  ).toBeInTheDocument();
+  const directory = screen.getByRole('region', {
+    name: /full station directory/i
+  });
+  const palmMirage = within(directory).getByRole('region', {
+    name: /88.7 fm palm mirage/i
+  });
+  const midnightPlaza = within(directory).getByRole('region', {
+    name: /94.2 fm midnight plaza/i
+  });
+  const dreamChannel = within(directory).getByRole('region', {
+    name: /101.9 fm dream channel/i
+  });
+
+  expect(within(palmMirage).getAllByRole('listitem')).toHaveLength(6);
+  expect(within(palmMirage).getByText('Love Philter')).toBeInTheDocument();
+  expect(within(midnightPlaza).getAllByRole('listitem')).toHaveLength(10);
+  expect(within(midnightPlaza).getByText('Ride On Time')).toBeInTheDocument();
+  expect(within(dreamChannel).getAllByRole('listitem')).toHaveLength(6);
+  expect(within(dreamChannel).getByText('Sunset Disco')).toBeInTheDocument();
+  expect(within(directory).getAllByRole('listitem')).toHaveLength(22);
+});
+
+test('shows a personal interface manifesto on the about page', () => {
+  renderBrowser();
+
+  fireEvent.change(screen.getByLabelText(/address/i), {
+    target: { value: 'about' }
+  });
+  fireEvent.submit(screen.getByLabelText(/address/i).closest('form'));
+
+  expect(
+    screen.getByRole('group', { name: /interface manifesto/i })
+  ).toHaveTextContent(/interfaces should be explored, not merely viewed/i);
+  expect(
+    screen.getByRole('group', { name: /interface manifesto/i })
+  ).toHaveTextContent(/nostalgia is not an excuse for poor usability/i);
+});
+
+test('curates external links through the existing confirmation page', () => {
+  renderBrowser();
+
+  fireEvent.change(screen.getByLabelText(/address/i), {
+    target: { value: 'links' }
+  });
+  fireEvent.submit(screen.getByLabelText(/address/i).closest('form'));
+
+  expect(screen.getByText(/rough but personal web/i)).toBeInTheDocument();
+  expect(
+    screen.getByText(/restraint is also a design choice/i)
+  ).toBeInTheDocument();
+
+  fireEvent.click(
+    screen.getByRole('button', { name: /cameron's world/i })
+  );
+
+  expect(
+    screen.getByRole('heading', { name: /external link/i })
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole('link', { name: /open in a new browser tab/i })
+  ).toHaveAttribute('href', 'https://www.cameronsworld.net/');
 });
 
 test('shows a safe confirmation page instead of embedding external websites', () => {
