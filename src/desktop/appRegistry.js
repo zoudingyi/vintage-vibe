@@ -131,7 +131,7 @@ const appRegistry = [
     showInStartMenu: true,
     component: GuestbookApp,
     defaultPosition: { x: 216, y: 144 },
-    windowSize: { width: 460 }
+    windowSize: { height: 560, width: 460 }
   }
 ];
 

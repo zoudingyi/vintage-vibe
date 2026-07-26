@@ -548,6 +548,11 @@
   margin: 8px 0;
 }
 
+.vapornet-guestbook-page .guestbook-content {
+  max-width: 920px;
+  margin: 0 auto;
+}
+
 .vapornet-manifesto {
   max-width: 760px;
   margin: 18px auto 0;
@@ -648,6 +653,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  padding: 0px 10px;
 }
 
 .vapornet-radio-launch-panel strong {

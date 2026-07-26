@@ -20,8 +20,8 @@ export const browserPages = {
   },
   guestbook: {
     address: 'vintage://guestbook',
-    description: 'Leave a message in the local desktop guestbook.',
-    keywords: 'guestbook message sign visitor',
+    description: 'Sign and browse the local VaporNet visitor log.',
+    keywords: 'guestbook message sign visitor local transmission log',
     title: 'Guestbook'
   },
   help: {

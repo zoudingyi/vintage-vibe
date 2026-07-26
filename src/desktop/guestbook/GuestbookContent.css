@@ -1,0 +1,551 @@
+.guestbook-content {
+  min-width: 0;
+}
+
+.guestbook-terminal-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+  color: #fff;
+}
+
+.guestbook-terminal-heading span,
+.guestbook-panel-heading small {
+  display: block;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.08em;
+}
+
+.guestbook-terminal-heading span {
+  color: #7df9ff;
+  font-size: 10px;
+}
+
+.guestbook-terminal-heading h2 {
+  margin: 3px 0 0;
+  color: #ff9cdd;
+  font-family: 'Courier New', monospace;
+  font-size: 19px;
+  font-weight: normal;
+}
+
+.guestbook-terminal-heading > strong {
+  color: #39ff14;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.guestbook-message {
+  margin: 0 0 12px;
+  padding: 7px 9px;
+  border: 1px dashed #7df9ff;
+  color: #7df9ff;
+  background: rgba(0, 0, 40, 0.86);
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+}
+
+.guestbook-message.is-error {
+  border-color: #ff9cdd;
+  color: #ff9cdd;
+}
+
+.guestbook-message.is-saved {
+  animation: guestbook-signal-confirmation 560ms ease-out;
+  border-style: solid;
+  border-color: #39ff14;
+  color: #39ff14;
+}
+
+.guestbook-node-status {
+  min-width: 0;
+  margin-bottom: 14px;
+  padding: 12px;
+  border: 2px outset #a9a9ff;
+  color: #fff;
+  background:
+    linear-gradient(90deg, rgba(125, 249, 255, 0.05), transparent 45%),
+    rgba(0, 0, 40, 0.9);
+}
+
+.guestbook-node-status-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 9px;
+  border-bottom: 1px dotted #4d5ea8;
+  font-family: 'Courier New', monospace;
+}
+
+.guestbook-node-status-heading > span {
+  color: #39ff14;
+  font-size: 9px;
+}
+
+.guestbook-node-status-heading h3 {
+  margin: 0;
+  color: #7df9ff;
+  font-size: 12px;
+}
+
+.guestbook-node-status-heading small {
+  margin-left: auto;
+  color: #ff9cdd;
+  font-size: 9px;
+}
+
+.guestbook-node-status dl {
+  display: grid;
+  margin: 0;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(150px, 100%), 1fr)
+  );
+}
+
+.guestbook-node-status dl > div {
+  min-width: 0;
+  padding: 10px 11px 2px;
+  border-left: 1px solid rgba(125, 249, 255, 0.2);
+}
+
+.guestbook-node-status dl > div:first-child {
+  border-left: 0;
+}
+
+.guestbook-node-status dt,
+.guestbook-node-status dd {
+  font-family: 'Courier New', monospace;
+}
+
+.guestbook-node-status dt {
+  color: #9ea4d8;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+}
+
+.guestbook-node-status dd {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+  color: #fff;
+  font-size: 13px;
+}
+
+.guestbook-context-grid {
+  display: grid;
+  margin-bottom: 14px;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(300px, 100%), 1fr)
+  );
+  gap: 14px;
+}
+
+.guestbook-webmaster-note {
+  min-width: 0;
+  padding: 13px;
+  color: #101010;
+}
+
+.guestbook-letter-meta {
+  display: grid;
+  padding-bottom: 9px;
+  border-bottom: 1px dotted #6f4e91;
+  gap: 3px;
+  color: #000080;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+}
+
+.guestbook-letter-meta span:first-child {
+  color: #6c1f71;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.guestbook-webmaster-note p {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.guestbook-webmaster-note > strong {
+  display: block;
+  margin-top: 11px;
+  color: #000080;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  text-align: right;
+}
+
+.guestbook-signature-preview {
+  min-width: 0;
+  padding: 12px;
+  border: 2px outset #a9a9ff;
+  color: #fff;
+  background: rgba(0, 0, 40, 0.9);
+}
+
+.guestbook-preview-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-family: 'Courier New', monospace;
+}
+
+.guestbook-preview-heading span {
+  display: block;
+  color: #7df9ff;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+}
+
+.guestbook-preview-heading h3 {
+  margin: 3px 0 0;
+  color: #ff9cdd;
+  font-size: 12px;
+}
+
+.guestbook-preview-heading > strong {
+  color: #39ff14;
+  font-size: 8px;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.guestbook-preview-card {
+  min-height: 94px;
+  padding: 10px;
+  border: 1px dashed #7df9ff;
+  background: rgba(8, 5, 42, 0.96);
+}
+
+.guestbook-preview-card h4 {
+  margin: 4px 0 5px;
+  overflow-wrap: anywhere;
+  color: #ff9cdd;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+}
+
+.guestbook-preview-card p {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.guestbook-terminal-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(280px, 100%), 1fr)
+  );
+  align-items: start;
+  gap: 14px;
+}
+
+.guestbook-terminal-grid.is-page {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.guestbook-form-panel {
+  min-width: 0;
+  padding: 12px;
+  color: #101010;
+}
+
+.guestbook-panel-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 12px;
+}
+
+.guestbook-panel-heading > span {
+  display: inline-grid;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  place-items: center;
+  border: 1px solid #000080;
+  color: #000080;
+  background: #7df9ff;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+}
+
+.guestbook-panel-heading strong,
+.guestbook-panel-heading small {
+  display: block;
+}
+
+.guestbook-panel-heading strong {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
+.guestbook-panel-heading small {
+  margin-top: 2px;
+  color: #6c1f71;
+  font-size: 9px;
+}
+
+.guestbook-panel-heading.is-dark {
+  color: #fff;
+}
+
+.guestbook-panel-heading.is-dark > span {
+  border-color: #ff9cdd;
+  color: #000040;
+  background: #ff9cdd;
+}
+
+.guestbook-panel-heading.is-dark small {
+  color: #7df9ff;
+}
+
+.guestbook-entry-form {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.guestbook-entry-form label {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.guestbook-entry-form label > span {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+}
+
+.guestbook-entry-form input,
+.guestbook-entry-form textarea {
+  box-sizing: border-box;
+  width: 100%;
+  border: 2px solid;
+  border-color: #6c1f71 #df9be7 #df9be7 #6c1f71;
+  border-radius: 0;
+  color: #101010;
+  background: #fff;
+  font: inherit;
+}
+
+.guestbook-entry-form input {
+  min-height: 28px;
+  padding: 3px 5px;
+}
+
+.guestbook-entry-form textarea {
+  min-height: 104px;
+  padding: 5px;
+  line-height: 1.35;
+  resize: vertical;
+}
+
+.guestbook-entry-form input:focus,
+.guestbook-entry-form textarea:focus {
+  outline: 1px dotted #000080;
+  outline-offset: -4px;
+}
+
+.guestbook-entry-form [aria-invalid='true'] {
+  background: #fff0fa;
+}
+
+.guestbook-field-error {
+  color: #8b003c;
+  font-size: 11px;
+}
+
+.guestbook-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.guestbook-form-footer output {
+  color: #000080;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+}
+
+.guestbook-transmissions {
+  min-width: 0;
+  padding: 12px;
+  border: 2px outset #a9a9ff;
+  background: rgba(0, 0, 40, 0.88);
+}
+
+.guestbook-entry-list {
+  display: flex;
+  max-height: 430px;
+  flex-direction: column;
+  gap: 9px;
+  overflow: auto;
+}
+
+.guestbook-content--page .guestbook-entry-list {
+  max-height: none;
+}
+
+.guestbook-content--page .guestbook-entry-form textarea {
+  min-height: 124px;
+}
+
+.guestbook-entry-card {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #4d5ea8;
+  border-left: 3px solid #7df9ff;
+  color: #fff;
+  background: rgba(8, 5, 42, 0.96);
+  box-shadow: inset 0 0 0 1px rgba(255, 156, 221, 0.18);
+}
+
+.guestbook-entry-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: #7df9ff;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+}
+
+.guestbook-entry-type {
+  display: block;
+  margin-top: 7px;
+  color: #39ff14;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+.guestbook-entry-card h3 {
+  margin: 4px 0 5px;
+  color: #ff9cdd;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+}
+
+.guestbook-entry-card p {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.guestbook-empty-state {
+  display: flex;
+  min-height: 118px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 7px;
+  margin: 0;
+  border: 1px dashed #4d5ea8;
+  color: #7df9ff;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  text-align: center;
+}
+
+.guestbook-empty-state strong,
+.guestbook-empty-state span {
+  display: block;
+}
+
+.guestbook-window-app {
+  min-height: 100%;
+  padding: 12px;
+  background: #08052a;
+}
+
+.guestbook-content--window .guestbook-terminal-heading {
+  margin-bottom: 10px;
+}
+
+.guestbook-preview-note {
+  margin: 12px 0 0;
+  color: #9ea4d8;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  text-align: right;
+}
+
+@keyframes guestbook-signal-confirmation {
+  0% {
+    background: rgba(57, 255, 20, 0.22);
+  }
+
+  100% {
+    background: rgba(0, 0, 40, 0.86);
+  }
+}
+
+@media (max-width: 520px) {
+  .guestbook-terminal-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .guestbook-form-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .guestbook-form-footer button {
+    width: 100%;
+  }
+
+  .guestbook-node-status-heading {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .guestbook-node-status-heading small {
+    width: 100%;
+    margin-left: 17px;
+  }
+
+  .guestbook-node-status dl > div {
+    border-left: 0;
+    border-top: 1px solid rgba(125, 249, 255, 0.14);
+  }
+
+  .guestbook-node-status dl > div:first-child {
+    border-top: 0;
+  }
+
+  .guestbook-preview-heading {
+    flex-direction: column;
+  }
+
+  .guestbook-preview-heading > strong {
+    text-align: left;
+  }
+
+  .guestbook-preview-note {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guestbook-message.is-saved {
+    animation: none;
+  }
+}

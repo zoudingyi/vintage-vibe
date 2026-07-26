@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within
+} from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import candy from 'react95/dist/themes/candy';
 import { theSixtiesUSA } from 'react95/dist/themes';
@@ -248,6 +254,60 @@ test('lists every radio track grouped by station', () => {
   expect(within(dreamChannel).getAllByRole('listitem')).toHaveLength(6);
   expect(within(dreamChannel).getByText('Sunset Disco')).toBeInTheDocument();
   expect(within(directory).getAllByRole('listitem')).toHaveLength(22);
+});
+
+test('signs the shared local guestbook directly inside VaporNet', async () => {
+  const { onOpenApp } = renderBrowser();
+
+  fireEvent.click(screen.getByRole('button', { name: /^guestbook/i }));
+
+  expect(
+    screen.getByRole('heading', { name: /^guestbook$/i })
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole('region', { name: /node status/i })
+  ).toBeInTheDocument();
+  expect(screen.getByText(/from the webmaster/i)).toBeInTheDocument();
+  expect(
+    screen.getByRole('region', { name: /signature preview/i })
+  ).toBeInTheDocument();
+  expect(screen.queryByText(/private storage/i)).not.toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.getAllByText(/^archived transmission$/i)).toHaveLength(2);
+  });
+
+  fireEvent.change(screen.getByLabelText(/guestbook name/i), {
+    target: { value: 'Ada' }
+  });
+  fireEvent.change(screen.getByLabelText(/guestbook message/i), {
+    target: { value: 'Great desktop shell.' }
+  });
+  fireEvent.click(screen.getByRole('button', { name: /sign guestbook/i }));
+
+  const transmissions = screen.getByRole('region', {
+    name: /recent transmissions/i
+  });
+  await waitFor(() => {
+    expect(within(transmissions).getByText('Ada')).toBeInTheDocument();
+  });
+  expect(
+    within(transmissions).getByText(/great desktop shell/i)
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole('status', { name: /guestbook status/i })
+  ).toHaveTextContent(/transmission accepted.*signature id/i);
+  expect(
+    JSON.parse(window.localStorage.getItem('vintage-vibe-guestbook'))[0]
+  ).toEqual(
+    expect.objectContaining({
+      authorType: 'visitor',
+      createdAt: expect.any(String),
+      message: 'Great desktop shell.',
+      name: 'Ada',
+      status: 'local'
+    })
+  );
+  expect(onOpenApp).not.toHaveBeenCalledWith('guestbook');
 });
 
 test('shows a personal interface manifesto on the about page', () => {

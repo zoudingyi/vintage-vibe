@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within
+} from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import { theSixtiesUSA } from 'react95/dist/themes';
 import Home from './index';
@@ -1205,10 +1211,11 @@ test('applies hidden vaporwave terminal presets without listing them in help', (
   );
 });
 
-test('persists guestbook signatures', () => {
+test('persists guestbook signatures', async () => {
   renderDesktop();
 
   openStartMenuItem(/guestbook/i);
+  await screen.findByText(/no signatures yet/i);
 
   fireEvent.change(screen.getByLabelText(/guestbook name/i), {
     target: { value: 'Ada' }
@@ -1218,7 +1225,9 @@ test('persists guestbook signatures', () => {
   });
   fireEvent.click(screen.getByRole('button', { name: /sign guestbook/i }));
 
-  expect(screen.getByText('Ada')).toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.getByText('Ada')).toBeInTheDocument();
+  });
   expect(screen.getByText(/great desktop shell/i)).toBeInTheDocument();
   expect(
     JSON.parse(window.localStorage.getItem('vintage-vibe-guestbook'))[0]
@@ -1226,18 +1235,18 @@ test('persists guestbook signatures', () => {
   ).toBe('Great desktop shell.');
 });
 
-test('reports corrupted local guestbook data', () => {
+test('reports corrupted local guestbook data', async () => {
   window.localStorage.setItem('vintage-vibe-guestbook', '{not-json');
   renderDesktop();
 
   openStartMenuItem(/guestbook/i);
 
-  expect(screen.getByRole('status')).toHaveTextContent(
-    /guestbook data could not be read/i
-  );
+  expect(
+    await screen.findByRole('status', { name: /guestbook status/i })
+  ).toHaveTextContent(/guestbook data could not be read/i);
 });
 
-test('recovers when local guestbook data has an invalid shape', () => {
+test('recovers when local guestbook data has an invalid shape', async () => {
   window.localStorage.setItem(
     'vintage-vibe-guestbook',
     JSON.stringify({ message: 'not an entry list' })
@@ -1246,9 +1255,9 @@ test('recovers when local guestbook data has an invalid shape', () => {
 
   openStartMenuItem(/guestbook/i);
 
-  expect(screen.getByRole('status')).toHaveTextContent(
-    /guestbook data could not be read/i
-  );
+  expect(
+    await screen.findByRole('status', { name: /guestbook status/i })
+  ).toHaveTextContent(/guestbook data could not be read/i);
   expect(screen.getByText(/no signatures yet/i)).toBeInTheDocument();
 });
 

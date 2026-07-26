@@ -1,5 +1,8 @@
 import React from 'react';
 import { Button, Fieldset, Panel } from 'react95';
+import GuestbookContent, {
+  archivedGuestbookEntries
+} from '../../guestbook/GuestbookContent';
 import { radioStations } from '../../radioStations';
 import { projects } from '../data';
 import {
@@ -413,18 +416,20 @@ function RadioPage({ onOpenApp }) {
   );
 }
 
-function GuestbookPage({ onOpenApp }) {
+function GuestbookPage() {
   return (
-    <article className="vapornet-page">
-      <PageHeader eyebrow="VISITOR SERVICES" title="GUESTBOOK">
-        <p>Sign the local guestbook and leave a message for the next visitor.</p>
+    <article className="vapornet-page vapornet-guestbook-page">
+      <PageHeader eyebrow="VISITOR SERVICES // NODE 1999" title="GUESTBOOK">
+        <p>
+          Leave a trace before the connection closes. Messages, memories, and
+          late-night transmissions are welcome.
+        </p>
       </PageHeader>
-      <Panel className="vapornet-launch-panel" variant="well">
-        <p>Guestbook entries are stored only in this browser.</p>
-        <Button onClick={() => onOpenApp('guestbook')}>
-          Open Guestbook Program
-        </Button>
-      </Panel>
+
+      <GuestbookContent
+        archivedEntries={archivedGuestbookEntries}
+        mode="page"
+      />
     </article>
   );
 }
