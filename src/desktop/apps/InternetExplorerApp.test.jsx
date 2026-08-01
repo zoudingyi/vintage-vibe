@@ -310,7 +310,7 @@ test('signs the shared local guestbook directly inside VaporNet', async () => {
   expect(onOpenApp).not.toHaveBeenCalledWith('guestbook');
 });
 
-test('shows a personal interface manifesto on the about page', () => {
+test('shows Devo personal interests without career or technical content', () => {
   renderBrowser();
 
   fireEvent.change(screen.getByLabelText(/address/i), {
@@ -319,11 +319,125 @@ test('shows a personal interface manifesto on the about page', () => {
   fireEvent.submit(screen.getByLabelText(/address/i).closest('form'));
 
   expect(
-    screen.getByRole('group', { name: /interface manifesto/i })
-  ).toHaveTextContent(/interfaces should be explored, not merely viewed/i);
+    screen.getByRole('heading', { name: /devo control room/i })
+  ).toBeInTheDocument();
   expect(
-    screen.getByRole('group', { name: /interface manifesto/i })
-  ).toHaveTextContent(/nostalgia is not an excuse for poor usability/i);
+    screen.getByText('「未来は消えても、信号は永遠に」')
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText(
+      /welcome to devo control room.*失われた未来へようこそ.*all personal signals online/i
+    )
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole('img', { name: /devo zou.*yamaha yzf-r3/i })
+  ).toBeInTheDocument();
+  const operatorProfile = screen.getByRole('region', { name: /devo zou/i });
+  ['YZF-R3', 'DOTA 2', 'EVA-01', '5 ONLINE'].forEach(value => {
+    expect(within(operatorProfile).getByText(value)).toBeInTheDocument();
+  });
+  expect(
+    within(operatorProfile).getByText(/Hi ~ 👋.*🏍️.*🎧.*🎮/)
+  ).toBeInTheDocument();
+  expect(within(operatorProfile).getByText(/擦眼泪不安全/)).toBeInTheDocument();
+
+  const machineFile = screen.getByRole('region', {
+    name: /machine.*speed/i
+  });
+  expect(
+    within(machineFile).getByText(/yamaha yzF-r3/i)
+  ).toBeInTheDocument();
+  expect(
+    within(machineFile).getByRole('img', { name: /yamaha yzf-r3/i })
+  ).toBeInTheDocument();
+
+  const racingSignal = screen.getByRole('region', {
+    name: /racing signal/i
+  });
+  expect(
+    within(racingSignal).getByText(/marc márquez/i)
+  ).toBeInTheDocument();
+  expect(
+    within(racingSignal).getByRole('img', {
+      name: /marc márquez.*number 93/i
+    })
+  ).toBeInTheDocument();
+
+  const dotaTerminal = screen.getByRole('region', {
+    name: /dota 2 terminal/i
+  });
+  expect(
+    within(dotaTerminal).getByRole('img', { name: /dota 2 logo/i })
+  ).toBeInTheDocument();
+  expect(within(dotaTerminal).getByText(/ping 32 ms/i)).toBeInTheDocument();
+  expect(within(dotaTerminal).getByText(/^songoku$/i)).toBeInTheDocument();
+  expect(within(dotaTerminal).getByText(/^3号位$/i)).toBeInTheDocument();
+  expect(within(dotaTerminal).getByText(/^斧王$/i)).toBeInTheDocument();
+  expect(within(dotaTerminal).getByText(/^冠绝一世$/i)).toBeInTheDocument();
+
+  const evaMonitor = screen.getByRole('region', {
+    name: /eva sync monitor/i
+  });
+  expect(
+    within(evaMonitor).getByRole('img', {
+      name: /eva unit-01 synchronization monitor/i
+    })
+  ).toBeInTheDocument();
+  expect(within(evaMonitor).getByText(/pattern.*blue/i)).toBeInTheDocument();
+  expect(within(evaMonitor).getByText(/^碇シンジ$/i)).toBeInTheDocument();
+  expect(within(evaMonitor).getByText(/^14$/i)).toBeInTheDocument();
+  expect(
+    within(evaMonitor).getByText(/^third children$/i)
+  ).toBeInTheDocument();
+  expect(within(evaMonitor).getByText(/^初号机$/i)).toBeInTheDocument();
+  expect(
+    within(evaMonitor).getByText(/a\.t\. field.*deployed/i)
+  ).toBeInTheDocument();
+  expect(
+    within(evaMonitor).getByText(
+      '逃げちゃダメだ、逃げちゃダメだ、逃げちゃダメだ!'
+    )
+  ).toBeInTheDocument();
+  expect(within(evaMonitor).queryByText(/あんた、バカぁ/)).not
+    .toBeInTheDocument();
+  expect(within(evaMonitor).queryByText(/どこだって天国/)).not
+    .toBeInTheDocument();
+
+  const catNetwork = screen.getByRole('region', {
+    name: /cat surveillance wall/i
+  });
+  expect(within(catNetwork).getAllByRole('listitem')).toHaveLength(5);
+  expect(within(catNetwork).getAllByRole('img')).toHaveLength(5);
+  ['Hana', 'Cookie', '桃桃', '洋芋', '坨坨'].forEach(catName => {
+    expect(within(catNetwork).getByText(catName)).toBeInTheDocument();
+  });
+  expect(within(catNetwork).getByText(/5 nodes online/i)).toBeInTheDocument();
+
+  const personalTelemetry = screen.getByRole('region', {
+    name: /personal telemetry/i
+  });
+  [
+    'CHENGDU',
+    'OFFLINE',
+    'LOST',
+    'FRAGMENTED',
+    'MAXIMUM',
+    'GRANTED',
+    'ONLINE',
+    'ETERNAL'
+  ].forEach(value => {
+    expect(within(personalTelemetry).getByText(value)).toBeInTheDocument();
+  });
+  expect(within(personalTelemetry).getByText(/reality status/i))
+    .toBeInTheDocument();
+  expect(within(personalTelemetry).getByText(/transmission/i))
+    .toBeInTheDocument();
+
+  expect(
+    screen.queryByRole('group', { name: /interface manifesto/i })
+  ).not.toBeInTheDocument();
+  expect(screen.queryByText(/react and component architecture/i))
+    .not.toBeInTheDocument();
 });
 
 test('curates external links through the existing confirmation page', () => {

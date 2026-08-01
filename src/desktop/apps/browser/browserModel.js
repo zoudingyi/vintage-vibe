@@ -7,8 +7,9 @@ export const HOME_ADDRESS = 'vintage://home';
 export const browserPages = {
   about: {
     address: 'vintage://about',
-    description: 'Profile, skills, and contact information.',
-    keywords: 'frontend react accessibility contact skills profile',
+    description: 'A personal control room for interests and after-hours life.',
+    keywords:
+      'about personal interests motorcycle yamaha r3 motogp marquez dota eva cats chengdu',
     title: 'About Me'
   },
   favorites: {

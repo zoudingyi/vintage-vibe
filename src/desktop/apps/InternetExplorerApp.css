@@ -548,6 +548,1048 @@
   margin: 8px 0;
 }
 
+.vapornet-about-page .vapornet-page-header {
+  max-width: 920px;
+}
+
+.vapornet-about-ticker {
+  max-width: 920px;
+  margin: 0 auto 16px;
+  overflow: hidden;
+  border: 1px solid #ff71ce;
+  color: #fff200;
+  background: #09001e;
+  box-shadow: 4px 4px 0 rgba(45, 226, 230, 0.2);
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+
+.vapornet-about-ticker span {
+  display: inline-block;
+  min-width: 100%;
+  padding: 7px 10px;
+  animation: vapornet-about-signal 18s linear infinite;
+}
+
+.vapornet-about-operator {
+  display: grid;
+  max-width: 920px;
+  margin: 0 auto 16px;
+  grid-template-columns: minmax(220px, 0.78fr) minmax(0, 1.62fr);
+  border: 4px ridge #a9a9ff;
+  background: #08052a;
+  box-shadow: 8px 8px 0 rgba(247, 6, 207, 0.18);
+}
+
+.vapornet-about-portrait {
+  position: relative;
+  min-height: 340px;
+  overflow: hidden;
+  border-right: 2px solid #2de2e6;
+  background: #07051f;
+  isolation: isolate;
+}
+
+.vapornet-about-portrait::before {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    rgba(5, 7, 56, 0.2) 4px
+  );
+  content: '';
+  pointer-events: none;
+}
+
+.vapornet-about-portrait::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 7, 56, 0.02) 42%,
+    rgba(5, 7, 56, 0.9) 100%
+  );
+  content: '';
+  pointer-events: none;
+}
+
+.vapornet-about-portrait > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 43%;
+}
+
+.vapornet-about-photo-label {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 7px;
+  border-top: 1px solid rgba(125, 249, 255, 0.72);
+  font-family: 'Courier New', monospace;
+}
+
+.vapornet-about-photo-label span {
+  color: #7df9ff;
+  font-size: 7px;
+  letter-spacing: 0.05em;
+}
+
+.vapornet-about-photo-label strong {
+  color: #fff200;
+  font-size: 9px;
+  white-space: nowrap;
+  text-shadow: 1px 1px #f706cf;
+}
+
+.vapornet-about-intro {
+  min-width: 0;
+  padding: clamp(18px, 3.5cqi, 30px);
+  background:
+    linear-gradient(135deg, rgba(48, 29, 117, 0.52), transparent 58%),
+    rgba(5, 4, 38, 0.94);
+}
+
+.vapornet-about-intro > span,
+.vapornet-about-card-copy > span,
+.vapornet-cat-network-heading span {
+  color: #2de2e6;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+
+.vapornet-about-intro h2 {
+  margin: 6px 0 2px;
+  font-size: clamp(24px, 5cqi, 38px);
+  text-shadow: 2px 0 #2de2e6;
+}
+
+.vapornet-about-handle {
+  color: #fff200;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+}
+
+.vapornet-about-intro > p:not(.vapornet-about-handle) {
+  margin-bottom: 10px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.vapornet-about-intro > dl {
+  display: grid;
+  margin: 16px 0 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.vapornet-about-intro > dl > div {
+  min-width: 0;
+  padding: 7px 8px;
+  border: 1px solid #443f89;
+  background: rgba(0, 0, 25, 0.55);
+}
+
+.vapornet-about-intro dt,
+.vapornet-about-mini-stats dt,
+.vapornet-cat-stats dt,
+.vapornet-about-telemetry dt {
+  color: #9ea4d8;
+  font-family: 'Courier New', monospace;
+  font-size: 8px;
+  letter-spacing: 0.06em;
+}
+
+.vapornet-about-intro dd,
+.vapornet-about-mini-stats dd,
+.vapornet-cat-stats dd,
+.vapornet-about-telemetry dd {
+  margin: 3px 0 0;
+  overflow-wrap: anywhere;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+}
+
+.vapornet-about-interest-grid {
+  display: grid;
+  max-width: 920px;
+  margin: 0 auto 16px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.vapornet-about-card {
+  display: grid;
+  min-width: 0;
+  min-height: 270px;
+  grid-template-columns: minmax(130px, 0.75fr) minmax(0, 1.25fr);
+  overflow: hidden;
+  border: 3px outset #a9a9ff;
+  color: #effcff;
+  background: rgba(4, 3, 30, 0.96);
+  box-shadow: inset 0 0 22px rgba(45, 226, 230, 0.1);
+}
+
+.vapornet-about-card.is-machine {
+  grid-column: span 7;
+  border-color: #4f80ff #091c72 #091c72 #4f80ff;
+}
+
+.vapornet-about-card.is-racing {
+  grid-column: span 5;
+  grid-template-columns: minmax(118px, 0.68fr) minmax(0, 1.32fr);
+  border-color: #ff8b98 #861623 #861623 #ff8b98;
+}
+
+.vapornet-about-card.is-dota,
+.vapornet-about-card.is-eva {
+  grid-column: span 6;
+}
+
+.vapornet-r3-photo {
+  position: relative;
+  min-height: 100%;
+  overflow: hidden;
+  border-right: 1px solid #4774ff;
+  background: #071648;
+  isolation: isolate;
+}
+
+.vapornet-r3-photo::after {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 48%, rgba(7, 22, 72, 0.82) 100%),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 3px,
+      rgba(71, 116, 255, 0.15) 4px
+    );
+  content: '';
+  pointer-events: none;
+  z-index: 1;
+}
+
+.vapornet-r3-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 58%;
+  filter: saturate(1.08) contrast(1.04);
+  z-index: 0;
+}
+
+.vapornet-r3-photo span {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  left: 8px;
+  z-index: 2;
+  padding-top: 5px;
+  border-top: 1px solid #7df9ff;
+  color: #fff200;
+  font-family: 'Courier New', monospace;
+  font-size: 8px;
+  letter-spacing: 0.04em;
+}
+
+.vapornet-rider-photo {
+  position: relative;
+  min-height: 100%;
+  overflow: hidden;
+  border-right: 1px solid #ff5066;
+  background: #39060e;
+  isolation: isolate;
+}
+
+.vapornet-rider-photo::before,
+.vapornet-rider-photo::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  content: '';
+  pointer-events: none;
+}
+
+.vapornet-rider-photo::before {
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    rgba(255, 80, 102, 0.2) 4px
+  );
+}
+
+.vapornet-rider-photo::after {
+  background: linear-gradient(
+    180deg,
+    rgba(57, 6, 14, 0.04) 34%,
+    rgba(57, 6, 14, 0.92) 100%
+  );
+}
+
+.vapornet-rider-photo img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 54% 38%;
+  filter: saturate(1.06) contrast(1.08);
+}
+
+.vapornet-rider-photo > span,
+.vapornet-rider-photo > small,
+.vapornet-rider-photo > strong {
+  position: absolute;
+  z-index: 2;
+}
+
+.vapornet-rider-photo > span {
+  top: 7px;
+  left: 7px;
+  padding: 3px 5px;
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  color: #fff;
+  background: rgba(57, 6, 14, 0.72);
+  font-family: 'Courier New', monospace;
+  font-size: 7px;
+  letter-spacing: 0.04em;
+}
+
+.vapornet-rider-photo > strong {
+  right: 8px;
+  bottom: 25px;
+  color: #fff;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: clamp(58px, 10cqi, 94px);
+  font-style: italic;
+  line-height: 1;
+  text-shadow: 5px 4px #e6102f, -2px -2px #fff200;
+}
+
+.vapornet-rider-photo > small {
+  right: 8px;
+  bottom: 8px;
+  left: 8px;
+  padding-top: 5px;
+  border-top: 1px solid #ff8498;
+  color: #fff200;
+  font-family: 'Courier New', monospace;
+  font-size: 7px;
+  letter-spacing: 0.03em;
+}
+
+.vapornet-about-card-copy {
+  min-width: 0;
+  padding: 16px;
+}
+
+.vapornet-about-card-copy h2 {
+  margin: 5px 0 8px;
+  font-size: clamp(17px, 3cqi, 22px);
+}
+
+.vapornet-about-card-copy > strong {
+  display: block;
+  margin-bottom: 10px;
+  color: #fff200;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+}
+
+.vapornet-about-card-copy > p {
+  margin-bottom: 14px;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.vapornet-about-mini-stats {
+  display: grid;
+  margin: auto 0 0;
+  gap: 5px;
+}
+
+.vapornet-about-mini-stats > div {
+  display: grid;
+  min-width: 0;
+  padding-top: 5px;
+  border-top: 1px dotted #4d5ea8;
+  grid-template-columns: minmax(92px, auto) minmax(0, 1fr);
+  gap: 8px;
+}
+
+.vapornet-about-mini-stats dd {
+  margin-top: 0;
+  color: #7df9ff;
+  text-align: right;
+}
+
+.vapornet-about-card-status {
+  display: flex;
+  min-width: 0;
+  min-height: 31px;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  grid-column: 1 / -1;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+.vapornet-about-card-status > span {
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #39ff14;
+  box-shadow: 0 0 8px #39ff14;
+}
+
+.vapornet-about-card-status > strong {
+  margin-left: auto;
+  font-size: 8px;
+  white-space: nowrap;
+}
+
+.vapornet-about-card-status.is-dota-status {
+  border-bottom: 1px solid #9b263d;
+  color: #ff8498;
+  background: #26020a;
+}
+
+.vapornet-about-card-status.is-dota-status > strong {
+  color: #7df9ff;
+}
+
+.vapornet-about-card-status.is-eva-status {
+  border-bottom: 1px solid #8b57c7;
+  color: #d7bcff;
+  background: #19062d;
+}
+
+.vapornet-about-card-status.is-eva-status > span {
+  background: #ff9d00;
+  box-shadow: 0 0 8px #ff9d00;
+}
+
+.vapornet-about-card-status.is-eva-status > strong {
+  color: #b4ff00;
+}
+
+.vapornet-about-card.is-dota {
+  min-height: 322px;
+  grid-template-columns: minmax(146px, 0.78fr) minmax(0, 1.22fr);
+  grid-template-rows: 31px minmax(0, 1fr);
+  border-color: #a3354b #50101d #50101d #a3354b;
+  background:
+    linear-gradient(140deg, rgba(154, 27, 53, 0.18), transparent 60%),
+    #10050e;
+}
+
+.vapornet-dota-client {
+  position: relative;
+  display: grid;
+  min-height: 100%;
+  place-items: center;
+  align-content: center;
+  gap: 9px;
+  overflow: hidden;
+  border-right: 1px solid #9b263d;
+  background:
+    radial-gradient(circle at center, rgba(196, 53, 47, 0.3), transparent 58%),
+    repeating-linear-gradient(
+      142deg,
+      rgba(255, 132, 152, 0.08) 0,
+      rgba(255, 132, 152, 0.08) 1px,
+      transparent 2px,
+      transparent 14px
+    ),
+    #160308;
+  isolation: isolate;
+}
+
+.vapornet-dota-client::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    rgba(255, 132, 152, 0.08) 4px
+  );
+  content: '';
+}
+
+.vapornet-dota-client::after {
+  position: absolute;
+  inset: 8px;
+  border: 1px dotted rgba(255, 132, 152, 0.32);
+  content: '';
+  pointer-events: none;
+}
+
+.vapornet-dota-logo {
+  z-index: 1;
+  width: min(94px, 70%);
+  overflow: visible;
+  color: #d34740;
+  filter: drop-shadow(0 0 12px rgba(211, 71, 64, 0.64));
+}
+
+.vapornet-dota-logo > path:first-of-type {
+  fill: currentcolor;
+}
+
+.vapornet-dota-logo-cut {
+  fill: none;
+  stroke: #160308;
+  stroke-linecap: square;
+  stroke-linejoin: bevel;
+  stroke-width: 10;
+}
+
+.vapornet-dota-hero,
+.vapornet-dota-latency {
+  z-index: 1;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+}
+
+.vapornet-dota-hero {
+  display: grid;
+  gap: 2px;
+}
+
+.vapornet-dota-hero > span {
+  color: #ff8498;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-shadow: 2px 2px #50101d;
+}
+
+.vapornet-dota-hero > small {
+  color: #ffc1ca;
+  font-size: 8px;
+  letter-spacing: 0.05em;
+}
+
+.vapornet-dota-latency {
+  color: #7df9ff;
+  font-size: 8px;
+}
+
+.vapornet-dota-latency i {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 3px;
+  border-radius: 50%;
+  background: #39ff14;
+  box-shadow: 0 0 6px #39ff14;
+}
+
+.vapornet-about-card.is-dota .vapornet-about-card-copy > span,
+.vapornet-about-card.is-dota h2 {
+  color: #ff8498;
+}
+
+.vapornet-about-card.is-dota .vapornet-about-card-copy,
+.vapornet-about-card.is-eva .vapornet-about-card-copy {
+  display: flex;
+  flex-direction: column;
+}
+
+.vapornet-about-card.is-dota .vapornet-about-card-copy > strong {
+  color: #ffb0bd;
+}
+
+.vapornet-about-card.is-dota .vapornet-about-mini-stats,
+.vapornet-about-card.is-eva .vapornet-about-mini-stats {
+  margin-top: auto;
+}
+
+.vapornet-about-card.is-dota .vapornet-about-mini-stats dt,
+.vapornet-about-card.is-eva .vapornet-about-mini-stats dt {
+  font-size: 8.5px;
+}
+
+.vapornet-about-card.is-dota .vapornet-about-mini-stats dd,
+.vapornet-about-card.is-eva .vapornet-about-mini-stats dd {
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.vapornet-about-card.is-eva {
+  position: relative;
+  min-height: 322px;
+  grid-template-columns: minmax(146px, 0.78fr) minmax(0, 1.22fr);
+  grid-template-rows: 31px minmax(0, 1fr);
+  border-color: #a67aff #341164 #341164 #a67aff;
+  background:
+    linear-gradient(120deg, rgba(104, 33, 164, 0.25), transparent 60%),
+    #100523;
+}
+
+.vapornet-eva-monitor {
+  position: relative;
+  display: grid;
+  min-height: 100%;
+  place-items: center;
+  overflow: hidden;
+  border-right: 1px solid #753bb4;
+  background:
+    radial-gradient(circle at center, rgba(180, 255, 0, 0.13), transparent 44%),
+    linear-gradient(145deg, rgba(110, 39, 147, 0.52), transparent 62%),
+    #090217;
+  isolation: isolate;
+}
+
+.vapornet-eva-monitor::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(166, 122, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(166, 122, 255, 0.12) 1px, transparent 1px);
+  background-size: 18px 18px;
+  content: '';
+  transform: perspective(130px) rotateX(8deg) scale(1.2);
+}
+
+.vapornet-eva-hazard {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 4;
+  padding: 5px 0;
+  color: #090217;
+  background: repeating-linear-gradient(
+    135deg,
+    #c9ff3a 0,
+    #c9ff3a 10px,
+    #191225 11px,
+    #191225 20px
+  );
+  font-family: 'Courier New', monospace;
+  font-size: 7px;
+  font-weight: bold;
+  letter-spacing: 0.18em;
+  text-align: center;
+}
+
+.vapornet-eva-at-field {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  width: 126px;
+  height: 126px;
+  transform: translate(-50%, -55%);
+}
+
+.vapornet-eva-at-field > svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 5px rgba(255, 157, 0, 0.72));
+  animation: vapornet-at-field-pulse 3.2s ease-in-out infinite;
+}
+
+.vapornet-eva-at-field polygon {
+  fill: rgba(255, 157, 0, 0.035);
+  stroke: #ff9d00;
+  stroke-width: 1.5;
+}
+
+.vapornet-eva-at-field path {
+  fill: none;
+  stroke: rgba(255, 178, 47, 0.72);
+  stroke-width: 1;
+}
+
+.vapornet-eva-at-field > span {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  color: #ffb22f;
+  font-family: 'Courier New', monospace;
+  font-size: 8px;
+  font-weight: bold;
+  letter-spacing: 0.18em;
+  text-shadow: 0 0 6px #ff7b00;
+  transform: translateX(-50%);
+}
+
+.vapornet-eva-core {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  width: 68px;
+  height: 68px;
+  margin-top: -7px;
+  place-items: center;
+  border: 2px solid #b4ff00;
+  border-right-color: #a67aff;
+  border-radius: 50%;
+  background: rgba(9, 2, 23, 0.82);
+  box-shadow: 0 0 16px rgba(180, 255, 0, 0.35), inset 0 0 14px #16052f;
+}
+
+.vapornet-eva-core::before,
+.vapornet-eva-core::after {
+  position: absolute;
+  background: #b4ff00;
+  content: '';
+  opacity: 0.62;
+}
+
+.vapornet-eva-core::before {
+  width: 84px;
+  height: 1px;
+}
+
+.vapornet-eva-core::after {
+  width: 1px;
+  height: 84px;
+}
+
+.vapornet-eva-core span {
+  color: #b4ff00;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 38px;
+  font-style: italic;
+  text-shadow: 4px 3px #6e2793, 0 0 10px rgba(180, 255, 0, 0.65);
+}
+
+.vapornet-eva-core i {
+  position: absolute;
+  inset: 8px;
+  border: 1px dashed rgba(166, 122, 255, 0.85);
+  border-radius: 50%;
+  transform: rotate(22deg);
+}
+
+.vapornet-eva-waveform {
+  position: absolute;
+  right: 10px;
+  bottom: 46px;
+  left: 10px;
+  z-index: 3;
+  display: flex;
+  height: 19px;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.vapornet-eva-waveform i {
+  width: 3px;
+  height: 8px;
+  background: #b4ff00;
+  box-shadow: 0 0 6px rgba(180, 255, 0, 0.72);
+  transform: skew(-14deg);
+}
+
+.vapornet-eva-waveform i:nth-child(2),
+.vapornet-eva-waveform i:nth-child(4) {
+  height: 17px;
+}
+
+.vapornet-eva-waveform i:nth-child(3) {
+  height: 12px;
+}
+
+.vapornet-eva-readout {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  left: 8px;
+  z-index: 3;
+  display: grid;
+  gap: 3px;
+  padding-top: 5px;
+  border-top: 1px solid #b4ff00;
+  font-family: 'Courier New', monospace;
+}
+
+.vapornet-eva-readout span {
+  color: #b4ff00;
+  font-size: 8px;
+}
+
+.vapornet-eva-readout small {
+  color: #ffb22f;
+  font-size: 8px;
+  font-weight: bold;
+}
+
+.vapornet-about-card.is-eva .vapornet-about-card-copy > span,
+.vapornet-about-card.is-eva h2 {
+  color: #b4ff00;
+}
+
+.vapornet-about-card.is-eva .vapornet-about-card-copy > strong {
+  color: #ff9d00;
+}
+
+.vapornet-about-card.is-eva .vapornet-about-mini-stats dd {
+  color: #c9ff3a;
+}
+
+.vapornet-cat-network {
+  max-width: 920px;
+  margin: 0 auto 16px;
+  padding: 16px;
+  border: 4px ridge #ff9cdd;
+  background:
+    linear-gradient(135deg, rgba(255, 156, 221, 0.12), transparent 58%),
+    rgba(5, 4, 38, 0.96);
+  box-shadow: inset 0 0 25px rgba(255, 156, 221, 0.09);
+}
+
+.vapornet-cat-network-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.vapornet-cat-network-heading h2 {
+  margin: 4px 0 0;
+}
+
+.vapornet-cat-network-heading > strong {
+  color: #39ff14;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  text-align: right;
+}
+
+.vapornet-cat-network > p {
+  max-width: 700px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.vapornet-cat-grid {
+  display: grid;
+  margin: 14px 0;
+  padding: 0;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  list-style: none;
+}
+
+.vapornet-cat-grid li {
+  min-width: 0;
+  overflow: hidden;
+  padding: 4px;
+  border: 2px outset #d5a9ff;
+  color: #ff9cdd;
+  background: #090820;
+  font-family: 'Courier New', monospace;
+}
+
+.vapornet-cat-feed {
+  position: relative;
+  aspect-ratio: 1 / 1.08;
+  overflow: hidden;
+  border: 1px solid #464586;
+  background: #050519;
+  isolation: isolate;
+}
+
+.vapornet-cat-feed::after {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 58%, rgba(5, 4, 38, 0.72) 100%),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 3px,
+      rgba(255, 156, 221, 0.1) 4px
+    );
+  content: '';
+  pointer-events: none;
+  z-index: 1;
+}
+
+.vapornet-cat-feed img {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.92) contrast(1.06);
+}
+
+.vapornet-cat-grid li:nth-child(1) img,
+.vapornet-cat-grid li:nth-child(5) img {
+  object-position: 50% 34%;
+}
+
+.vapornet-cat-grid li:nth-child(3) img {
+  object-position: 50% 48%;
+}
+
+.vapornet-cat-grid li:nth-child(4) img {
+  object-position: 50% 61%;
+}
+
+.vapornet-cat-feed span {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 2;
+  padding: 2px 4px;
+  color: #7df9ff;
+  background: rgba(5, 4, 38, 0.78);
+  font-size: 7px;
+  letter-spacing: 0.05em;
+}
+
+.vapornet-cat-identity {
+  display: grid;
+  min-height: 38px;
+  align-content: center;
+  gap: 2px;
+  padding: 5px 4px 3px;
+}
+
+.vapornet-cat-identity strong {
+  overflow: hidden;
+  color: #fff;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vapornet-cat-identity small {
+  color: #39ff14;
+  font-size: 6px;
+  line-height: 1.25;
+}
+
+.vapornet-cat-stats {
+  display: grid;
+  margin: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.vapornet-cat-stats > div {
+  min-width: 0;
+  padding: 7px 8px;
+  border: 1px solid #4d5ea8;
+  background: rgba(0, 0, 25, 0.55);
+}
+
+.vapornet-cat-stats dd {
+  color: #7df9ff;
+}
+
+.vapornet-about-telemetry {
+  max-width: 920px;
+  margin: 0 auto;
+  border: 2px outset #a9a9ff;
+  background: rgba(0, 0, 35, 0.94);
+}
+
+.vapornet-about-telemetry-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px dotted #4d5ea8;
+}
+
+.vapornet-about-telemetry-heading > span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #39ff14;
+  box-shadow: 0 0 7px #39ff14;
+}
+
+.vapornet-about-telemetry-heading h2 {
+  margin: 0;
+  font-size: 13px;
+}
+
+.vapornet-about-telemetry-heading small {
+  margin-left: auto;
+  color: #7df9ff;
+  font-family: 'Courier New', monospace;
+  font-size: 8px;
+}
+
+.vapornet-about-telemetry > dl {
+  display: grid;
+  margin: 0;
+  padding: 8px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.vapornet-about-telemetry > dl > div {
+  min-width: 0;
+  padding: 7px;
+  border: 1px solid #343c79;
+  background: rgba(8, 5, 42, 0.88);
+}
+
+.vapornet-about-telemetry dd {
+  color: #fff200;
+}
+
+.vapornet-about-closing {
+  max-width: 920px;
+  margin: 18px auto 0;
+  padding-top: 13px;
+  border-top: 1px dashed #2de2e6;
+  color: #7df9ff;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+}
+
+.vapornet-about-closing > strong {
+  color: #ff9cdd;
+  font-size: 11px;
+}
+
+.vapornet-about-closing > p {
+  margin: 6px 0 0;
+  font-size: 10px;
+}
+
 .vapornet-guestbook-page .guestbook-content {
   max-width: 920px;
   margin: 0 auto;
@@ -1058,6 +2100,7 @@
 .vapornet-track-artwork {
   position: relative;
   min-width: 0;
+  align-self: start;
 }
 
 .vapornet-track-artwork img {
@@ -1285,6 +2328,31 @@
   }
 }
 
+@keyframes vapornet-about-signal {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes vapornet-at-field-pulse {
+  50% {
+    opacity: 0.5;
+    transform: scale(1.05);
+  }
+}
+
+@container (max-width: 760px) {
+  .vapornet-about-card.is-machine,
+  .vapornet-about-card.is-racing,
+  .vapornet-about-card.is-dota,
+  .vapornet-about-card.is-eva {
+    grid-column: 1 / -1;
+  }
+}
+
 @container (max-width: 590px) {
   .ie-toolbar .ie-toolbar-button {
     min-width: 38px;
@@ -1322,6 +2390,58 @@
   .vapornet-curated-links,
   .vapornet-manifesto ul {
     grid-template-columns: 1fr;
+  }
+
+  .vapornet-about-operator {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-about-portrait {
+    min-height: 250px;
+    border-right: 0;
+    border-bottom: 2px solid #2de2e6;
+  }
+
+  .vapornet-about-card.is-machine,
+  .vapornet-about-card.is-racing,
+  .vapornet-about-card.is-dota,
+  .vapornet-about-card.is-eva {
+    grid-column: 1 / -1;
+  }
+
+  .vapornet-cat-network-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .vapornet-cat-network-heading > strong {
+    text-align: left;
+  }
+
+  .vapornet-cat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vapornet-cat-grid li:last-child:nth-child(odd) {
+    box-sizing: border-box;
+    width: calc(50% - 4px);
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+
+  .vapornet-cat-stats,
+  .vapornet-about-telemetry > dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vapornet-about-telemetry-heading {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .vapornet-about-telemetry-heading small {
+    width: 100%;
+    margin-left: 15px;
   }
 
   .vapornet-station-tracks {
@@ -1414,10 +2534,46 @@
   .vapornet-record-count {
     white-space: normal;
   }
+
+  .vapornet-about-card {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-about-card.is-racing,
+  .vapornet-about-card.is-dota,
+  .vapornet-about-card.is-eva {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-about-card-status > strong {
+    display: none;
+  }
+
+  .vapornet-r3-photo,
+  .vapornet-rider-photo,
+  .vapornet-dota-client,
+  .vapornet-eva-monitor {
+    min-height: 240px;
+    border-right: 0;
+    border-bottom: 1px solid currentColor;
+  }
+
+  .vapornet-dota-client,
+  .vapornet-eva-monitor {
+    min-height: 200px;
+  }
+
+  .vapornet-about-intro > dl,
+  .vapornet-cat-stats,
+  .vapornet-about-telemetry > dl {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .vapornet-marquee span,
+  .vapornet-about-ticker span,
+  .vapornet-eva-at-field > svg,
   .vapornet-new-badge,
   .vapornet-under-construction {
     animation: none;
