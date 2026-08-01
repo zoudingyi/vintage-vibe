@@ -104,7 +104,7 @@ test('navigates by address and supports back, forward, home, and refresh', () =>
   fireEvent.change(address, { target: { value: 'projects' } });
   fireEvent.submit(address.closest('form'));
   expect(
-    screen.getByRole('heading', { name: /project archive/i })
+    screen.getByRole('heading', { name: /frontend systems engineer/i })
   ).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole('button', { name: /^back/i }));
@@ -114,7 +114,7 @@ test('navigates by address and supports back, forward, home, and refresh', () =>
 
   fireEvent.click(screen.getByRole('button', { name: /^forward/i }));
   expect(
-    screen.getByRole('heading', { name: /project archive/i })
+    screen.getByRole('heading', { name: /frontend systems engineer/i })
   ).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole('button', { name: /^refresh/i }));
@@ -122,6 +122,60 @@ test('navigates by address and supports back, forward, home, and refresh', () =>
 
   fireEvent.click(screen.getByRole('button', { name: /^home/i }));
   expect(address).toHaveValue('vintage://home');
+});
+
+test('presents the projects page as a technical career archive', () => {
+  renderBrowser();
+  const address = screen.getByLabelText(/address/i);
+
+  fireEvent.change(address, { target: { value: 'projects' } });
+  fireEvent.submit(address.closest('form'));
+
+  expect(
+    screen.getByRole('heading', { name: /frontend systems engineer/i })
+  ).toBeInTheDocument();
+
+  const technicalStack = screen.getByRole('region', {
+    name: /technical stack/i
+  });
+  ['React', 'Vue 2 / 3', 'TypeScript', 'Next.js / SSR', 'Vite / Webpack'].forEach(
+    technology => {
+      expect(within(technicalStack).getByText(technology)).toBeInTheDocument();
+    }
+  );
+
+  const workHistory = screen.getByRole('region', { name: /work history/i });
+  expect(within(workHistory).getAllByRole('article')).toHaveLength(3);
+  [
+    '成都直新科技有限公司',
+    '成都区融未来网络科技有限公司',
+    '四川萃菁池科技有限公司'
+  ].forEach(company => {
+    expect(within(workHistory).getByText(company)).toBeInTheDocument();
+  });
+
+  const projectArchive = screen.getByRole('region', {
+    name: /selected project files/i
+  });
+  expect(within(projectArchive).getAllByRole('article')).toHaveLength(5);
+  expect(
+    within(projectArchive).getByRole('heading', { name: /直新小助/i })
+  ).toBeInTheDocument();
+  expect(within(projectArchive).getAllByText(/oauth2/i)).toHaveLength(2);
+});
+
+test('highlights a project opened from a VaporNet search result', () => {
+  renderBrowser();
+  const address = screen.getByLabelText(/address/i);
+
+  fireEvent.change(address, {
+    target: { value: 'vintage://projects?project=zhixin-assistant' }
+  });
+  fireEvent.submit(address.closest('form'));
+
+  expect(
+    screen.getByRole('article', { name: /直新小助/i })
+  ).toHaveClass('is-selected');
 });
 
 test('searches built-in pages and project data', () => {

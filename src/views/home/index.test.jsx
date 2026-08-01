@@ -512,7 +512,9 @@ test('opens a project detail with external links', () => {
   openStartMenuItem(/projects/i);
   fireEvent.click(screen.getByRole('button', { name: /vintage vibe/i }));
 
-  expect(screen.getByText(/react95 desktop portfolio/i)).toBeInTheDocument();
+  expect(
+    screen.getByText(/一个可交互的复古桌面作品集/)
+  ).toBeInTheDocument();
   expect(screen.getByRole('link', { name: /project github/i })).toHaveAttribute(
     'href',
     'https://github.com/zoudingyi/vintage-vibe'

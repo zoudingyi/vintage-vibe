@@ -25,22 +25,28 @@ export default function ProjectsApp() {
         <p>{selectedProject.summary}</p>
         <p>Status: {selectedProject.status}</p>
         <p>Stack: {selectedProject.stack}</p>
-        <div className="projects-links">
-          <Anchor
-            href={selectedProject.github}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Project GitHub
-          </Anchor>
-          <Anchor
-            href={selectedProject.demo}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Live Demo
-          </Anchor>
-        </div>
+        {(selectedProject.github || selectedProject.demo) && (
+          <div className="projects-links">
+            {selectedProject.github && (
+              <Anchor
+                href={selectedProject.github}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Project GitHub
+              </Anchor>
+            )}
+            {selectedProject.demo && (
+              <Anchor
+                href={selectedProject.demo}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Documentation
+              </Anchor>
+            )}
+          </div>
+        )}
       </Fieldset>
     </div>
   );
