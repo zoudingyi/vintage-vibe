@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Button,
-  Fieldset,
+  GroupBox,
   Monitor,
   Tab,
   TabBody,
@@ -123,7 +123,7 @@ function AppearanceSettings({ desktopSettings, onDesktopSettingsChange }) {
 
   return (
     <>
-      <Fieldset label="Preview">
+      <GroupBox label="Preview">
         <div className="settings-monitor-stage">
           <Monitor
             aria-label="Appearance preview"
@@ -165,8 +165,8 @@ function AppearanceSettings({ desktopSettings, onDesktopSettingsChange }) {
             </div>
           </Monitor>
         </div>
-      </Fieldset>
-      <Fieldset label="Wallpaper">
+      </GroupBox>
+      <GroupBox label="Wallpaper">
         <div className="settings-wallpaper-grid">
           {wallpaperOptions.map(option => (
             <WallpaperChoice
@@ -179,8 +179,8 @@ function AppearanceSettings({ desktopSettings, onDesktopSettingsChange }) {
             />
           ))}
         </div>
-      </Fieldset>
-      <Fieldset label="System Theme">
+      </GroupBox>
+      <GroupBox label="System Theme">
         <div className="settings-theme-grid">
           {desktopThemeOptions.map(option => (
             <ThemeChoice
@@ -193,8 +193,8 @@ function AppearanceSettings({ desktopSettings, onDesktopSettingsChange }) {
             />
           ))}
         </div>
-      </Fieldset>
-      <Fieldset label="Visual Effects">
+      </GroupBox>
+      <GroupBox label="Visual Effects">
         <SettingsCheckbox
           checked={desktopSettings.scanlines}
           onChange={event =>
@@ -217,7 +217,7 @@ function AppearanceSettings({ desktopSettings, onDesktopSettingsChange }) {
             </ChoiceButton>
           ))}
         </div>
-      </Fieldset>
+      </GroupBox>
     </>
   );
 }
@@ -225,7 +225,7 @@ function AppearanceSettings({ desktopSettings, onDesktopSettingsChange }) {
 function DesktopSettings({ desktopSettings, onDesktopSettingsChange }) {
   return (
     <>
-      <Fieldset label="Icon Layout">
+      <GroupBox label="Icon Layout">
         <div className="settings-choice-row">
           {['column', 'grid'].map(layout => (
             <ChoiceButton
@@ -237,8 +237,8 @@ function DesktopSettings({ desktopSettings, onDesktopSettingsChange }) {
             </ChoiceButton>
           ))}
         </div>
-      </Fieldset>
-      <Fieldset label="Icon Size">
+      </GroupBox>
+      <GroupBox label="Icon Size">
         <div className="settings-choice-row">
           {['small', 'medium', 'large'].map(size => (
             <ChoiceButton
@@ -250,8 +250,8 @@ function DesktopSettings({ desktopSettings, onDesktopSettingsChange }) {
             </ChoiceButton>
           ))}
         </div>
-      </Fieldset>
-      <Fieldset label="Selection Glow">
+      </GroupBox>
+      <GroupBox label="Selection Glow">
         <div className="settings-choice-row">
           {[
             ['soft', 'Soft Dual Bloom'],
@@ -269,7 +269,7 @@ function DesktopSettings({ desktopSettings, onDesktopSettingsChange }) {
             </ChoiceButton>
           ))}
         </div>
-      </Fieldset>
+      </GroupBox>
       <p className="settings-help-text">
         Icons follow the selected layout. Free-position dragging is not enabled.
       </p>
@@ -280,7 +280,7 @@ function DesktopSettings({ desktopSettings, onDesktopSettingsChange }) {
 function TaskbarSettings({ desktopSettings, onDesktopSettingsChange }) {
   return (
     <>
-      <Fieldset label="Clock Format">
+      <GroupBox label="Clock Format">
         <div className="settings-choice-row">
           {[
             ['12h', '12-hour'],
@@ -303,8 +303,8 @@ function TaskbarSettings({ desktopSettings, onDesktopSettingsChange }) {
         >
           Show Seconds
         </SettingsCheckbox>
-      </Fieldset>
-      <Fieldset label="Task Buttons">
+      </GroupBox>
+      <GroupBox label="Task Buttons">
         <div className="settings-choice-row">
           {[
             ['label', 'Icon and Label'],
@@ -321,7 +321,7 @@ function TaskbarSettings({ desktopSettings, onDesktopSettingsChange }) {
             </ChoiceButton>
           ))}
         </div>
-      </Fieldset>
+      </GroupBox>
     </>
   );
 }
@@ -345,7 +345,7 @@ function AudioSettings({
 
   return (
     <>
-      <Fieldset label="Global Audio">
+      <GroupBox label="Global Audio">
         <SettingsCheckbox
           checked={desktopSettings.soundEnabled}
           onChange={event =>
@@ -384,8 +384,8 @@ function AudioSettings({
           </Button>
           {audioNotice && <span role="status">{audioNotice}</span>}
         </div>
-      </Fieldset>
-      <Fieldset label="Radio Appearance">
+      </GroupBox>
+      <GroupBox label="Radio Appearance">
         <div className="settings-radio-appearance-grid">
           {radioAppearanceOptions.map(option => (
             <RadioAppearanceChoice
@@ -398,7 +398,7 @@ function AudioSettings({
             />
           ))}
         </div>
-      </Fieldset>
+      </GroupBox>
     </>
   );
 }
@@ -413,7 +413,7 @@ function SystemSettings({
 }) {
   return (
     <>
-      <Fieldset label="Startup">
+      <GroupBox label="Startup">
         <SettingsCheckbox
           checked={desktopSettings.restoreSession}
           onChange={event =>
@@ -432,8 +432,8 @@ function SystemSettings({
         >
           Show Boot Log
         </SettingsCheckbox>
-      </Fieldset>
-      <Fieldset label="Local Data">
+      </GroupBox>
+      <GroupBox label="Local Data">
         <p className="settings-help-text">
           Settings are saved in this browser. Open windows: {windowCount}.
           Guestbook entries are stored separately.
@@ -443,7 +443,7 @@ function SystemSettings({
           <Button onClick={onResetDesktopSettings}>Reset All Settings</Button>
           <Button onClick={onClearDesktopSession}>Clear Window Session</Button>
         </div>
-      </Fieldset>
+      </GroupBox>
     </>
   );
 }

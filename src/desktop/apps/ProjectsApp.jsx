@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Anchor, Button, Fieldset, Panel } from 'react95';
+import { Anchor, Button, Frame, GroupBox } from 'react95';
 import { projects } from './data';
 
 export default function ProjectsApp() {
@@ -8,7 +8,7 @@ export default function ProjectsApp() {
 
   return (
     <div className="projects-app">
-      <Panel variant="well" className="projects-sidebar">
+      <Frame variant="status" className="projects-sidebar">
         <strong>Projects Explorer</strong>
         {projects.map(project => (
           <Button
@@ -20,8 +20,8 @@ export default function ProjectsApp() {
             {project.name}
           </Button>
         ))}
-      </Panel>
-      <Fieldset label={selectedProject.name} className="projects-detail">
+      </Frame>
+      <GroupBox label={selectedProject.name} className="projects-detail">
         <p>{selectedProject.summary}</p>
         <p>Status: {selectedProject.status}</p>
         <p>Stack: {selectedProject.stack}</p>
@@ -47,7 +47,7 @@ export default function ProjectsApp() {
             )}
           </div>
         )}
-      </Fieldset>
+      </GroupBox>
     </div>
   );
 }

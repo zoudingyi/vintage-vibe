@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Fieldset, Window, WindowContent, WindowHeader } from 'react95';
+import { GroupBox, Window, WindowContent, WindowHeader } from 'react95';
 import './index.css';
 
 function About() {
@@ -15,10 +15,10 @@ function About() {
             Vintage Vibe is a playable retro portfolio built around clear
             React architecture, accessible controls, and system-like details.
           </p>
-          <Fieldset label="Contact">
+          <GroupBox label="Contact">
             <p>Email: 18483641399@163.com</p>
             <p>GitHub: zoudingyi</p>
-          </Fieldset>
+          </GroupBox>
           <Link className="about-desktop-link" to="/home">
             Open Desktop
           </Link>

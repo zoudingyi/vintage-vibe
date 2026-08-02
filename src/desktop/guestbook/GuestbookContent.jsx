@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Panel } from 'react95';
+import { Button, Frame } from 'react95';
 import useGuestbook from './useGuestbook';
 import {
   GUESTBOOK_MESSAGE_LIMIT,
@@ -244,7 +244,7 @@ export default function GuestbookContent({
           </section>
 
           <div className="guestbook-context-grid">
-            <Panel className="guestbook-webmaster-note" variant="well">
+            <Frame className="guestbook-webmaster-note" variant="status">
               <div className="guestbook-letter-meta">
                 <span>FROM THE WEBMASTER</span>
                 <span>TO: VAPORNET VISITORS</span>
@@ -258,7 +258,7 @@ export default function GuestbookContent({
                 欢迎来到这里。愿每一次短暂访问，都能留下一点真实的痕迹。
               </p>
               <strong>— WEBMASTER</strong>
-            </Panel>
+            </Frame>
 
             <section
               aria-labelledby={previewHeadingId}
@@ -288,7 +288,7 @@ export default function GuestbookContent({
       <div
         className={`guestbook-terminal-grid${isPage ? ' is-page' : ''}`}
       >
-        <Panel className="guestbook-form-panel" variant="well">
+        <Frame className="guestbook-form-panel" variant="status">
           <div className="guestbook-panel-heading">
             <span aria-hidden="true">01</span>
             <div>
@@ -362,7 +362,7 @@ export default function GuestbookContent({
               </Button>
             </div>
           </form>
-        </Panel>
+        </Frame>
 
         <section
           aria-labelledby="guestbook-transmissions-heading"

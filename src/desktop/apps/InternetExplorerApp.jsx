@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Panel, ScrollView } from 'react95';
+import { Button, Frame, ScrollView } from 'react95';
 import { useTheme } from 'styled-components';
 import browserIcon from '@/assets/icons/internet_explorer.png';
 import searchIcon from '@/assets/icons/search.png';
@@ -220,7 +220,7 @@ export default function InternetExplorerApp({ onOpenApp = () => {} }) {
             <u>F</u>ile
           </MenuButton>
           {activeMenu === 'file' && (
-            <Panel className="ie-menu-popup" role="menu">
+            <Frame className="ie-menu-popup" role="menu">
               <button
                 onClick={() => {
                   addressRef.current?.focus();
@@ -235,7 +235,7 @@ export default function InternetExplorerApp({ onOpenApp = () => {} }) {
               <button disabled role="menuitem" type="button">
                 New Window
               </button>
-            </Panel>
+            </Frame>
           )}
         </div>
 
@@ -248,7 +248,7 @@ export default function InternetExplorerApp({ onOpenApp = () => {} }) {
             <u>E</u>dit
           </MenuButton>
           {activeMenu === 'edit' && (
-            <Panel className="ie-menu-popup" role="menu">
+            <Frame className="ie-menu-popup" role="menu">
               <button onClick={copyAddress} role="menuitem" type="button">
                 Copy Address
               </button>
@@ -263,7 +263,7 @@ export default function InternetExplorerApp({ onOpenApp = () => {} }) {
               >
                 Select Address
               </button>
-            </Panel>
+            </Frame>
           )}
         </div>
 
@@ -276,7 +276,7 @@ export default function InternetExplorerApp({ onOpenApp = () => {} }) {
             <u>V</u>iew
           </MenuButton>
           {activeMenu === 'view' && (
-            <Panel className="ie-menu-popup" role="menu">
+            <Frame className="ie-menu-popup" role="menu">
               <button onClick={refreshPage} role="menuitem" type="button">
                 Refresh <span>F5</span>
               </button>
@@ -287,7 +287,7 @@ export default function InternetExplorerApp({ onOpenApp = () => {} }) {
               >
                 Home
               </button>
-            </Panel>
+            </Frame>
           )}
         </div>
 
@@ -300,7 +300,7 @@ export default function InternetExplorerApp({ onOpenApp = () => {} }) {
             F<u>a</u>vorites
           </MenuButton>
           {activeMenu === 'favorites' && (
-            <Panel className="ie-menu-popup ie-favorites-popup" role="menu">
+            <Frame className="ie-menu-popup ie-favorites-popup" role="menu">
               <button
                 onClick={addCurrentFavorite}
                 role="menuitem"
@@ -340,7 +340,7 @@ export default function InternetExplorerApp({ onOpenApp = () => {} }) {
                   )}
                 </div>
               ))}
-            </Panel>
+            </Frame>
           )}
         </div>
 
@@ -353,7 +353,7 @@ export default function InternetExplorerApp({ onOpenApp = () => {} }) {
             <u>H</u>elp
           </MenuButton>
           {activeMenu === 'help' && (
-            <Panel className="ie-menu-popup" role="menu">
+            <Frame className="ie-menu-popup" role="menu">
               <button
                 onClick={() => navigate('vintage://help')}
                 role="menuitem"
@@ -368,7 +368,7 @@ export default function InternetExplorerApp({ onOpenApp = () => {} }) {
               >
                 About VaporNet Explorer
               </button>
-            </Panel>
+            </Frame>
           )}
         </div>
       </nav>

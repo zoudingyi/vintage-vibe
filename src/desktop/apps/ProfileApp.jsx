@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Fieldset, Tab, TabBody, Tabs } from 'react95';
+import { GroupBox, Tab, TabBody, Tabs } from 'react95';
 
 const profileTabs = {
   overview: {
@@ -51,7 +51,7 @@ export default function ProfileApp() {
         ))}
       </Tabs>
       <TabBody>
-        <Fieldset label={selectedTab.title}>{selectedTab.content}</Fieldset>
+        <GroupBox label={selectedTab.title}>{selectedTab.content}</GroupBox>
       </TabBody>
     </div>
   );

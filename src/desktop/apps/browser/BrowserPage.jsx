@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Fieldset, Panel } from 'react95';
+import { Anchor, Button, Frame, GroupBox } from 'react95';
 import catCookie from '../../../assets/images/about/cat-cookie.jpg';
 import catHana from '../../../assets/images/about/cat-hana.jpg';
 import catTaotao from '../../../assets/images/about/cat-taotao.jpg';
@@ -503,13 +503,13 @@ function FavoritesPage() {
         </p>
       </PageHeader>
 
-      <Panel className="vapornet-record-notice" variant="well">
+      <Frame className="vapornet-record-notice" variant="status">
         <strong>PROFILE: COASTAL LIGHT // CITY NIGHTS</strong>
         <span>
           Female vocals, precise arrangements, deep album cuts, and alternate
           interpretations connect the records and songs collected here.
         </span>
-      </Panel>
+      </Frame>
 
       <section
         aria-labelledby="core-albums-heading"
@@ -839,9 +839,9 @@ function RadioPage({ onOpenApp }) {
         ))}
       </div>
 
-      <Panel
+      <Frame
         className="vapornet-launch-panel vapornet-radio-launch-panel"
-        variant="well"
+        variant="status"
       >
         <div>
           <strong>LIVE PLAYER // DESKTOP APPLICATION</strong>
@@ -850,7 +850,7 @@ function RadioPage({ onOpenApp }) {
         <Button onClick={() => onOpenApp('vaporwave-radio')}>
           Launch Vaporwave Radio
         </Button>
-      </Panel>
+      </Frame>
 
       <section
         aria-labelledby="station-directory-heading"
@@ -976,7 +976,7 @@ function LinksPage({ onNavigate }) {
           </article>
         ))}
       </div>
-      <Panel className="vapornet-personal-links" variant="well">
+      <Frame className="vapornet-personal-links" variant="status">
         <strong>PERSONAL TERMINALS</strong>
         <PageLink
           address="https://github.com/zoudingyi"
@@ -990,7 +990,7 @@ function LinksPage({ onNavigate }) {
         >
           Electronic Mail Terminal
         </PageLink>
-      </Panel>
+      </Frame>
       <p className="vapornet-curated-stamp">CURATED BY HAND</p>
     </article>
   );
@@ -1058,18 +1058,18 @@ function HelpPage() {
       <PageHeader eyebrow="INTERNET EXPLORER HELP" title="VAPORNET HELP">
         <p>This program browses a safe, simulated local internet.</p>
       </PageHeader>
-      <Fieldset label="Supported addresses">
+      <GroupBox label="Supported addresses">
         <p>
           Use <code>vintage://home</code> or enter a page name such as{' '}
           <code>projects</code>.
         </p>
         <p>HTTPS and email links are handed to the system browser.</p>
-      </Fieldset>
-      <Fieldset label="Keyboard shortcuts">
+      </GroupBox>
+      <GroupBox label="Keyboard shortcuts">
         <p>Ctrl+L — focus the address bar</p>
         <p>Alt+Left / Alt+Right — move through history</p>
         <p>F5 — refresh the current page</p>
-      </Fieldset>
+      </GroupBox>
     </article>
   );
 }
@@ -1080,12 +1080,12 @@ function ExternalPage({ address }) {
       <PageHeader eyebrow="INTERNET ZONE" title="EXTERNAL LINK">
         <p>VaporNet does not embed arbitrary external websites.</p>
       </PageHeader>
-      <Panel variant="well">
+      <Frame variant="status">
         <p className="vapornet-external-address">{address}</p>
-        <a href={address} rel="noopener noreferrer" target="_blank">
+        <Anchor href={address} rel="noopener noreferrer" target="_blank">
           Open in a new browser tab
-        </a>
-      </Panel>
+        </Anchor>
+      </Frame>
     </article>
   );
 }
@@ -1096,13 +1096,13 @@ function NotFoundPage({ address, onNavigate }) {
       <PageHeader eyebrow="DNS ERROR" title="404 — PAGE NOT FOUND">
         <p>The local server could not locate this VaporNet address.</p>
       </PageHeader>
-      <Panel variant="well">
+      <Frame variant="status">
         <code>{address}</code>
         <p>Check the address or return to the home gateway.</p>
         <Button onClick={() => onNavigate('vintage://home')}>
           Return Home
         </Button>
-      </Panel>
+      </Frame>
     </article>
   );
 }

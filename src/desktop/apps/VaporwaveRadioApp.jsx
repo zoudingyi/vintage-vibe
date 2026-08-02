@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Panel } from 'react95';
+import { Button, Frame } from 'react95';
 import {
   createRadioVisualizer,
   EMPTY_RADIO_VISUALIZATION
@@ -136,7 +136,7 @@ function CassetteDeckRadio({
         <span className="radio-a-frequency">FM {station.frequency}</span>
       </header>
 
-      <Panel className="radio-a-cassette-bay" variant="well">
+      <Frame className="radio-a-cassette-bay" variant="status">
         <div className="radio-a-cassette">
           <div
             aria-label="Now playing"
@@ -162,7 +162,7 @@ function CassetteDeckRadio({
             <i />
           </div>
         </div>
-      </Panel>
+      </Frame>
 
       <div className="radio-a-readout">
         <span>{playing ? 'PLAY' : 'STANDBY'}</span>
@@ -298,7 +298,7 @@ function BroadcastTerminalRadio({
       </header>
 
       <div className="radio-c-layout">
-        <Panel className="radio-c-directory" variant="well">
+        <Frame className="radio-c-directory" variant="status">
           <span className="radio-kicker">CHANNEL DIRECTORY</span>
           <StationButtons
             activeStationId={station.id}
@@ -310,7 +310,7 @@ function BroadcastTerminalRadio({
             <div><dt>FORMAT</dt><dd>VAPOR / FM</dd></div>
             <div><dt>BITRATE</dt><dd>320 DREAMS</dd></div>
           </dl>
-        </Panel>
+        </Frame>
 
         <div className="radio-c-console">
           <div
@@ -391,11 +391,11 @@ function BroadcastTerminalRadio({
             playing={playing}
           />
 
-          <Panel className="radio-c-log" variant="well">
+          <Frame className="radio-c-log" variant="status">
             <span>22:41:08  CONNECT {station.frequency}</span>
             <span>22:41:09  SIGNAL LOCKED</span>
             <span>22:41:10  {playing ? 'STREAM ACTIVE' : 'STREAM PAUSED'}</span>
-          </Panel>
+          </Frame>
         </div>
       </div>
 
