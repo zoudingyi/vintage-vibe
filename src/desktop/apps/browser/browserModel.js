@@ -27,9 +27,10 @@ export const browserPages = {
   },
   help: {
     address: 'vintage://help',
-    description: 'Learn how to navigate VaporNet safely.',
-    keywords: 'help browser address security shortcuts',
-    title: 'VaporNet Help'
+    description: 'Vintage Vibe 桌面、应用和 VaporNet 使用指南。',
+    keywords:
+      'help guide quick start desktop apps browser address security privacy shortcuts troubleshooting 帮助 指南 快速开始 桌面 应用 浏览器 地址 安全 隐私 快捷键 故障排查',
+    title: 'VaporNet Help / 使用帮助'
   },
   home: {
     address: HOME_ADDRESS,

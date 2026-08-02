@@ -129,6 +129,75 @@ test('navigates by address and supports back, forward, home, and refresh', () =>
   expect(address).toHaveValue('vintage://home');
 });
 
+test('presents help as a visitor guide with working discovery actions', () => {
+  const { onOpenApp } = renderBrowser();
+  const address = screen.getByLabelText(/address/i);
+
+  fireEvent.change(address, { target: { value: 'help' } });
+  fireEvent.submit(address.closest('form'));
+
+  expect(
+    screen.getByRole('heading', { name: /welcome to vintage vibe/i })
+  ).toBeInTheDocument();
+  expect(screen.getByText(/交互式复古桌面作品集/)).toBeInTheDocument();
+
+  [
+    /Quick Start \/ 快速開始/i,
+    /Things to Explore \/ 值得探索/i,
+    /Using VaporNet \/ 使用 VaporNet/i,
+    /Keyboard Shortcuts \/ 鍵盤快速鍵/i,
+    /Local Data & Privacy \/ 本機資料與隱私/i,
+    /Troubleshooting \/ 故障排除/i
+  ].forEach(sectionName => {
+    expect(
+      screen.getByRole('group', { name: sectionName })
+    ).toBeInTheDocument();
+  });
+  const exploration = screen.getByRole('group', {
+    name: /Things to Explore \/ 值得探索/i
+  });
+  expect(within(exploration).getAllByRole('button')).toHaveLength(4);
+  expect(
+    within(exploration).queryByRole('button', { name: /Project Archive/i })
+  ).not.toBeInTheDocument();
+  expect(
+    within(exploration).queryByRole('button', { name: /Profile/i })
+  ).not.toBeInTheDocument();
+  expect(
+    within(exploration).queryByRole('button', { name: /My Videos/i })
+  ).not.toBeInTheDocument();
+  expect(
+    within(exploration).queryByRole('button', { name: /Settings \/ 设置/i })
+  ).not.toBeInTheDocument();
+  expect(screen.getByText(/VaporNet Help System 1999/i)).toBeInTheDocument();
+  expect(screen.getByText(/本機網路連線中/)).toBeInTheDocument();
+  expect(screen.getAllByText('WIN/LINUX')).toHaveLength(11);
+  expect(screen.getAllByText('MAC', { selector: 'small' })).toHaveLength(4);
+  expect(screen.getByText('⌃ Esc')).toBeInTheDocument();
+  expect(screen.getByText('Return / Space')).toBeInTheDocument();
+  expect(screen.queryByText('⌥ Tab')).not.toBeInTheDocument();
+  expect(screen.queryByText('F5 / fn + F5')).not.toBeInTheDocument();
+  expect(screen.getByText(/这里只显示当前可确认有效的 Mac 键位/))
+    .toBeInTheDocument();
+  expect(
+    screen.queryByRole('button', { name: /browse projects/i })
+  ).not.toBeInTheDocument();
+
+  fireEvent.click(
+    within(exploration).getByRole('button', { name: /Favorite Records/i })
+  );
+
+  expect(address).toHaveValue('vintage://favorites');
+  expect(
+    screen.getByRole('heading', { name: /favorite records/i })
+  ).toBeInTheDocument();
+
+  fireEvent.click(screen.getByRole('button', { name: /^back/i }));
+  fireEvent.click(screen.getByRole('button', { name: /open settings/i }));
+
+  expect(onOpenApp).toHaveBeenCalledWith('settings');
+});
+
 test('resets the page scroll position after navigation', () => {
   renderBrowser();
   const address = screen.getByLabelText(/address/i);

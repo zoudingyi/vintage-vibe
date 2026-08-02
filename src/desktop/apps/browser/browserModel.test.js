@@ -55,6 +55,17 @@ test('indexes favorite records and radio selections on their local pages', () =>
   );
 });
 
+test('finds the bilingual help page with a Chinese search term', () => {
+  expect(searchVaporNet('帮助')).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        address: 'vintage://help',
+        title: 'VaporNet Help / 使用帮助'
+      })
+    ])
+  );
+});
+
 test('keeps a browser-style history when navigating from the middle', () => {
   let state = createBrowserState();
 

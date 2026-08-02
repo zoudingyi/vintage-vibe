@@ -2636,6 +2636,182 @@
   margin: 0 0 6px;
 }
 
+.vapornet-help-page .vapornet-page-header {
+  max-width: 920px;
+}
+
+.vapornet-help-layout {
+  display: grid;
+  max-width: 920px;
+  margin: 0 auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.vapornet-page .vapornet-help-section {
+  min-width: 0;
+  margin: 0;
+  color: #effcff;
+  line-height: 1.45;
+}
+
+.vapornet-help-section.is-wide {
+  grid-column: 1 / -1;
+}
+
+.vapornet-help-section ol,
+.vapornet-help-section ul {
+  margin: 4px 0 0;
+  padding-left: 24px;
+}
+
+.vapornet-help-section li + li {
+  margin-top: 8px;
+}
+
+.vapornet-help-section li::marker {
+  color: #2de2e6;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+}
+
+.vapornet-help-steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 28px;
+}
+
+.vapornet-help-steps li + li {
+  margin-top: 0;
+}
+
+.vapornet-help-steps strong,
+.vapornet-help-troubleshooting strong {
+  color: #fff200;
+}
+
+.vapornet-help-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.vapornet-help-destinations {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.vapornet-help-addresses {
+  margin: 14px 0 2px !important;
+  padding: 8px;
+  border: 1px dashed #2de2e6;
+  background: rgba(3, 2, 28, 0.72);
+  overflow-wrap: anywhere;
+}
+
+.vapornet-help-shortcuts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.vapornet-help-shortcuts h2 {
+  margin: 2px 0 8px;
+  font-size: 16px;
+}
+
+.vapornet-help-shortcuts dl {
+  margin: 0;
+}
+
+.vapornet-help-shortcuts dl > div {
+  display: grid;
+  grid-template-columns: minmax(190px, 0.9fr) minmax(0, 1fr);
+  gap: 8px;
+  padding: 5px 0;
+  border-top: 1px solid rgba(125, 249, 255, 0.22);
+}
+
+.vapornet-help-shortcuts dt,
+.vapornet-help-shortcuts dd {
+  min-width: 0;
+  margin: 0;
+}
+
+.vapornet-help-shortcuts kbd {
+  display: inline-block;
+  padding: 1px 4px;
+  border: 1px solid #a9a9ff;
+  color: #7df9ff;
+  background: #03021c;
+  box-shadow: 1px 1px #ff71ce;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+}
+
+.vapornet-help-shortcut-keys {
+  display: grid;
+  gap: 4px;
+}
+
+.vapornet-help-shortcut-keys > span {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 58px minmax(0, 1fr);
+  align-items: center;
+  gap: 5px;
+}
+
+.vapornet-help-shortcut-keys small {
+  color: #ff71ce;
+  font-family: 'Courier New', monospace;
+  font-size: 8px;
+  letter-spacing: 0.05em;
+}
+
+.vapornet-help-shortcut-note {
+  margin: 0;
+  padding: 8px;
+  border: 1px dashed #a9a9ff;
+  color: #e9d7ff;
+  background: rgba(3, 2, 28, 0.56);
+  font-size: 11px;
+}
+
+.vapornet-help-shortcut-note strong {
+  color: #7df9ff;
+}
+
+.vapornet-help-footer {
+  display: flex;
+  max-width: 920px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 18px auto 0;
+  padding: 7px 10px;
+  border: 1px solid #2de2e6;
+  color: #7df9ff;
+  background: rgba(3, 2, 28, 0.88);
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+.vapornet-help-footer strong {
+  color: #fff200;
+}
+
+.vapornet-help-footer span::before {
+  margin-right: 14px;
+  color: #ff71ce;
+  content: '◆';
+}
+
 .vapornet-system-page {
   display: flex;
   flex-direction: column;
@@ -2721,6 +2897,10 @@
 }
 
 @container (max-width: 760px) {
+  .vapornet-help-destinations {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .vapornet-about-card.is-machine,
   .vapornet-about-card.is-racing,
   .vapornet-about-card.is-dota,
@@ -2762,6 +2942,9 @@
   .vapornet-home-grid,
   .vapornet-two-column,
   .vapornet-project-list,
+  .vapornet-help-layout,
+  .vapornet-help-shortcuts,
+  .vapornet-help-steps,
   .vapornet-skill-grid,
   .vapornet-album-grid,
   .vapornet-curated-links,
@@ -2848,6 +3031,10 @@
     grid-template-columns: 1fr;
   }
 
+  .vapornet-help-section.is-wide {
+    grid-column: auto;
+  }
+
   .vapornet-tracks-grid {
     grid-template-columns: 1fr;
   }
@@ -2884,6 +3071,15 @@
 
   .vapornet-page {
     padding: 14px;
+  }
+
+  .vapornet-help-destinations {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-help-shortcuts dl > div {
+    grid-template-columns: 1fr;
+    gap: 5px;
   }
 
   .vapornet-project-section-heading {
