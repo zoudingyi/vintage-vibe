@@ -279,11 +279,11 @@
   min-width: 0;
   min-height: 0;
   flex: 1 1 auto;
-  overflow: auto;
-  border: 2px solid;
-  border-color: var(--ie-border-dark, #404040)
-    var(--ie-border-lightest, #fff) var(--ie-border-lightest, #fff)
-    var(--ie-border-dark, #404040);
+  background: #02042d;
+}
+
+.ie-browser-viewport > div {
+  padding: 0;
   background: #02042d;
 }
 

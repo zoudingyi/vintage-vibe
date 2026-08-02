@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Panel } from 'react95';
+import { Button, Panel, ScrollView } from 'react95';
 import { useTheme } from 'styled-components';
 import browserIcon from '@/assets/icons/internet_explorer.png';
 import searchIcon from '@/assets/icons/search.png';
@@ -434,9 +434,11 @@ export default function InternetExplorerApp({ onOpenApp = () => {} }) {
         <Button type="submit">Go</Button>
       </form>
 
-      <main
+      <ScrollView
         aria-label={`${currentPageTitle} web page`}
+        as="main"
         className="ie-browser-viewport"
+        key={currentAddress}
       >
         <BrowserPage
           address={currentAddress}
@@ -444,7 +446,7 @@ export default function InternetExplorerApp({ onOpenApp = () => {} }) {
           onNavigate={navigate}
           onOpenApp={onOpenApp}
         />
-      </main>
+      </ScrollView>
 
       <footer className="ie-status-bar">
         <span aria-live="polite" role="status">

@@ -30,10 +30,15 @@ beforeEach(() => {
 
 test('opens on the VaporNet home page with an IE-style browser shell', () => {
   renderBrowser();
+  const viewport = screen.getByRole('main', {
+    name: /vapornet home web page/i
+  });
 
   expect(
     screen.getByRole('heading', { name: /welcome to vapornet/i })
   ).toBeInTheDocument();
+  expect(viewport).toHaveClass('ie-browser-viewport');
+  expect(viewport.firstElementChild).toHaveStyle({ overflow: 'auto' });
   expect(screen.getByLabelText(/address/i)).toHaveValue('vintage://home');
   expect(screen.getByLabelText(/address/i).parentElement).toHaveClass(
     'ie-address-field'
@@ -122,6 +127,25 @@ test('navigates by address and supports back, forward, home, and refresh', () =>
 
   fireEvent.click(screen.getByRole('button', { name: /^home/i }));
   expect(address).toHaveValue('vintage://home');
+});
+
+test('resets the page scroll position after navigation', () => {
+  renderBrowser();
+  const address = screen.getByLabelText(/address/i);
+  const homeScroller = screen.getByRole('main', {
+    name: /vapornet home web page/i
+  }).firstElementChild;
+
+  homeScroller.scrollTop = 240;
+
+  fireEvent.change(address, { target: { value: 'projects' } });
+  fireEvent.submit(address.closest('form'));
+
+  const projectsScroller = screen.getByRole('main', {
+    name: /project archive web page/i
+  }).firstElementChild;
+
+  expect(projectsScroller.scrollTop).toBe(0);
 });
 
 test('presents the projects page as a technical career archive', () => {
