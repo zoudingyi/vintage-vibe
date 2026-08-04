@@ -14,6 +14,26 @@
 
 优先使用 pnpm 命令，因为该仓库包含 `pnpm-lock.yaml`；除非明确要切换包管理器，否则避免混用并产生其他 lockfile 更新。
 
+## Cloudflare 部署与更新
+
+该项目通过 Cloudflare Workers Static Assets 发布，Worker 名称为 `vintage-vibe`，部署配置以仓库根目录的 `wrangler.jsonc` 为准。`pnpm build` 生成 `build/`，Wrangler 将该目录作为静态资源上传，并使用 `single-page-application` 回退支持 `/home`、`/about` 等客户端路由。
+
+Cloudflare Workers Builds 当前使用以下配置：
+
+- 构建命令：`pnpm build`。
+- 生产部署命令：`npx wrangler deploy`。
+- 非生产分支版本命令：`npx wrangler versions upload`。
+- 生产分支：`refactor`。
+- 非生产分支构建：启用。
+
+推送到 `refactor` 时，Cloudflare 依次执行构建命令和生产部署命令，并更新正式 `workers.dev` 地址。推送到其他分支时，Cloudflare 依次执行构建命令和版本命令，只生成可供验证的预览版本，不应覆盖当前生产部署。合并功能分支到 `refactor` 后的推送才会触发正式更新。
+
+本地检查 Cloudflare 部署内容时，先执行 `pnpm build`，再执行 `pnpm exec wrangler deploy --dry-run`；本地优先使用 `pnpm exec` 以确保调用锁文件安装的 Wrangler。只有用户明确要求实际发布时，才执行 `pnpm exec wrangler deploy`；不要把真实部署命令当作普通验证步骤，也不要在未获授权时推送分支。
+
+`public/audio/` 是被 Git 忽略的本地媒体目录。手动执行 `pnpm build` 会将其复制到 `build/audio/`，随后通过本地 `pnpm exec wrangler deploy` 可把音频与网页临时发布到同一个 Worker。部署前应确认 `build/audio/` 存在并抽查目标文件。由于 GitHub 自动构建无法取得这些未跟踪音频，后续任何基于远程仓库的自动部署都会发布一个不含本地音频的新版本；因此这种方式只适合临时演示，不能视为持久音频托管方案。
+
+部署验证至少包括：生产构建成功、Wrangler dry-run 成功、站点根路径可访问、直接访问 `/home` 和 `/about` 不返回 404；若本次为包含本地音频的手动部署，还要验证至少一个 `/audio/...` 地址可以播放。
+
 ## 编码风格与命名约定
 
 沿用现有 React 函数组件模式，并保持组件小而明确。导出可复用组件的文件使用 PascalCase 命名，例如 `System.jsx`；路由视图保持 `src/views/<name>/index.jsx` 结构。使用 2 空格缩进、单一职责函数和清晰的 prop 命名。除非规则确实属于全局样式，否则 CSS 应靠近其所服务的组件或视图。项目使用 Create React App 的 ESLint 预设：`react-app` 和 `react-app/jest`。
