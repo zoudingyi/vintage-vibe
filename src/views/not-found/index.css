@@ -12,6 +12,69 @@
   width: min(420px, calc(100vw - 28px));
 }
 
+.system-error-glitch {
+  isolation: isolate;
+  animation: system-error-frame-glitch 620ms steps(2, end) 1;
+}
+
+.system-error-glitch .system-error-title,
+.system-error-glitch strong {
+  animation: system-error-text-glitch 620ms steps(2, end) 1;
+}
+
 .not-found-window p {
   margin: 12px 0 18px;
+}
+
+@keyframes system-error-frame-glitch {
+  0%,
+  100% {
+    filter: none;
+    transform: translateX(0);
+  }
+  18% {
+    filter: drop-shadow(-4px 0 rgba(72, 247, 255, 0.72))
+      drop-shadow(4px 0 rgba(255, 63, 180, 0.68));
+    transform: translateX(-1px);
+  }
+  42% {
+    filter: drop-shadow(3px 0 rgba(72, 247, 255, 0.62))
+      drop-shadow(-3px 0 rgba(255, 63, 180, 0.58));
+    transform: translateX(1px);
+  }
+  68% {
+    filter: drop-shadow(-2px 0 rgba(72, 247, 255, 0.48))
+      drop-shadow(2px 0 rgba(255, 63, 180, 0.45));
+    transform: translateX(0);
+  }
+}
+
+@keyframes system-error-text-glitch {
+  0%,
+  100% {
+    text-shadow: none;
+  }
+  18%,
+  54% {
+    text-shadow: -2px 0 rgba(72, 247, 255, 0.8),
+      2px 0 rgba(255, 63, 180, 0.75);
+  }
+  36%,
+  72% {
+    text-shadow: 1px 0 rgba(72, 247, 255, 0.6),
+      -1px 0 rgba(255, 63, 180, 0.58);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .system-error-glitch,
+  .system-error-glitch .system-error-title,
+  .system-error-glitch strong {
+    animation: none;
+  }
+
+  .system-error-glitch {
+    filter: drop-shadow(-1px 0 rgba(72, 247, 255, 0.36))
+      drop-shadow(1px 0 rgba(255, 63, 180, 0.34));
+  }
 }

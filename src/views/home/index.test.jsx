@@ -759,6 +759,46 @@ test('applies scanline intensity without exposing inactive animation settings', 
   );
 });
 
+test('toggles, previews, and restores the persisted VHS distortion setting', () => {
+  const { unmount } = renderDesktop();
+
+  expect(screen.getByTestId('desktop-environment')).toHaveAttribute(
+    'data-vhs-effects',
+    'true'
+  );
+  expect(screen.getByTestId('vhs-scan-error')).toBeInTheDocument();
+
+  openStartMenuItem(/settings/i);
+  expect(screen.getByTestId('settings-monitor-screen')).toHaveAttribute(
+    'data-vhs-effects',
+    'true'
+  );
+  expect(screen.getByTestId('settings-monitor-vhs-error')).toBeInTheDocument();
+
+  fireEvent.click(screen.getByLabelText(/vhs distortion/i));
+
+  expect(screen.getByTestId('desktop-environment')).toHaveAttribute(
+    'data-vhs-effects',
+    'false'
+  );
+  expect(screen.getByTestId('settings-monitor-screen')).toHaveAttribute(
+    'data-vhs-effects',
+    'false'
+  );
+  expect(
+    JSON.parse(window.localStorage.getItem(DESKTOP_STORAGE_KEY)).settings
+      .vhsEffects
+  ).toBe(false);
+
+  unmount();
+  renderDesktop();
+
+  expect(screen.getByTestId('desktop-environment')).toHaveAttribute(
+    'data-vhs-effects',
+    'false'
+  );
+});
+
 test('previews appearance changes inside the settings monitor', () => {
   renderDesktop();
 
@@ -979,6 +1019,7 @@ test('resets appearance without changing system preferences', () => {
   openStartMenuItem(/settings/i);
   fireEvent.click(screen.getByRole('button', { name: /matrix/i }));
   fireEvent.click(screen.getByRole('button', { name: /sunset/i }));
+  fireEvent.click(screen.getByLabelText(/vhs distortion/i));
   fireEvent.click(screen.getByRole('tab', { name: /audio/i }));
   fireEvent.click(screen.getByRole('button', { name: /night drive/i }));
   fireEvent.click(screen.getByRole('tab', { name: /system/i }));
@@ -992,6 +1033,7 @@ test('resets appearance without changing system preferences', () => {
     radioAppearance: 'cassette',
     react95Theme: 'theSixtiesUSA',
     restoreSession: false,
+    vhsEffects: true,
     wallpaper: 'sunset'
   });
 });

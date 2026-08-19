@@ -17,6 +17,12 @@ test('defaults global audio preferences to enabled at a low volume', () => {
   });
 });
 
+test('defaults VHS distortion to enabled', () => {
+  const desktopData = loadDesktopData(window.localStorage);
+
+  expect(desktopData.settings.vhsEffects).toBe(true);
+});
+
 test('defaults the radio appearance to Cassette Deck', () => {
   const desktopData = loadDesktopData(window.localStorage);
 
@@ -108,6 +114,7 @@ test('loads supported multi-page desktop settings', () => {
         showSeconds: true,
         soundEnabled: true,
         taskbarButtonMode: 'icon',
+        vhsEffects: false,
         wallpaper: 'neon-horizon'
       },
       session: { activeWindowId: null, windows: [] }
@@ -128,6 +135,7 @@ test('loads supported multi-page desktop settings', () => {
     showSeconds: true,
     soundEnabled: true,
     taskbarButtonMode: 'icon',
+    vhsEffects: false,
     wallpaper: 'neon-horizon'
   });
   expect(desktopData.settings).not.toHaveProperty('animationMode');
@@ -150,6 +158,7 @@ test('falls back from unsupported multi-page desktop settings', () => {
         showSeconds: 1,
         soundEnabled: 'yes',
         taskbarButtonMode: 'both',
+        vhsEffects: 'sometimes',
         wallpaper: 'missing'
       },
       session: { activeWindowId: null, windows: [] }
@@ -169,6 +178,7 @@ test('falls back from unsupported multi-page desktop settings', () => {
     showSeconds: false,
     soundEnabled: true,
     taskbarButtonMode: 'label',
+    vhsEffects: true,
     wallpaper: 'sunset'
   });
   expect(desktopData.settings).not.toHaveProperty('animationMode');

@@ -8,6 +8,13 @@ const WindowFrame = styled.div`
   width: ${({ $width }) => $width}px;
   height: ${({ $height }) => ($height ? `${$height}px` : 'auto')};
   max-width: calc(100vw - 24px);
+  filter: drop-shadow(-1px 0 4px rgba(72, 247, 255, 0.16))
+    drop-shadow(1px 0 4px rgba(255, 63, 180, 0.14));
+
+  &[data-active='true'] {
+    filter: drop-shadow(-2px 0 6px rgba(72, 247, 255, 0.28))
+      drop-shadow(2px 0 6px rgba(255, 63, 180, 0.25));
+  }
 
   ${({ $fullScreen }) =>
     $fullScreen &&

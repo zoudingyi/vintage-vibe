@@ -22,6 +22,7 @@ export const DEFAULT_DESKTOP_SETTINGS = {
   showSeconds: false,
   soundEnabled: true,
   taskbarButtonMode: 'label',
+  vhsEffects: true,
   wallpaper: 'sunset'
 };
 
@@ -143,6 +144,10 @@ function normalizeSettings(settings) {
     )
       ? settings.taskbarButtonMode
       : DEFAULT_DESKTOP_SETTINGS.taskbarButtonMode,
+    vhsEffects:
+      typeof settings?.vhsEffects === 'boolean'
+        ? settings.vhsEffects
+        : DEFAULT_DESKTOP_SETTINGS.vhsEffects,
     wallpaper: [
       'teal',
       'starfield',

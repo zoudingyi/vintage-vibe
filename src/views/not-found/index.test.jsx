@@ -16,6 +16,9 @@ test('renders the retro not found view', () => {
   );
 
   expect(screen.getByText(/404 - shortcut target not found/i)).toBeInTheDocument();
+  expect(screen.getByTestId('system-error-window')).toHaveClass(
+    'system-error-glitch'
+  );
   expect(screen.getByRole('link', { name: /return to desktop/i })).toHaveAttribute(
     'href',
     '/home'

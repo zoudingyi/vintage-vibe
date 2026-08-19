@@ -134,8 +134,14 @@ function AppearanceSettings({ desktopSettings, onDesktopSettingsChange }) {
               className={`settings-monitor-screen desktop-wallpaper-${desktopSettings.wallpaper}`}
               data-scanline-intensity={desktopSettings.scanlineIntensity}
               data-scanlines={desktopSettings.scanlines}
+              data-vhs-effects={desktopSettings.vhsEffects}
               data-testid="settings-monitor-screen"
             >
+              <span
+                aria-hidden="true"
+                className="settings-monitor-vhs-error"
+                data-testid="settings-monitor-vhs-error"
+              />
               <div aria-hidden="true" className="settings-monitor-icons">
                 <span />
                 <span />
@@ -195,6 +201,14 @@ function AppearanceSettings({ desktopSettings, onDesktopSettingsChange }) {
         </div>
       </GroupBox>
       <GroupBox label="Visual Effects">
+        <SettingsCheckbox
+          checked={desktopSettings.vhsEffects}
+          onChange={event =>
+            onDesktopSettingsChange({ vhsEffects: event.target.checked })
+          }
+        >
+          VHS Distortion
+        </SettingsCheckbox>
         <SettingsCheckbox
           checked={desktopSettings.scanlines}
           onChange={event =>

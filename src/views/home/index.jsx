@@ -183,6 +183,7 @@ function DesktopShell({ initialDesktopData }) {
       react95Theme: DEFAULT_DESKTOP_SETTINGS.react95Theme,
       scanlineIntensity: DEFAULT_DESKTOP_SETTINGS.scanlineIntensity,
       scanlines: DEFAULT_DESKTOP_SETTINGS.scanlines,
+      vhsEffects: DEFAULT_DESKTOP_SETTINGS.vhsEffects,
       wallpaper: DEFAULT_DESKTOP_SETTINGS.wallpaper
     });
   }
@@ -223,9 +224,16 @@ function DesktopShell({ initialDesktopData }) {
           className="desktop-environment-wrapper"
           data-scanline-intensity={desktopSettings.scanlineIntensity}
           data-scanlines={desktopSettings.scanlines}
+          data-vhs-effects={desktopSettings.vhsEffects}
           data-testid="desktop-environment"
           style={desktopThemeStyle}
         >
+          <div aria-hidden="true" className="vhs-overlay" />
+          <div
+            aria-hidden="true"
+            className="vhs-scan-error"
+            data-testid="vhs-scan-error"
+          />
           <div className="shutdown-screen">
             <p>Windows is shutting down...</p>
             <p>Saving desktop settings to localStorage.</p>
@@ -243,9 +251,16 @@ function DesktopShell({ initialDesktopData }) {
         className="desktop-environment-wrapper"
         data-scanline-intensity={desktopSettings.scanlineIntensity}
         data-scanlines={desktopSettings.scanlines}
+        data-vhs-effects={desktopSettings.vhsEffects}
         data-testid="desktop-environment"
         style={desktopThemeStyle}
       >
+        <div aria-hidden="true" className="vhs-overlay" />
+        <div
+          aria-hidden="true"
+          className="vhs-scan-error"
+          data-testid="vhs-scan-error"
+        />
         <div
           className={`desktop desktop-wallpaper-${desktopSettings.wallpaper} desktop-icons-${desktopSettings.iconLayout} desktop-icon-size-${desktopSettings.iconSize}`}
           data-icon-glow={desktopSettings.iconGlowEffect}
@@ -295,6 +310,10 @@ function DesktopShell({ initialDesktopData }) {
               <span>{app.title}</span>
             </Button>
           ))}
+          <div aria-hidden="true" className="desktop-decorative-copy">
+            <span lang="ja">仮想世界</span>
+            <small>VIRTUAL WORLD // 夜間通信</small>
+          </div>
           {windows.map(windowState => {
             const app = apps.find(item => item.id === windowState.appId);
 
