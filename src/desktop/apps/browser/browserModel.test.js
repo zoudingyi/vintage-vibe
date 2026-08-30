@@ -55,6 +55,21 @@ test('indexes favorite records and radio selections on their local pages', () =>
   );
 });
 
+test('resolves and indexes the Moments timeline as a local page', () => {
+  expect(resolveBrowserAddress('moments')).toEqual({
+    address: 'vintage://moments',
+    kind: 'internal'
+  });
+  expect(searchVaporNet('时间轴')).toEqual(
+    expect.arrayContaining([
+      expect.objectContaining({
+        address: 'vintage://moments',
+        title: 'Moments'
+      })
+    ])
+  );
+});
+
 test('finds the bilingual help page with a Chinese search term', () => {
   expect(searchVaporNet('帮助')).toEqual(
     expect.arrayContaining([

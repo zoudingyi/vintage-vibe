@@ -2812,6 +2812,334 @@
   content: '◆';
 }
 
+.vapornet-moments-page {
+  background-image: linear-gradient(
+      90deg,
+      rgba(45, 226, 230, 0.035) 1px,
+      transparent 1px
+    ),
+    linear-gradient(rgba(247, 6, 207, 0.03) 1px, transparent 1px),
+    radial-gradient(#fff 0.8px, transparent 0.8px),
+    linear-gradient(145deg, rgba(83, 12, 127, 0.5), transparent 58%);
+  background-size: 24px 24px, 24px 24px, 47px 47px, auto;
+}
+
+.vapornet-moments-page .vapornet-page-header {
+  max-width: 780px;
+}
+
+.vapornet-moments-page .vapornet-page-header p {
+  max-width: 650px;
+  margin-inline: auto;
+  color: #d9d3ff;
+  line-height: 1.65;
+}
+
+.vapornet-moments-status {
+  display: grid;
+  max-width: 780px;
+  margin: 0 auto 28px;
+  border: 1px solid #2de2e6;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  background: rgba(3, 2, 28, 0.92);
+  box-shadow: 6px 6px 0 rgba(247, 6, 207, 0.22);
+}
+
+.vapornet-moments-status > div {
+  min-width: 0;
+  padding: 10px 12px;
+  border-right: 1px solid #443f89;
+}
+
+.vapornet-moments-status > div:last-child {
+  border-right: 0;
+}
+
+.vapornet-moments-status span,
+.vapornet-moments-status strong {
+  display: block;
+  font-family: 'Courier New', monospace;
+}
+
+.vapornet-moments-status span {
+  margin-bottom: 5px;
+  color: #a9a9ff;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+}
+
+.vapornet-moments-status strong {
+  color: #fff200;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.vapornet-moments-archive {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.vapornet-moments-timeline {
+  position: relative;
+}
+
+.vapornet-moments-timeline::before {
+  position: absolute;
+  top: 11px;
+  bottom: 11px;
+  left: 123px;
+  width: 2px;
+  background: linear-gradient(#2de2e6, #f706cf 60%, #7f00ff);
+  box-shadow: 0 0 8px rgba(45, 226, 230, 0.75);
+  content: '';
+}
+
+.vapornet-moments-timeline > ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vapornet-moment-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: 42px;
+  padding-bottom: 24px;
+}
+
+.vapornet-moment-row:last-child {
+  padding-bottom: 0;
+}
+
+.vapornet-moment-date {
+  padding-top: 12px;
+  font-family: 'Courier New', monospace;
+  text-align: right;
+}
+
+.vapornet-moment-date > span {
+  display: block;
+  color: #ff71ce;
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 1;
+  text-shadow: 2px 0 #2de2e6;
+}
+
+.vapornet-moment-date time {
+  display: block;
+  margin-top: 5px;
+  color: #a9a9ff;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.vapornet-moment-node {
+  position: absolute;
+  top: 17px;
+  left: 116px;
+  z-index: 1;
+  width: 11px;
+  height: 11px;
+  border: 2px solid #050738;
+  background: #fff200;
+  box-shadow: 0 0 0 2px #2de2e6, 0 0 11px #2de2e6;
+  transform: rotate(45deg);
+}
+
+.vapornet-moment-card {
+  min-width: 0;
+  border: 1px solid #2de2e6;
+  background: rgba(5, 4, 38, 0.96);
+  box-shadow: 5px 5px 0 rgba(247, 6, 207, 0.2);
+}
+
+.vapornet-moment-card > header {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #443f89;
+  background: linear-gradient(90deg, rgba(83, 12, 127, 0.44), transparent);
+}
+
+.vapornet-moment-card > header span {
+  color: #fff200;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+
+.vapornet-moment-card h2 {
+  margin: 4px 0 0;
+  color: #fff;
+  font-size: 17px;
+  letter-spacing: 0.03em;
+}
+
+.vapornet-moment-card > header code {
+  max-width: 42%;
+  padding: 2px 4px;
+  color: #a9a9ff;
+  background: #03021c;
+  font-size: 8px;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.vapornet-moment-card > p {
+  margin: 0;
+  padding: 14px;
+  color: #e9faff;
+  line-height: 1.7;
+}
+
+.vapornet-moment-media {
+  margin: 0 14px 14px;
+  border: 1px solid #443f89;
+  background: #03021c;
+}
+
+.vapornet-moment-media-heading {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 8px;
+  border-bottom: 1px solid #443f89;
+  font-family: 'Courier New', monospace;
+}
+
+.vapornet-moment-media-heading strong {
+  color: #ff71ce;
+  font-size: 11px;
+}
+
+.vapornet-moment-media-heading span {
+  color: #a9a9ff;
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  text-align: right;
+}
+
+.vapornet-moment-media-grid-layout {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  padding: 6px;
+}
+
+.vapornet-moment-media.is-single .vapornet-moment-media-grid-layout {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.vapornet-moment-media-item {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 116px;
+  aspect-ratio: 4 / 3;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid #2de2e6;
+  background: radial-gradient(circle at 72% 22%, #ff71ce 0 2%, transparent 3%),
+    linear-gradient(145deg, #191e73, #610661 60%, #05041c);
+  cursor: default;
+}
+
+.vapornet-moment-media-item.is-video {
+  aspect-ratio: 16 / 9;
+  background: radial-gradient(circle at 75% 22%, #fff200 0 2%, transparent 3%),
+    linear-gradient(145deg, #081c48, #352264 56%, #17051f);
+}
+
+.vapornet-moment-media-item.is-tone-2 {
+  border-color: #ff71ce;
+  background: linear-gradient(145deg, #321071, #0d6b83 64%, #05041c);
+}
+
+.vapornet-moment-media-item.is-tone-3 {
+  border-color: #fff200;
+  background: linear-gradient(145deg, #620952, #8f3d69 52%, #180726);
+}
+
+.vapornet-moment-media-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.26;
+  background-image: linear-gradient(rgba(125, 249, 255, 0.36) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 249, 255, 0.24) 1px, transparent 1px);
+  background-size: 10px 10px;
+}
+
+.vapornet-moment-media-glyph {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  font-size: 32px;
+  text-shadow: 2px 0 #f706cf, -2px 0 #2de2e6;
+}
+
+.vapornet-moment-media-copy {
+  position: absolute;
+  bottom: 7px;
+  left: 7px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Courier New', monospace;
+}
+
+.vapornet-moment-media-copy strong {
+  color: #fff;
+  font-size: 9px;
+}
+
+.vapornet-moment-media-copy small {
+  color: #fff200;
+  font-size: 8px;
+}
+
+.vapornet-moment-media-state {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 1;
+  padding: 2px 4px;
+  color: #7df9ff;
+  background: rgba(3, 2, 28, 0.82);
+  font-family: 'Courier New', monospace;
+  font-size: 7px;
+  letter-spacing: 0.05em;
+}
+
+.vapornet-moments-footer {
+  margin: 24px 0 0 146px;
+  padding: 9px 12px;
+  border: 1px dashed #a9a9ff;
+  color: #c9c4f2;
+  background: rgba(3, 2, 28, 0.82);
+  font-family: 'Courier New', monospace;
+  text-align: center;
+}
+
+.vapornet-moments-footer span {
+  color: #7df9ff;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.vapornet-moments-footer p {
+  margin: 5px 0 0;
+  font-size: 10px;
+}
+
 .vapornet-system-page {
   display: flex;
   flex-direction: column;
@@ -3043,6 +3371,44 @@
     grid-template-columns: 1fr;
   }
 
+  .vapornet-moments-status {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-moments-status > div {
+    border-right: 0;
+    border-bottom: 1px solid #443f89;
+  }
+
+  .vapornet-moments-status > div:last-child {
+    border-bottom: 0;
+  }
+
+  .vapornet-moments-timeline::before {
+    left: 82px;
+  }
+
+  .vapornet-moment-row {
+    grid-template-columns: 66px minmax(0, 1fr);
+    gap: 34px;
+  }
+
+  .vapornet-moment-node {
+    left: 75px;
+  }
+
+  .vapornet-moment-media-grid-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-moment-media-item {
+    aspect-ratio: 16 / 9;
+  }
+
+  .vapornet-moments-footer {
+    margin-left: 100px;
+  }
+
   .vapornet-personal-links {
     flex-direction: column;
     align-items: flex-start;
@@ -3177,6 +3543,54 @@
   .vapornet-cat-stats,
   .vapornet-about-telemetry > dl {
     grid-template-columns: 1fr;
+  }
+
+  .vapornet-moments-timeline::before {
+    left: 7px;
+  }
+
+  .vapornet-moment-row {
+    display: block;
+    padding: 0 0 20px 28px;
+  }
+
+  .vapornet-moment-date {
+    padding: 0 0 7px;
+    text-align: left;
+  }
+
+  .vapornet-moment-date > span,
+  .vapornet-moment-date time {
+    display: inline-block;
+  }
+
+  .vapornet-moment-date > span {
+    margin-right: 7px;
+    font-size: 16px;
+  }
+
+  .vapornet-moment-node {
+    top: 3px;
+    left: 0;
+  }
+
+  .vapornet-moment-card > header,
+  .vapornet-moment-media-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .vapornet-moment-card > header code {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .vapornet-moment-media-heading span {
+    text-align: left;
+  }
+
+  .vapornet-moments-footer {
+    margin-left: 28px;
   }
 }
 

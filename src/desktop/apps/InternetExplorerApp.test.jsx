@@ -373,6 +373,53 @@ test('preserves the edited now panel and opens the personal record archive', () 
   expect(screen.queryByText(/demo pressing/i)).not.toBeInTheDocument();
 });
 
+test('opens the static Moments timeline from the VaporNet home page', () => {
+  const { onOpenApp } = renderBrowser();
+
+  fireEvent.click(screen.getByRole('button', { name: /moments/i }));
+
+  expect(screen.getByLabelText(/address/i)).toHaveValue('vintage://moments');
+  expect(
+    screen.getByRole('heading', { name: /moments signal archive/i })
+  ).toBeInTheDocument();
+
+  const timeline = screen.getByRole('region', {
+    name: /personal moments timeline/i
+  });
+  const entries = within(timeline).getAllByRole('article');
+  const publishedDates = Array.from(timeline.querySelectorAll('time')).map(
+    time => time.getAttribute('dateTime')
+  );
+
+  expect(entries).toHaveLength(5);
+  expect(publishedDates).toHaveLength(5);
+  expect(publishedDates).toEqual([...publishedDates].sort().reverse());
+  expect(within(timeline).getAllByText(/sample record/i)).toHaveLength(5);
+  expect(within(timeline).getByText('PHOTO LOG')).toBeInTheDocument();
+  expect(within(timeline).getByText('GALLERY')).toBeInTheDocument();
+  expect(within(timeline).getByText('VIDEO COVER')).toBeInTheDocument();
+  expect(within(timeline).queryByRole('button')).not.toBeInTheDocument();
+  expect(within(timeline).queryByRole('textbox')).not.toBeInTheDocument();
+  expect(within(timeline).queryByText(/like|comment|点赞|评论/i))
+    .not.toBeInTheDocument();
+
+  fireEvent.click(within(timeline).getByLabelText(/video placeholder/i));
+  expect(onOpenApp).not.toHaveBeenCalled();
+});
+
+test('opens Moments directly from the address bar', () => {
+  renderBrowser();
+  const address = screen.getByLabelText(/address/i);
+
+  fireEvent.change(address, { target: { value: 'moments' } });
+  fireEvent.submit(address.closest('form'));
+
+  expect(address).toHaveValue('vintage://moments');
+  expect(
+    screen.getByRole('main', { name: /moments web page/i })
+  ).toBeInTheDocument();
+});
+
 test('lists every radio track grouped by station', () => {
   renderBrowser();
 

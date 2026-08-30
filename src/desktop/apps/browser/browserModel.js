@@ -44,6 +44,13 @@ export const browserPages = {
     keywords: 'links github email external cool sites',
     title: 'Cool Links'
   },
+  moments: {
+    address: 'vintage://moments',
+    description: 'A reverse-chronological personal timeline and signal archive.',
+    keywords:
+      'moments personal timeline diary archive text photo video 时间轴 动态 个人记录',
+    title: 'Moments'
+  },
   projects: {
     address: 'vintage://projects',
     description: 'Interactive frontend projects and system experiments.',

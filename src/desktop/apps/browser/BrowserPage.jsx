@@ -26,6 +26,7 @@ import {
   searchVaporNet
 } from './browserModel';
 import { favoriteAlbums, favoriteTracks } from './favoriteRecords';
+import MomentsPage from './MomentsPage';
 
 function PageLink({ address, children, onNavigate }) {
   return (
@@ -70,6 +71,7 @@ function HomePage({ onNavigate }) {
     ['vintage://projects', 'Project Archive', 'Interactive frontend systems'],
     ['vintage://radio', 'Radio Station', 'Tune into the desktop broadcast'],
     ['vintage://favorites', 'Favorite Records', 'A playlist-shaped canon'],
+    ['vintage://moments', 'Moments', 'Personal timeline & field notes'],
     ['vintage://guestbook', 'Guestbook', 'Leave a local message'],
     ['vintage://links', 'Cool Links', 'External destinations'],
     ['vintage://help', 'Browser Help', 'Addresses and safety information']
@@ -1400,6 +1402,8 @@ export default function BrowserPage({ address, onNavigate, onOpenApp }) {
       return <AboutPage {...pageProps} />;
     case 'favorites':
       return <FavoritesPage {...pageProps} />;
+    case 'moments':
+      return <MomentsPage />;
     case 'projects':
       return <ProjectsPage {...pageProps} />;
     case 'radio':
