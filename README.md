@@ -1,6 +1,17 @@
 # Vintage Vibe
 
-Vintage Vibe is a playable React portfolio that combines a Windows 95-inspired desktop shell with a Vaporwave boot screen. Applications open in managed windows and share desktop-level interactions instead of behaving like separate pages.
+Vintage Vibe is Devo Zou's interactive personal portfolio. It uses a Windows 95-inspired desktop and a Vaporwave network world to present projects, professional experience, and personal interests. Applications open in managed windows and share desktop-level interactions instead of behaving like separate pages.
+
+## Product positioning
+
+The guiding principle is **the portfolio is the content; the retro desktop is the presentation layer**. Nostalgia, fictional system details, and playful interactions should make the work more memorable without obscuring what visitors came to learn.
+
+Within this framing:
+
+- **Vintage Vibe** is the complete portfolio experience.
+- **VaporOS** is the fictional desktop system that presents the portfolio.
+- **VaporNet** is the fictional personal network available inside its browser.
+- **Devo Zou** is the creator and operator behind the system.
 
 Planned visual effects, audio features, and desktop applications are tracked in [ROADMAP.md](ROADMAP.md).
 
