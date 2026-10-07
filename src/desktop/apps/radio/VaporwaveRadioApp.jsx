@@ -3,12 +3,12 @@ import { Button, Frame } from 'react95';
 import {
   createRadioVisualizer,
   EMPTY_RADIO_VISUALIZATION
-} from '@/desktop/radioVisualizer';
+} from './radioVisualizer';
 import { playRadioCue } from '@/desktop/audioEngine';
 import {
   createRadioPlaybackMemory,
   radioStations
-} from '@/desktop/radioStations';
+} from './radioStations';
 import './VaporwaveRadioApp.css';
 
 const stations = radioStations;

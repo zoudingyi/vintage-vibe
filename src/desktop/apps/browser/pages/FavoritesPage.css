@@ -1,0 +1,268 @@
+.vapornet-page .vapornet-record-notice {
+  display: block;
+  max-width: 760px;
+  margin: 0 auto 22px;
+  padding: 12px 14px 13px;
+  color: #101010;
+}
+
+.vapornet-record-notice strong {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #000080;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.vapornet-record-notice strong::after {
+  flex: 1 1 auto;
+  min-width: 24px;
+  border-top: 1px dotted #6f4e91;
+  content: '';
+}
+
+.vapornet-record-notice span {
+  display: block;
+  margin-top: 7px;
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.vapornet-record-count {
+  color: #39ff14;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.vapornet-album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.vapornet-album-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  border: 2px outset #a9a9ff;
+  color: #effcff;
+  background: linear-gradient(145deg, #21184f, #080817 76%);
+  box-shadow: inset 0 0 0 1px rgba(45, 226, 230, 0.18);
+}
+
+.vapornet-album-artwork {
+  position: relative;
+  min-width: 0;
+  margin: 12px 12px 0;
+  aspect-ratio: 1.12 / 1;
+  isolation: isolate;
+}
+
+.vapornet-album-disc {
+  position: absolute;
+  top: 7%;
+  right: 0;
+  width: 78%;
+  aspect-ratio: 1;
+  border: 1px solid #09090c;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, #111 0 5%, #d02b78 5% 14%, #111 14% 18%, transparent 18%),
+    repeating-radial-gradient(circle, #16161a 0 2px, #2b2b32 3px 4px);
+  box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.55);
+  transform: translateX(-2%);
+  transition: transform 180ms ease-out;
+}
+
+.vapornet-album-disc i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ddd;
+  transform: translate(-50%, -50%);
+}
+
+.vapornet-album-artwork img {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 89%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  object-fit: cover;
+  box-shadow: 4px 5px 9px rgba(0, 0, 0, 0.48);
+}
+
+.vapornet-album-index {
+  position: absolute;
+  z-index: 2;
+  right: 13%;
+  bottom: 6%;
+  padding: 2px 5px;
+  border: 1px solid #080817;
+  color: #080817;
+  background: #fff200;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  font-weight: bold;
+}
+
+.vapornet-album-card:hover .vapornet-album-disc,
+.vapornet-album-card:focus-within .vapornet-album-disc {
+  transform: translateX(10%);
+}
+
+.vapornet-album-details {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  padding: 12px;
+}
+
+.vapornet-album-details > span,
+.vapornet-track-details > span {
+  color: #39ff14;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+.vapornet-album-details h3,
+.vapornet-track-details h3 {
+  margin: 7px 0 3px;
+  color: #7df9ff;
+  font-family: 'Courier New', monospace;
+  font-size: 17px;
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+}
+
+.vapornet-album-details > strong,
+.vapornet-track-details > strong {
+  color: #ff71ce;
+  font-size: 11px;
+  line-height: 1.25;
+}
+
+.vapornet-album-details dl,
+.vapornet-track-details dl {
+  margin: 10px 0;
+  font-size: 10px;
+}
+
+.vapornet-album-details dl > div,
+.vapornet-track-details dl > div {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 6px;
+  margin-top: 3px;
+}
+
+.vapornet-album-details dt,
+.vapornet-track-details dt {
+  color: #a9a9ff;
+  font-family: 'Courier New', monospace;
+}
+
+.vapornet-album-details dd,
+.vapornet-track-details dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.vapornet-album-highlight {
+  display: grid;
+  gap: 3px;
+  margin: 0 0 10px;
+  padding: 7px 8px;
+  border-left: 2px solid #fff200;
+  background: rgba(255, 242, 0, 0.08);
+}
+
+.vapornet-album-highlight span {
+  color: #fff200;
+  font-family: 'Courier New', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+}
+
+.vapornet-album-highlight strong {
+  color: #fff;
+  font-size: 11px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.vapornet-album-note,
+.vapornet-track-details p {
+  margin: 0;
+  color: #d8d7f3;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.vapornet-tracks-section {
+  max-width: 760px;
+  margin: 28px auto 0;
+}
+
+.vapornet-tracks-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.vapornet-track-card {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px;
+  border: 2px outset #a9a9ff;
+  color: #effcff;
+  background: linear-gradient(115deg, #181440, #080817 76%);
+}
+
+.vapornet-track-artwork {
+  position: relative;
+  min-width: 0;
+  align-self: start;
+}
+
+.vapornet-track-artwork img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, 0.66);
+  object-fit: cover;
+  box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.48);
+}
+
+.vapornet-track-artwork span {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  padding: 2px 5px;
+  color: #080817;
+  background: #2de2e6;
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  font-weight: bold;
+}
+
+.vapornet-track-details {
+  min-width: 0;
+}

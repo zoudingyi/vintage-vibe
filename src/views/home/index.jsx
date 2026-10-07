@@ -3,7 +3,7 @@ import '@/desktop/DesktopWallpaper.css';
 import './index.css';
 import styled, { ThemeProvider } from 'styled-components';
 
-import Taskbar from '@/components/Taskbar';
+import Taskbar from '@/desktop/Taskbar';
 import DesktopWindow from '@/desktop/DesktopWindow';
 import { DesktopProvider, useDesktop } from '@/desktop/DesktopProvider';
 import appRegistry from '@/desktop/appRegistry';

@@ -4,7 +4,7 @@ import { useTheme } from 'styled-components';
 import browserIcon from '@/assets/icons/internet_explorer.png';
 import searchIcon from '@/assets/icons/search.png';
 import folderIcon from '@/assets/icons/folder_closed.png';
-import BrowserPage from './browser/BrowserPage';
+import BrowserPage from './BrowserPage';
 import {
   HOME_ADDRESS,
   browserReducer,
@@ -13,8 +13,20 @@ import {
   loadBrowserState,
   resolveBrowserAddress,
   saveBrowserState
-} from './browser/browserModel';
+} from './browserModel';
 import './InternetExplorerApp.css';
+import './BrowserPage.css';
+import './pages/HomePage.css';
+import './pages/AboutPage.css';
+import './pages/GuestbookPage.css';
+import './pages/ProjectsPage.css';
+import './pages/RadioPage.css';
+import './pages/FavoritesPage.css';
+import './pages/LinksPage.css';
+import './pages/SearchPage.css';
+import './pages/HelpPage.css';
+import './pages/MomentsPage.css';
+import './BrowserPageResponsive.css';
 
 function MenuButton({ active, children, label, onClick }) {
   return (

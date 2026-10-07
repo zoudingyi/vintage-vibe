@@ -1,0 +1,78 @@
+.vapornet-curated-links {
+  display: grid;
+  max-width: 760px;
+  margin: 0 auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.vapornet-curated-link {
+  min-width: 0;
+  padding: 14px;
+  border: 2px outset #a9a9ff;
+  background: linear-gradient(135deg, #141249, #401058);
+}
+
+.vapornet-curated-link > span {
+  display: block;
+  margin-bottom: 7px;
+  color: #fff200;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.vapornet-curated-link .vapornet-link {
+  color: #7df9ff;
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.vapornet-curated-link p {
+  margin: 10px 0 0;
+  color: #e9d7ff;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.vapornet-page .vapornet-personal-links {
+  display: flex;
+  max-width: 620px;
+  margin: 18px auto 0;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 10px 12px;
+  color: #101010;
+}
+
+.vapornet-personal-links strong {
+  color: #000080;
+  font-family: 'Courier New', monospace;
+}
+
+.vapornet-personal-links .vapornet-link {
+  padding-left: 10px;
+  border-left: 1px solid #808080;
+  color: #0000ee;
+}
+
+.vapornet-curated-stamp {
+  width: max-content;
+  margin: 22px auto 0;
+  padding: 4px 9px;
+  border: 2px dashed #ff71ce;
+  color: #ff71ce;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  transform: rotate(-2deg);
+}
+
+.vapornet-under-construction {
+  display: block;
+  width: max-content;
+  margin: 25px auto;
+}

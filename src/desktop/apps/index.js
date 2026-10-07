@@ -1,12 +1,12 @@
 export { default as FolderApp } from './FolderApp';
 export { default as GuestbookApp } from './GuestbookApp';
 export { default as ImageViewerApp } from './ImageViewerApp';
-export { default as InternetExplorerApp } from './InternetExplorerApp';
+export { default as InternetExplorerApp } from './browser/InternetExplorerApp';
 export { default as MyComputerApp } from './MyComputerApp';
 export { default as ProfileApp } from './ProfileApp';
 export { default as ProjectsApp } from './ProjectsApp';
 export { default as RecycleBinApp } from './RecycleBinApp';
 export { default as SettingsApp } from './SettingsApp';
 export { default as TerminalApp } from './TerminalApp';
-export { default as VaporwaveRadioApp } from './VaporwaveRadioApp';
+export { default as VaporwaveRadioApp } from './radio/VaporwaveRadioApp';
 export { default as VideosApp } from './VideosApp';

@@ -1,4 +1,4 @@
-import { projects } from '../data';
+import { projects } from '../../content/portfolio';
 
 export const BROWSER_STORAGE_KEY = 'vintage-vibe-browser-state';
 export const BROWSER_STORAGE_VERSION = 1;

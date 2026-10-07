@@ -61,6 +61,27 @@ pnpm build
 
 Application source lives in `src/desktop/apps/`, while `src/desktop/appRegistry.js` defines which applications appear on the desktop and in the Start menu. Window lifecycle and geometry are managed by `DesktopProvider` and `windowReducer`.
 
+```text
+src/
+├── assets/                    # Fonts, icons, images, and SVGs
+├── desktop/
+│   ├── apps/
+│   │   ├── browser/           # Internet Explorer shell, model, and tests
+│   │   │   └── pages/        # VaporNet pages and their local styles
+│   │   ├── radio/            # Radio UI, station data, visualizer, and tests
+│   │   └── ...               # Other desktop applications
+│   ├── content/portfolio.js  # Portfolio content shared by applications
+│   ├── guestbook/            # Shared guestbook UI and repository
+│   ├── Taskbar.jsx           # Desktop taskbar
+│   └── ...                   # Window management, settings, and shared audio
+└── views/                    # Route-level screens and their styles/tests
+```
+
+Browser styles are loaded by `InternetExplorerApp.jsx`: shell styles first,
+shared page styles and local page styles next, then responsive and motion
+overrides in `BrowserPageResponsive.css`. Keep this order when adding styles.
+Tests remain next to the implementation they cover.
+
 ## Local data
 
 Desktop settings and restorable window sessions are stored in the browser under a versioned `vintage-vibe-desktop-state` key. The Settings app can disable restoration, clear only the window session, reset appearance, or reset every preference. Guestbook entries use a separate local key and remain private to the current browser.

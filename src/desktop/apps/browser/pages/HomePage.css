@@ -1,0 +1,124 @@
+.vapornet-marquee {
+  max-width: 760px;
+  margin: 0 auto 18px;
+  overflow: hidden;
+  border: 1px solid #ff71ce;
+  color: #fff200;
+  background: #11001f;
+  font-family: 'Courier New', monospace;
+  white-space: nowrap;
+}
+
+.vapornet-marquee span {
+  display: inline-block;
+  min-width: 100%;
+  padding: 5px;
+  animation: vapornet-marquee 12s linear infinite;
+}
+
+.vapornet-home-grid {
+  display: grid;
+  max-width: 760px;
+  margin: 0 auto;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.vapornet-now-panel {
+  max-width: 760px;
+  margin: 0 auto 16px;
+  border: 1px solid #2de2e6;
+  background: rgba(5, 4, 38, 0.94);
+  box-shadow: 5px 5px 0 rgba(247, 6, 207, 0.22);
+}
+
+.vapornet-now-heading {
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid #443f89;
+  font-family: 'Courier New', monospace;
+}
+
+.vapornet-now-heading > span {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #39ff14;
+  box-shadow: 0 0 8px #39ff14;
+}
+
+.vapornet-now-heading strong {
+  color: #fff200;
+  letter-spacing: 0.1em;
+}
+
+.vapornet-now-heading button {
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  color: #7df9ff;
+  background: transparent;
+  font: inherit;
+  text-decoration: underline;
+}
+
+.vapornet-now-heading button:hover,
+.vapornet-now-heading button:focus-visible {
+  color: #fff;
+  outline: 1px dashed #ff71ce;
+  outline-offset: 3px;
+}
+
+.vapornet-now-panel dl {
+  display: grid;
+  margin: 0;
+  padding: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px 18px;
+}
+
+.vapornet-now-panel dl > div {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(88px, auto) minmax(0, 1fr);
+  gap: 8px;
+}
+
+.vapornet-now-panel dt {
+  color: #ff71ce;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.vapornet-now-panel dd {
+  min-width: 0;
+  margin: 0;
+  color: #e9d7ff;
+  overflow-wrap: anywhere;
+}
+
+.vapornet-home-footer {
+  max-width: 760px;
+  margin: 22px auto 0;
+  padding-top: 15px;
+  border-top: 2px ridge #2de2e6;
+  text-align: center;
+}
+
+.vapornet-home-footer p {
+  margin: 5px 0;
+}
+
+.vapornet-counter {
+  padding: 2px 6px;
+  border: 2px inset #ccc;
+  color: #39ff14;
+  background: #020202;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.15em;
+}

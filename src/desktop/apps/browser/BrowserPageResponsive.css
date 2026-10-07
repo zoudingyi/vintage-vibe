@@ -1,0 +1,414 @@
+@keyframes vapornet-marquee {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes vapornet-blink {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes vapornet-about-signal {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes vapornet-at-field-pulse {
+  50% {
+    opacity: 0.5;
+    transform: scale(1.05);
+  }
+}
+
+@container (max-width: 760px) {
+  .vapornet-help-destinations {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vapornet-about-card.is-machine,
+  .vapornet-about-card.is-racing,
+  .vapornet-about-card.is-dota,
+  .vapornet-about-card.is-eva {
+    grid-column: 1 / -1;
+  }
+}
+
+@container (max-width: 590px) {
+  .ie-toolbar .ie-toolbar-button {
+    min-width: 38px;
+  }
+
+  .ie-toolbar-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .ie-toolbar {
+    min-height: 39px;
+  }
+
+  .ie-toolbar .ie-toolbar-button {
+    height: 32px;
+  }
+
+  .ie-toolbar-glyph img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .vapornet-home-grid,
+  .vapornet-two-column,
+  .vapornet-project-list,
+  .vapornet-help-layout,
+  .vapornet-help-shortcuts,
+  .vapornet-help-steps,
+  .vapornet-skill-grid,
+  .vapornet-album-grid,
+  .vapornet-curated-links,
+  .vapornet-manifesto ul {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-career-snapshot {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-career-intro {
+    border-right: 0;
+    border-bottom: 1px solid #443f89;
+  }
+
+  .vapornet-work-entry {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .vapornet-work-period {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .vapornet-work-period > span {
+    font-size: 15px;
+  }
+
+  .vapornet-about-operator {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-about-portrait {
+    min-height: 250px;
+    border-right: 0;
+    border-bottom: 2px solid #2de2e6;
+  }
+
+  .vapornet-about-card.is-machine,
+  .vapornet-about-card.is-racing,
+  .vapornet-about-card.is-dota,
+  .vapornet-about-card.is-eva {
+    grid-column: 1 / -1;
+  }
+
+  .vapornet-cat-network-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .vapornet-cat-network-heading > strong {
+    text-align: left;
+  }
+
+  .vapornet-cat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vapornet-cat-grid li:last-child:nth-child(odd) {
+    box-sizing: border-box;
+    width: calc(50% - 4px);
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+
+  .vapornet-cat-stats,
+  .vapornet-about-telemetry > dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .vapornet-about-telemetry-heading {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .vapornet-about-telemetry-heading small {
+    width: 100%;
+    margin-left: 15px;
+  }
+
+  .vapornet-station-tracks {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-help-section.is-wide {
+    grid-column: auto;
+  }
+
+  .vapornet-tracks-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-now-panel dl {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-moments-status {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-moments-status > div {
+    border-right: 0;
+    border-bottom: 1px solid #443f89;
+  }
+
+  .vapornet-moments-status > div:last-child {
+    border-bottom: 0;
+  }
+
+  .vapornet-moments-timeline::before {
+    left: 82px;
+  }
+
+  .vapornet-moment-row {
+    grid-template-columns: 66px minmax(0, 1fr);
+    gap: 34px;
+  }
+
+  .vapornet-moment-node {
+    left: 77.5px;
+  }
+
+  .vapornet-moment-media-grid-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-moment-media-item {
+    aspect-ratio: 16 / 9;
+  }
+
+  .vapornet-moments-footer {
+    margin-left: 100px;
+  }
+
+  .vapornet-personal-links {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .ie-status-bar {
+    grid-template-columns: 1fr auto;
+  }
+
+  .ie-status-address {
+    display: none;
+  }
+}
+
+@container (max-width: 400px) {
+  .ie-menu-button {
+    padding-inline: 4px;
+  }
+
+  .ie-address-bar label,
+  .ie-toolbar-divider,
+  .ie-toolbar-button[aria-label='Stop'] {
+    display: none;
+  }
+
+  .vapornet-page {
+    padding: 14px;
+  }
+
+  .vapornet-help-destinations {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-help-shortcuts dl > div {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .vapornet-project-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .vapornet-project-section-heading > strong {
+    white-space: normal;
+  }
+
+  .vapornet-career-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-now-heading {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .vapornet-now-heading button {
+    width: 100%;
+    margin-left: 16px;
+    text-align: left;
+  }
+
+  .vapornet-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .vapornet-page .vapornet-radio-launch-panel,
+  .vapornet-station-directory-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .vapornet-station-header {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .vapornet-station-frequency {
+    font-size: 17px;
+  }
+
+  .vapornet-station-header > strong {
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+
+  .vapornet-track-card {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-track-artwork {
+    width: min(180px, 100%);
+    justify-self: center;
+  }
+
+  .vapornet-record-count {
+    white-space: normal;
+  }
+
+  .vapornet-about-card {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-about-card.is-racing,
+  .vapornet-about-card.is-dota,
+  .vapornet-about-card.is-eva {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-about-card-status > strong {
+    display: none;
+  }
+
+  .vapornet-r3-photo,
+  .vapornet-rider-photo,
+  .vapornet-dota-client,
+  .vapornet-eva-monitor {
+    min-height: 240px;
+    border-right: 0;
+    border-bottom: 1px solid currentColor;
+  }
+
+  .vapornet-dota-client,
+  .vapornet-eva-monitor {
+    min-height: 200px;
+  }
+
+  .vapornet-about-intro > dl,
+  .vapornet-cat-stats,
+  .vapornet-about-telemetry > dl {
+    grid-template-columns: 1fr;
+  }
+
+  .vapornet-moments-timeline::before {
+    left: 7px;
+  }
+
+  .vapornet-moment-row {
+    display: block;
+    padding: 0 0 20px 28px;
+  }
+
+  .vapornet-moment-date {
+    padding: 0 0 7px;
+    text-align: left;
+  }
+
+  .vapornet-moment-date > span,
+  .vapornet-moment-date time {
+    display: inline-block;
+  }
+
+  .vapornet-moment-date > span {
+    margin-right: 7px;
+    font-size: 16px;
+  }
+
+  .vapornet-moment-node {
+    top: 3px;
+    left: 2.5px;
+  }
+
+  .vapornet-moment-card > header,
+  .vapornet-moment-media-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .vapornet-moment-card > header code {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .vapornet-moment-media-heading span {
+    text-align: left;
+  }
+
+  .vapornet-moments-footer {
+    margin-left: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vapornet-marquee span,
+  .vapornet-about-ticker span,
+  .vapornet-eva-at-field > svg,
+  .vapornet-new-badge,
+  .vapornet-under-construction {
+    animation: none;
+  }
+
+  .vapornet-album-disc {
+    transition: none;
+  }
+}

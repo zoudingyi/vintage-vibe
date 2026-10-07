@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Anchor, Button, Frame, GroupBox } from 'react95';
-import { projects } from './data';
+import { projects } from '../content/portfolio';
 
 export default function ProjectsApp() {
   const [selectedProjectId, setSelectedProjectId] = useState(projects[0].id);

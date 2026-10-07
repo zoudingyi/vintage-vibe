@@ -1,5 +1,5 @@
 import React from 'react';
-import { getMomentsNewestFirst } from './momentsData';
+import { getMomentsNewestFirst } from '../momentsData';
 
 function formatPublishedAt(publishedAt) {
   const [date, time] = publishedAt.split('T');

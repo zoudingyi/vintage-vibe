@@ -9,7 +9,7 @@ import { ThemeProvider } from 'styled-components';
 import candy from 'react95/dist/themes/candy';
 import { theSixtiesUSA } from 'react95/dist/themes';
 import InternetExplorerApp from './InternetExplorerApp';
-import { BROWSER_STORAGE_KEY } from './browser/browserModel';
+import { BROWSER_STORAGE_KEY } from './browserModel';
 
 function renderBrowser(props = {}, theme = theSixtiesUSA) {
   const onOpenApp = props.onOpenApp || jest.fn();
