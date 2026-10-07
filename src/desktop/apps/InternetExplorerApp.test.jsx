@@ -50,6 +50,32 @@ test('opens on the VaporNet home page with an IE-style browser shell', () => {
   expect(screen.getByRole('button', { name: /back/i })).toBeDisabled();
 });
 
+test('hides the Cool Links and Project Archive directories from the home page', () => {
+  renderBrowser();
+  const homePage = screen.getByRole('main', {
+    name: /vapornet home web page/i
+  });
+
+  expect(
+    within(homePage).queryByRole('button', { name: /cool links/i })
+  ).not.toBeInTheDocument();
+  expect(
+    within(homePage).queryByRole('button', { name: /project archive/i })
+  ).not.toBeInTheDocument();
+  [
+    /about me/i,
+    /radio station/i,
+    /favorite records/i,
+    /moments/i,
+    /guestbook/i,
+    /browser help/i
+  ].forEach(directoryName => {
+    expect(
+      within(homePage).getByRole('button', { name: directoryName })
+    ).toBeInTheDocument();
+  });
+});
+
 test('dismisses an open menu when clicking outside the menu bar', () => {
   renderBrowser();
   const fileMenuButton = screen.getByRole('button', { name: /file menu/i });

@@ -68,12 +68,12 @@ const aboutCats = [
 function HomePage({ onNavigate }) {
   const destinations = [
     ['vintage://about', 'About Me', 'Personal signal & interests'],
-    ['vintage://projects', 'Project Archive', 'Interactive frontend systems'],
+    // ['vintage://projects', 'Project Archive', 'Interactive frontend systems'],
     ['vintage://radio', 'Radio Station', 'Tune into the desktop broadcast'],
     ['vintage://favorites', 'Favorite Records', 'A playlist-shaped canon'],
     ['vintage://moments', 'Moments', 'Personal timeline & field notes'],
     ['vintage://guestbook', 'Guestbook', 'Leave a local message'],
-    ['vintage://links', 'Cool Links', 'External destinations'],
+    // ['vintage://links', 'Cool Links', 'External destinations'],
     ['vintage://help', 'Browser Help', 'Addresses and safety information']
   ];
 

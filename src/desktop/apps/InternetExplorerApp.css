@@ -2937,8 +2937,8 @@
 
 .vapornet-moment-node {
   position: absolute;
-  top: 17px;
-  left: 116px;
+  top: 15px;
+  left: 118.5px;
   z-index: 1;
   width: 11px;
   height: 11px;
@@ -3394,7 +3394,7 @@
   }
 
   .vapornet-moment-node {
-    left: 75px;
+    left: 77.5px;
   }
 
   .vapornet-moment-media-grid-layout {
@@ -3571,7 +3571,7 @@
 
   .vapornet-moment-node {
     top: 3px;
-    left: 0;
+    left: 2.5px;
   }
 
   .vapornet-moment-card > header,
