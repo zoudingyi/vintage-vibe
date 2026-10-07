@@ -25,7 +25,7 @@ Planned visual effects, audio features, and desktop applications are tracked in 
 - Eight curated react95 system themes with live color previews.
 - Five-page Settings app for appearance, desktop icons, taskbar, audio, and system behavior.
 - Eight wallpapers, including an animated Neon Horizon and a local Pixel Clouds background.
-- Profile, project explorer, Vaporwave Radio, My Videos, settings, terminal, guestbook, and system applications.
+- Profile, project explorer, Vaporwave Radio, Image Viewer, My Videos, settings, terminal, guestbook, and system applications.
 - Reduced-motion support and versioned local-storage recovery.
 
 ## Keyboard shortcuts
@@ -39,6 +39,14 @@ Planned visual effects, audio features, and desktop applications are tracked in 
 | `Alt + Tab` | Switch visible windows |
 | `Shift + Alt + Tab` | Switch visible windows in reverse |
 | `Alt + F4` | Close the active window |
+
+## Image Viewer
+
+Open Image Viewer from its desktop shortcut or the Start menu to browse six original vaporwave artworks. Previous and Next wrap around the gallery and fit each new image to the window. Use Out/In for 25%–400% zoom, 100% for original pixel dimensions, and Fit to show the complete image without enlarging it beyond its original size. Enlarged images can be scrolled in both directions.
+
+Info shows the description, filename, format, actual dimensions, and AI-generated origin. While focus is inside the viewer, left/right arrows change images and `+`/`-` adjust zoom. Minimized windows retain their image and zoom; closing the viewer or refreshing starts again with the first image in Fit mode. Failed images show a Retry button and do not block gallery navigation.
+
+The PNG artwork and generation prompts are versioned under [`src/assets/images/gallery/`](src/assets/images/gallery/PROMPTS.md).
 
 ## Development
 

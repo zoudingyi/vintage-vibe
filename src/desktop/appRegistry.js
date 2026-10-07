@@ -3,6 +3,7 @@ import folderIcon from '@/assets/icons/folder_closed.png';
 import internetExplorerIcon from '@/assets/icons/internet_explorer.png';
 import musicIcon from '@/assets/icons/music.png';
 import moviesIcon from '@/assets/icons/movies.png';
+import imageIcon from '@/assets/icons/image_viewer.png';
 import recycleIcon from '@/assets/icons/recycle_bin_full.png';
 import briefcaseIcon from '@/assets/icons/briefcase.png';
 import toolsIcon from '@/assets/icons/tools.png';
@@ -11,6 +12,7 @@ import mailIcon from '@/assets/icons/mail.png';
 import {
   FolderApp,
   GuestbookApp,
+  ImageViewerApp,
   InternetExplorerApp,
   MyComputerApp,
   ProfileApp,
@@ -62,6 +64,16 @@ const appRegistry = [
     component: VaporwaveRadioApp,
     defaultPosition: { x: 168, y: 96 },
     windowSize: { height: 570, width: 720 }
+  },
+  {
+    id: 'image-viewer',
+    title: 'Image Viewer',
+    icon: imageIcon,
+    showOnDesktop: true,
+    showInStartMenu: true,
+    component: ImageViewerApp,
+    defaultPosition: { x: 148, y: 72 },
+    windowSize: { height: 560, width: 760 }
   },
   {
     id: 'my-videos',

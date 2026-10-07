@@ -9,6 +9,7 @@ import { ThemeProvider } from 'styled-components';
 import { theSixtiesUSA } from 'react95/dist/themes';
 import Home from './index';
 import { DESKTOP_STORAGE_KEY } from '@/desktop/desktopStorage';
+import { galleryImages } from '@/desktop/apps/imageGallery';
 
 const originalAudioContext = window.AudioContext;
 
@@ -79,6 +80,55 @@ test('opens, minimizes, restores, and closes a desktop app window', () => {
   fireEvent.click(screen.getByLabelText(/close my computer/i));
 
   expect(screen.queryByText(/system properties/i)).not.toBeInTheDocument();
+});
+
+test('opens Image Viewer from both launchers without duplicating its window', () => {
+  renderDesktop();
+  fireEvent.doubleClick(screen.getByRole('button', { name: 'Image Viewer', exact: true }));
+  expect(screen.getByRole('dialog', { name: 'Image Viewer' })).toBeInTheDocument();
+  openStartMenuItem(/^Image Viewer$/);
+  expect(screen.getAllByRole('dialog', { name: 'Image Viewer' })).toHaveLength(1);
+  fireEvent.click(screen.getByLabelText('Close Image Viewer'));
+  openStartMenuItem(/^Image Viewer$/);
+  expect(screen.getByRole('dialog', { name: 'Image Viewer' })).toBeInTheDocument();
+});
+
+test('preserves Image Viewer state when minimized and resets it after closing', () => {
+  renderDesktop();
+  openStartMenuItem(/^Image Viewer$/);
+  fireEvent.click(screen.getByRole('button', { name: 'Next image' }));
+  const artwork = screen.getByAltText(galleryImages[1].alt);
+  Object.defineProperties(artwork, {
+    naturalWidth: { value: 1536 }, naturalHeight: { value: 1024 }
+  });
+  fireEvent.load(artwork);
+  fireEvent.click(screen.getByRole('button', { name: 'Actual size (100%)' }));
+  fireEvent.click(screen.getByLabelText('Minimize Image Viewer'));
+  fireEvent.click(screen.getByRole('button', { name: 'Restore Image Viewer' }));
+  expect(artwork).toBeVisible();
+  expect(within(screen.getByRole('dialog', { name: 'Image Viewer' })).getByRole('status'))
+    .toHaveTextContent(/Night City\s*02 \/ 06\s*100%\s*Ready/);
+  fireEvent.click(screen.getByLabelText('Close Image Viewer'));
+  openStartMenuItem(/^Image Viewer$/);
+  const viewer = screen.getByRole('dialog', { name: 'Image Viewer' });
+  expect(within(viewer).getByAltText(galleryImages[0].alt)).toBeInTheDocument();
+  expect(within(viewer).getByRole('button', { name: 'Fit to window' }))
+    .toHaveAttribute('aria-pressed', 'true');
+});
+
+test('opens Image Viewer with one tap in compact mode', () => {
+  const originalMatchMedia = window.matchMedia;
+  window.matchMedia = jest.fn().mockReturnValue({
+    addEventListener: jest.fn(), matches: true, removeEventListener: jest.fn()
+  });
+  try {
+    renderDesktop();
+    fireEvent.click(screen.getByRole('button', { name: 'Image Viewer', exact: true }));
+    expect(screen.getByRole('dialog', { name: 'Image Viewer' })).toBeInTheDocument();
+    expect(screen.queryByLabelText('Maximize Image Viewer')).toBeNull();
+  } finally {
+    window.matchMedia = originalMatchMedia;
+  }
 });
 
 test('preserves application state while its window is minimized', () => {
@@ -438,6 +488,7 @@ test('navigates and opens start menu apps with the keyboard', () => {
     name: /vaporwave radio/i
   });
   const profileItem = screen.getByRole('menuitem', { name: /profile/i });
+  const viewerItem = screen.getByRole('menuitem', { name: /image viewer/i });
 
   expect(browserItem).toHaveFocus();
 
@@ -445,6 +496,9 @@ test('navigates and opens start menu apps with the keyboard', () => {
   expect(radioItem).toHaveFocus();
 
   fireEvent.keyDown(radioItem, { key: 'ArrowDown' });
+  expect(viewerItem).toHaveFocus();
+
+  fireEvent.keyDown(viewerItem, { key: 'ArrowDown' });
   expect(profileItem).toHaveFocus();
 
   fireEvent.keyDown(profileItem, { key: 'Enter' });

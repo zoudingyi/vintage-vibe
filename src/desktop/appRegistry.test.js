@@ -42,9 +42,20 @@ test('uses Vaporwave Radio as the desktop music shortcut', () => {
     'my-folder',
     'internet-explorer',
     'vaporwave-radio',
+    'image-viewer',
     'my-videos',
     'recycle-bin'
   ]);
+});
+
+test('registers Image Viewer with desktop and Start menu entries', () => {
+  expect(appRegistry.find(app => app.id === 'image-viewer')).toMatchObject({
+    title: 'Image Viewer',
+    showInStartMenu: true,
+    showOnDesktop: true,
+    defaultPosition: { x: 148, y: 72 },
+    windowSize: { height: 560, width: 760 }
+  });
 });
 
 test('registers Internet Explorer as a desktop and Start menu application', () => {
