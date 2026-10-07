@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '@/desktop/DesktopWallpaper.css';
 import './index.css';
 import styled, { ThemeProvider } from 'styled-components';
 

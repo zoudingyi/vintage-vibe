@@ -1,0 +1,158 @@
+.start-screen--computer .cinema-title { padding-top: 20px; }
+.start-screen--computer .cinema-title h1 {
+  font-size: clamp(48px, 8.4vw, 112px);
+  text-shadow: 0 2px 20px #180b3890, 0 0 16px #ffe3ec55, 0 0 38px #f4bad022;
+}
+.start-screen--computer .cinema-title .cinema-title__note { margin-top: 12px; }
+
+.computer-entrance {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  margin: 36px auto 0;
+  color: #f5e5e5;
+  font: 10px/1.5 monospace;
+  letter-spacing: 0.08em;
+  text-shadow: none;
+}
+.computer-entrance button { font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.computer-entrance button:disabled { cursor: default; }
+.computer-entrance button:focus-visible { outline: 2px solid #48f7ff; outline-offset: 7px; }
+.computer-entrance__instruction { display: block; min-height: 34px; margin-top: 14px; color: #ead3e2; font-size: 9px; line-height: 1.7; }
+.computer-entrance__instruction small { display: block; font-size: 8px; opacity: 0.65; margin-top: 5px; }
+
+/* A CRT monitor with pastel reflections and a curved glass face. */
+.retro-computer { position: relative; }
+.retro-computer__hardware { position: relative; width: 180px; isolation: isolate; }
+.retro-computer__hardware::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  bottom: -12px;
+  left: -18px;
+  width: calc(100% + 36px);
+  height: 32px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 28% 50%, #62efe716, transparent 60%), radial-gradient(ellipse at 72% 50%, #fa75c918, transparent 60%);
+  filter: blur(12px);
+  pointer-events: none;
+}
+.retro-computer__monitor {
+  position: relative;
+  z-index: 1;
+  width: 180px;
+  height: 156px;
+  margin: 0 auto;
+  padding: 12px 12px 27px;
+  border: 2px solid #91879c;
+  border-radius: 12px 12px 8px 8px;
+  background: repeating-linear-gradient(0deg, #75606704 0 1px, transparent 1px 3px), radial-gradient(ellipse at 100% 100%, #b9a4c14d, transparent 65%), linear-gradient(125deg, #c6bdc6, #b7acbe 48%, #a69bad);
+  box-shadow: inset 1px 1px 0 #e2d8df66, inset -2px -2px 1px #82788b80, inset 0 0 0 3px #cfbfd22b, 0 8px 14px #08021c33;
+}
+.retro-computer__color-mark { position: absolute; top: 5px; left: 15px; display: flex; gap: 2px; opacity: 0.4; }
+.retro-computer__color-mark i { width: 8px; height: 2px; background: #ac95c5; box-shadow: 0 1px 0 #fff0db; }
+.retro-computer__color-mark i:nth-child(2) { background: #d893b0; }
+.retro-computer__color-mark i:nth-child(3) { background: #82bdb7; }
+.retro-computer__screen {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 110px;
+  padding: 0;
+  overflow: hidden;
+  border: 6px solid #736d80;
+  border-radius: 17px / 14px;
+  background: #16142e;
+  box-shadow: 0 0 0 2px #9a8ca4, 0 -1px 0 3px #beb1c14d, 0 1px 0 3px #88789166, inset 0 0 12px #000;
+}
+.retro-computer__picture {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 70%, #72538755, transparent 70%), linear-gradient(145deg, #25233e, #343257 58%, #26263e);
+  opacity: 0.65;
+  filter: brightness(0.7) saturate(0.65);
+  transition: filter 450ms ease, opacity 450ms ease;
+}
+.retro-computer__screen::after {
+  content: '';
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 45%, transparent 40%, #080414a6 100%), radial-gradient(ellipse at 18% 0%, #f0efff12, transparent 50%), linear-gradient(125deg, #b9f7f50a, transparent 40%, #ef8cce08);
+  box-shadow: inset 0 0 12px #050213, inset 0 2px 5px #e0fbff14;
+}
+.retro-computer__static { position: absolute; inset: 0; opacity: 0.015; background: repeating-conic-gradient(#ede7ff99 0% 25%, #25234499 0% 50%) 0 0 / 3px 3px; animation: retro-computer-static 220ms steps(2) infinite; }
+.retro-computer__scanlines { position: absolute; inset: 0; z-index: 2; background: repeating-linear-gradient(transparent 0 2px, #20183266 2px 3px); pointer-events: none; }
+.retro-computer__osd { position: absolute; top: 8px; right: 9px; z-index: 3; color: #c9ffd2; font: 5px/1 monospace; letter-spacing: 0.08em; text-shadow: 1px 1px 0 #405a63; }
+.retro-computer__monitor:is(:hover, :focus-within) .retro-computer__picture { filter: brightness(1.6) saturate(0.95); opacity: 1; }
+.retro-computer__monitor-trim { position: absolute; bottom: 6px; left: 14px; right: 13px; display: flex; justify-content: space-between; align-items: center; color: #756a80; }
+.retro-computer__brand { font: bold 5px/1.2 monospace; letter-spacing: 0.1em; text-align: left; text-shadow: 0 1px 0 #ffffff30; }
+.retro-computer__brand small { display: block; margin-top: 3px; font: 3px/1 monospace; letter-spacing: 0.05em; }
+.retro-computer__monitor-controls { display: flex; align-items: center; gap: 4px; }
+.retro-computer__monitor-controls i { width: 6px; height: 6px; border: 1px solid #8d8098; border-radius: 50%; background: linear-gradient(135deg, #c4b9c9, #aa9aaf); box-shadow: inset 1px 1px 0 #e0d3e04d, 1px 1px 0 #8b788780; }
+.retro-computer__monitor-controls i::after { content: ''; display: block; width: 1px; height: 3px; margin: 1px auto; background: #7b6876; }
+.retro-computer__monitor-controls b { width: 4px; height: 4px; margin-left: 2px; border-radius: 50%; background: #758886; box-shadow: 0 0 0 #a0fce300; transition: background 450ms ease, box-shadow 450ms ease; }
+.retro-computer__stand { position: relative; width: 62px; height: 9px; margin: 0 auto; background: linear-gradient(90deg, #9788a1, #bfb1be 25% 75%, #a69aaf); border-bottom: 2px solid #8c7f99; }
+.retro-computer__stand::after { content: ''; position: absolute; bottom: -5px; left: -17px; width: 96px; height: 7px; border: 1px solid #95879f; border-radius: 8px 8px 3px 3px; background: linear-gradient(#beb2c3, #a596b0); box-shadow: inset 1px 1px 0 #dfd4e34d, 1px 2px 0 #72536766, 0 3px 8px #08021c22; }
+.retro-computer__controls { display: flex; align-items: center; gap: 6px; }
+.retro-computer__power-button { display: grid; place-items: center; width: 20px; height: 18px; padding: 0; border: 2px solid #8e809d; border-radius: 4px; background: linear-gradient(135deg, #bbb0c4, #a697b1); box-shadow: inset 1px 1px 0 #e0d3e04d, inset -1px -1px 0 #96829e66, 1px 1px 0 #7e647a80; color: #65596f; transition: background 150ms ease, color 150ms ease; }
+.retro-computer__power-button span { font: 11px/1 Arial, sans-serif; }
+.retro-computer__power-button:hover { background: #c4d9d3; color: #446b65; }
+.retro-computer__monitor:is(:hover, :focus-within) .retro-computer__monitor-controls b { background: #8fbeb0; box-shadow: 0 0 5px #8edcc566; }
+.retro-computer--booting .retro-computer__monitor .retro-computer__monitor-controls b { background: #93f6d5; box-shadow: 0 0 8px #93f6d5; }
+.retro-computer--booting .retro-computer__hardware { z-index: 2; transform-origin: var(--camera-origin-x) var(--camera-origin-y); animation: retro-computer-camera 1s cubic-bezier(0.65, 0, 0.3, 1) forwards; }
+.retro-computer--booting .retro-computer__picture { animation: retro-computer-boot 300ms steps(2) forwards; }
+.retro-computer--booting .retro-computer__static { z-index: 2; animation: retro-computer-stabilize 400ms steps(3) forwards; }
+.retro-computer__desktop-picture { display: block; width: 100%; height: 100%; }
+.retro-computer__wallpaper { transform-origin: top left; }
+.retro-computer__connected-desktop { position: absolute; inset: 0; opacity: 0; animation: retro-computer-connect 1s linear forwards; }
+.retro-computer-portal { position: fixed; z-index: 10000001; left: var(--screen-x); top: var(--screen-y); width: var(--screen-width); height: var(--screen-height); overflow: hidden; border-radius: 10px; background: transparent; pointer-events: none; opacity: 0; animation: retro-computer-enter 1s cubic-bezier(0.65, 0, 0.3, 1) forwards; }
+.retro-computer-portal::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(transparent 0 2px, #20183255 2px 3px); pointer-events: none; animation: retro-computer-scanlines 1s ease-out forwards; }
+
+@keyframes retro-computer-static { 50% { background-position: 2px 1px; } }
+@keyframes retro-computer-boot { 0% { transform: translateX(0); } 25% { transform: translateX(-6px); filter: hue-rotate(25deg); } 65% { transform: translateX(4px); } 100% { transform: translateX(0); } }
+@keyframes retro-computer-stabilize { 0% { opacity: 0.65; } 45% { opacity: 0.3; } 100% { opacity: 0; } }
+@keyframes retro-computer-connect { 0%, 18% { opacity: 0; } 30%, 100% { opacity: 1; } }
+@keyframes retro-computer-enter {
+  0%, 30% { left: var(--screen-x); top: var(--screen-y); width: var(--screen-width); height: var(--screen-height); opacity: 0; border-radius: 10px; }
+  40% { left: var(--screen-x); top: var(--screen-y); width: var(--screen-width); height: var(--screen-height); opacity: 1; border-radius: 10px; }
+  100% { left: var(--portal-end-x); top: var(--portal-end-y); width: var(--portal-end-width); height: var(--portal-end-height); opacity: 1; border-radius: 0; }
+}
+@keyframes retro-computer-camera {
+  0%, 40% { transform: translate(0, 0) scale(1, 1); }
+  100% { transform: translate(var(--camera-offset-x), var(--camera-offset-y)) scale(var(--camera-scale)); }
+}
+@keyframes retro-computer-scanlines { 0%, 35% { opacity: 0.6; } 100% { opacity: 0; } }
+
+
+@media (max-width: 600px) {
+  .start-screen--computer { padding: 12px; }
+  .start-screen--computer .cinema-title { padding-top: 0; }
+  .start-screen--computer .cinema-title h1 { margin-top: 16px; font-size: clamp(44px, 14vw, 78px); }
+  .start-screen--computer .cinema-title .cinema-title__tagline { margin-top: 14px; }
+  .computer-entrance { margin-top: 30px; }
+  .retro-computer__hardware { width: 156px; }
+  .retro-computer__monitor { width: 156px; height: 136px; padding: 10px 10px 25px; }
+  .retro-computer__monitor-trim { left: 12px; right: 11px; bottom: 5px; }
+  .retro-computer__brand { font-size: 4.5px; }
+  .retro-computer__brand small { font-size: 2.8px; }
+  .retro-computer__power-button { width: 18px; height: 16px; }
+  .retro-computer__controls { gap: 5px; }
+  .retro-computer__screen { height: 94px; border-width: 5px; border-radius: 15px / 12px; }
+  .computer-entrance__instruction { font-size: 8px; }
+}
+@media (max-height: 650px) {
+  .start-screen--computer .cinema-title { padding-top: 0; }
+  .start-screen--computer .cinema-title h1 { font-size: clamp(48px, 8.4vw, 84px); margin-top: 14px; }
+  .start-screen--computer .cinema-title .cinema-title__tagline { margin-top: 14px; }
+  .computer-entrance { margin-top: 30px; }
+}
+@media (max-height: 650px) and (max-width: 600px) {
+  .start-screen--computer .cinema-title h1 { font-size: clamp(44px, 14vw, 78px); }
+  .start-screen--computer .cinema-title .cinema-title__note { margin-top: 12px; font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .computer-entrance *, .computer-entrance *::before, .computer-entrance *::after { animation: none !important; transition: none !important; }
+}

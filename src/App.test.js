@@ -1,20 +1,23 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders the start screen', () => {
+test('opens the cinematic start screen with the retro computer entrance', () => {
   render(<App />);
 
   expect(
     screen.getByRole('heading', { name: /vintage vibe/i })
   ).toBeInTheDocument();
   expect(
-    screen.getByRole('link', { name: /boot desktop/i })
-  ).toBeInTheDocument();
-  expect(screen.getByText(/vaporos 0\.95/i)).toBeInTheDocument();
-  expect(screen.getByText(/portfolio online/i)).toBeInTheDocument();
+    screen.getByRole('button', { name: '启动复古电脑，进入桌面' })
+  ).toBeEnabled();
   expect(
-    screen.getByText(/a playable portfolio by devo zou/i)
+    screen.getByRole('button', { name: '按下电源键，进入桌面' })
+  ).toBeEnabled();
+  expect(
+    screen.getByText(/a personal world by devo zou/i)
   ).toBeInTheDocument();
-  expect(screen.getByText(/interactive portfolio system/i)).toBeInTheDocument();
-  expect(screen.getByText(/system ready/i)).toBeInTheDocument();
+  expect(screen.getByText('あの頃の未来へ、ようこそ。'))
+    .toHaveAttribute('lang', 'ja');
+  expect(screen.queryByRole('navigation', { name: /入口样式预览/ }))
+    .not.toBeInTheDocument();
 });
