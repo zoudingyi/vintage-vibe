@@ -612,10 +612,10 @@ test('updates and persists global audio preferences from settings', () => {
   fireEvent.click(screen.getByRole('tab', { name: /audio/i }));
 
   const soundToggle = screen.getByLabelText(/enable sound/i);
-  const volumeControl = screen.getByLabelText(/master volume/i);
+  const volumeControl = screen.getByRole('slider', { name: /master volume/i });
 
   expect(soundToggle).toBeChecked();
-  expect(volumeControl).toHaveValue('25');
+  expect(volumeControl).toHaveAttribute('aria-valuenow', '25');
 
   fireEvent.click(soundToggle);
   expect(
@@ -623,11 +623,65 @@ test('updates and persists global audio preferences from settings', () => {
       .soundEnabled
   ).toBe(false);
   fireEvent.click(soundToggle);
-  fireEvent.change(volumeControl, { target: { value: '40' } });
+  fireEvent.keyDown(volumeControl, { key: 'Home' });
+  for (let step = 0; step < 4; step += 1) {
+    fireEvent.keyDown(volumeControl, { key: 'PageUp' });
+  }
+
+  expect(volumeControl).toHaveAttribute('aria-valuenow', '40');
+  expect(screen.getByText('Master Volume: 40%')).toBeInTheDocument();
 
   expect(
     JSON.parse(window.localStorage.getItem(DESKTOP_STORAGE_KEY)).settings
   ).toMatchObject({ masterVolume: 40, soundEnabled: true });
+});
+
+test('keeps volume within its limits and disables test sound at zero', () => {
+  renderDesktop();
+  openStartMenuItem(/settings/i);
+  fireEvent.click(screen.getByRole('tab', { name: /audio/i }));
+
+  const volumeControl = screen.getByRole('slider', { name: /master volume/i });
+  const testSoundButton = screen.getByRole('button', { name: /test sound/i });
+
+  fireEvent.keyDown(volumeControl, { key: 'Home' });
+  fireEvent.keyDown(volumeControl, { key: 'ArrowLeft' });
+  expect(volumeControl).toHaveAttribute('aria-valuenow', '0');
+  expect(testSoundButton).toBeDisabled();
+
+  fireEvent.keyDown(volumeControl, { key: 'ArrowRight' });
+  expect(volumeControl).toHaveAttribute('aria-valuenow', '1');
+  expect(testSoundButton).toBeEnabled();
+
+  fireEvent.keyDown(volumeControl, { key: 'End' });
+  fireEvent.keyDown(volumeControl, { key: 'ArrowRight' });
+  expect(volumeControl).toHaveAttribute('aria-valuenow', '100');
+  expect(
+    JSON.parse(window.localStorage.getItem(DESKTOP_STORAGE_KEY)).settings
+      .masterVolume
+  ).toBe(100);
+});
+
+test('updates and saves master volume while dragging the slider', () => {
+  renderDesktop();
+  openStartMenuItem(/settings/i);
+  fireEvent.click(screen.getByRole('tab', { name: /audio/i }));
+
+  const volumeControl = screen.getByRole('slider', { name: /master volume/i });
+  jest.spyOn(volumeControl.parentElement, 'getBoundingClientRect').mockReturnValue({
+    left: 10,
+    width: 200
+  });
+
+  fireEvent.mouseDown(volumeControl, { clientX: 60 });
+  fireEvent.mouseMove(document, { clientX: 160 });
+  expect(volumeControl).toHaveAttribute('aria-valuenow', '75');
+  expect(screen.getByText('Master Volume: 75%')).toBeInTheDocument();
+  expect(
+    JSON.parse(window.localStorage.getItem(DESKTOP_STORAGE_KEY)).settings
+      .masterVolume
+  ).toBe(75);
+  fireEvent.mouseUp(document, { clientX: 160 });
 });
 
 test('plays a test sound through the global audio controls', () => {
@@ -659,9 +713,11 @@ test('plays a test sound through the global audio controls', () => {
   const testSoundButton = screen.getByRole('button', { name: /test sound/i });
   expect(testSoundButton).toBeEnabled();
 
-  fireEvent.change(screen.getByLabelText(/master volume/i), {
-    target: { value: '40' }
-  });
+  const volumeControl = screen.getByRole('slider', { name: /master volume/i });
+  fireEvent.keyDown(volumeControl, { key: 'Home' });
+  for (let step = 0; step < 4; step += 1) {
+    fireEvent.keyDown(volumeControl, { key: 'PageUp' });
+  }
   fireEvent.click(testSoundButton);
 
   expect(window.AudioContext).toHaveBeenCalledTimes(1);

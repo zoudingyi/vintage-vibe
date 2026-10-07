@@ -3,6 +3,7 @@ import {
   Button,
   GroupBox,
   Monitor,
+  Slider,
   Tab,
   TabBody,
   Tabs,
@@ -368,21 +369,29 @@ function AudioSettings({
         >
           Enable Sound
         </SettingsCheckbox>
-        <label className="settings-volume-control">
+        <div className="settings-volume-control">
           <span>Master Volume: {desktopSettings.masterVolume}%</span>
-          <input
-            aria-label="Master Volume"
-            max="100"
-            min="0"
-            onChange={event =>
+          <Slider
+            className="settings-volume-slider"
+            max={100}
+            min={0}
+            onChange={masterVolume =>
               onDesktopSettingsChange({
-                masterVolume: Number(event.target.value)
+                masterVolume
               })
             }
-            type="range"
+            ref={element => {
+              // React95 forwards ARIA props to the wrapper, not the slider thumb.
+              element?.querySelector('[role="slider"]')?.setAttribute(
+                'aria-label',
+                'Master Volume'
+              );
+            }}
+            size="calc(100% - 20px)"
+            step={1}
             value={desktopSettings.masterVolume}
           />
-        </label>
+        </div>
         <p className="settings-help-text">
           Every application uses these controls. Sound starts at 25% volume.
         </p>

@@ -730,8 +730,10 @@
   margin-bottom: 12px;
 }
 
-.settings-volume-control input {
-  width: 100%;
+.settings-volume-control .settings-volume-slider {
+  margin-right: 10px;
+  margin-bottom: 0;
+  margin-left: 10px;
 }
 
 .settings-audio-test {
