@@ -1,0 +1,31 @@
+.desktop-route-surface {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* 桌面始终按视口尺寸排版，只改变视觉缩放，避免动画中窗口重新布局。 */
+.desktop-route-content {
+  width: 100vw;
+  height: 100vh;
+  transform-origin: top left;
+}
+
+/* 动画使用实测的 left/top/width/height，解除 inset 对右侧和底部的约束。 */
+.desktop-route-surface.retro-computer-portal {
+  right: auto;
+  bottom: auto;
+}
+
+.retro-computer-portal > .desktop-route-content {
+  animation: retro-computer-desktop-scale var(--boot-zoom-duration) cubic-bezier(0.65, 0, 0.3, 1) var(--boot-intro-duration) both;
+}
+
+/* 启动阶段保持缩入小屏幕，2050ms 后与显示区域、机身镜头一起放大全屏。
+   终点为 scale(1)，移除动画类后与普通桌面的几何尺寸一致。 */
+@keyframes retro-computer-desktop-scale {
+  from {
+    transform: scale(var(--desktop-start-scale-x), var(--desktop-start-scale-y));
+  }
+  to { transform: scale(1); }
+}

@@ -17,11 +17,13 @@ Planned visual effects, audio features, and desktop applications are tracked in 
 
 ## Desktop features
 
+- Boot into the actual restored desktop, keeping its windows and media mounted through the route transition.
 - Draggable, resizable, minimizable, maximizable windows.
 - Active-window focus, taskbar switching, cascading, tiling, and Show Desktop.
 - Keyboard navigation for desktop icons, the Start menu, and open windows.
 - Responsive full-screen windows and single-tap app launching on compact or touch devices.
 - Persistent themes, window geometry, and optional session restore.
+- CRT shutdown with audio fade-out, a return to the powered-off computer, and restart using the session restore preference.
 - Eight curated react95 system themes with live color previews.
 - Five-page Settings app for appearance, desktop icons, taskbar, audio, and system behavior.
 - Eight wallpapers, including an animated Neon Horizon and a local Pixel Clouds background.

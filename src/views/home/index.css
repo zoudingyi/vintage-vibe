@@ -370,34 +370,6 @@
   margin-bottom: 24px;
 }
 
-.shutdown-screen {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  color: white;
-  background: #150030;
-  text-align: center;
-  text-shadow: rgba(0, 0, 0, 0.8) 1px 1px;
-}
-
-.shutdown-screen p {
-  margin-bottom: 20px;
-  font-size: 20px;
-}
-
-.shutdown-screen button {
-  min-width: 90px;
-  padding: 6px 12px;
-  border: 2px solid;
-  border-color: rgb(223, 155, 231) rgb(1, 0, 1) rgb(1, 0, 1)
-    rgb(223, 155, 231);
-  color: white;
-  background: #681e6b;
-  font: inherit;
-}
-
 .desktop-context-menu {
   position: fixed;
   z-index: 10000;

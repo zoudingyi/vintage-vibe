@@ -4,6 +4,7 @@ import './index.css';
 import styled, { ThemeProvider } from 'styled-components';
 
 import Taskbar from '@/desktop/Taskbar';
+import ShutdownSequence from '@/desktop/ShutdownSequence';
 import DesktopWindow from '@/desktop/DesktopWindow';
 import { DesktopProvider, useDesktop } from '@/desktop/DesktopProvider';
 import appRegistry from '@/desktop/appRegistry';
@@ -47,10 +48,12 @@ const Button = styled.button`
   }
 `;
 
-function DesktopShell({ initialDesktopData }) {
+function DesktopShell({ initialDesktopData, booting }) {
   const compactDesktop = useCompactDesktop();
   const [openStartMenu, setOpenStartMenu] = useState(false);
-  const [shutdown, setShutdown] = useState(false);
+  const [shutdown, setShutdown] = useState(null);
+  const [screenOff, setScreenOff] = useState(false);
+  const handleScreenOff = React.useCallback(() => setScreenOff(true), []);
   const [contextMenu, setContextMenu] = useState(null);
   const [bootLogDismissed, setBootLogDismissed] = useState(false);
   const [selectedDesktopAppId, setSelectedDesktopAppId] = useState(null);
@@ -117,6 +120,8 @@ function DesktopShell({ initialDesktopData }) {
 
   React.useEffect(() => {
     function keepWindowsInBounds() {
+      // 电源过渡期间冻结窗口几何，避免 resize 改动正在展示的桌面。
+      if (shutdown || booting) return;
       clampWindows({
         height: window.innerHeight - 47,
         width: window.innerWidth
@@ -125,10 +130,12 @@ function DesktopShell({ initialDesktopData }) {
 
     window.addEventListener('resize', keepWindowsInBounds);
     return () => window.removeEventListener('resize', keepWindowsInBounds);
-  }, [clampWindows]);
+  }, [booting, clampWindows, shutdown]);
 
   React.useEffect(() => {
     function handleSystemShortcut(event) {
+      // inert 不会停止 window 上的监听器，因此全局快捷键也需显式锁定。
+      if (shutdown || booting) return;
       if (event.ctrlKey && event.key === 'Escape') {
         event.preventDefault();
         setContextMenu(null);
@@ -156,7 +163,7 @@ function DesktopShell({ initialDesktopData }) {
 
     window.addEventListener('keydown', handleSystemShortcut);
     return () => window.removeEventListener('keydown', handleSystemShortcut);
-  }, [activeWindowId, cycleWindows, handleCloseWindow]);
+  }, [activeWindowId, booting, cycleWindows, handleCloseWindow, shutdown]);
 
   function updateDesktopSettings(nextSettings) {
     setDesktopSettings(currentSettings => ({
@@ -218,221 +225,229 @@ function DesktopShell({ initialDesktopData }) {
     desktopIconRefs.current[desktopApps[nextIndex].id]?.focus();
   }
 
-  if (shutdown) {
-    return (
-      <ThemeProvider theme={desktopTheme}>
-        <Wrapper
-          className="desktop-environment-wrapper"
-          data-scanline-intensity={desktopSettings.scanlineIntensity}
-          data-scanlines={desktopSettings.scanlines}
-          data-vhs-effects={desktopSettings.vhsEffects}
-          data-testid="desktop-environment"
-          style={desktopThemeStyle}
-        >
-          <div aria-hidden="true" className="vhs-overlay" />
-          <div
-            aria-hidden="true"
-            className="vhs-scan-error"
-            data-testid="vhs-scan-error"
-          />
-          <div className="shutdown-screen">
-            <p>Windows is shutting down...</p>
-            <p>Saving desktop settings to localStorage.</p>
-            <p>It is now safe to turn off your computer.</p>
-            <button onClick={() => setShutdown(false)}>Restart</button>
-          </div>
-        </Wrapper>
-      </ThemeProvider>
-    );
+  function shutdownDesktop() {
+    if (shutdown) return;
+    // 在动画和应用卸载前保存会话；保存失败仍允许关机，并将错误传给首页。
+    const saved = saveDesktopData({
+      session: { activeWindowId, windows },
+      settings: desktopSettings,
+      version: DESKTOP_STORAGE_VERSION
+    });
+    setOpenStartMenu(false);
+    setContextMenu(null);
+    setShutdown({
+      reducedMotion:
+        window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false,
+      saveFailed: !saved
+    });
   }
 
   return (
     <ThemeProvider theme={desktopTheme}>
-      <Wrapper
-        className="desktop-environment-wrapper"
-        data-scanline-intensity={desktopSettings.scanlineIntensity}
-        data-scanlines={desktopSettings.scanlines}
-        data-vhs-effects={desktopSettings.vhsEffects}
-        data-testid="desktop-environment"
-        style={desktopThemeStyle}
-      >
-        <div aria-hidden="true" className="vhs-overlay" />
+      {/* CRT 收束期间保留真实桌面，让应用完成音频淡出；熄屏后再卸载。 */}
+      {!screenOff && (
         <div
-          aria-hidden="true"
-          className="vhs-scan-error"
-          data-testid="vhs-scan-error"
-        />
-        <div
-          className={`desktop desktop-wallpaper-${desktopSettings.wallpaper} desktop-icons-${desktopSettings.iconLayout} desktop-icon-size-${desktopSettings.iconSize}`}
-          data-icon-glow={desktopSettings.iconGlowEffect}
-          data-testid="desktop-surface"
-          onClick={() => {
-            setOpenStartMenu(false);
-            setContextMenu(null);
-          }}
-          onContextMenu={event => {
-            event.preventDefault();
-            setOpenStartMenu(false);
-            setContextMenu(
-              getContextMenuPosition(event.clientX, event.clientY)
-            );
-          }}
+          className={`desktop-power-transition${shutdown ? ' desktop-power-transition--shutting-down' : ''}`}
+          aria-hidden={shutdown ? true : undefined}
+          {...(shutdown ? { inert: '' } : {})}
         >
-          {desktopApps.map(app => (
-            <Button
-              aria-pressed={selectedDesktopAppId === app.id}
-              className="desktop-application-item"
-              data-selected={selectedDesktopAppId === app.id}
-              onClick={event => {
-                event.stopPropagation();
-                setSelectedDesktopAppId(app.id);
-                if (compactDesktop) {
-                  openApp(app.id);
-                }
-              }}
-              onDoubleClick={event => {
-                event.stopPropagation();
-                openApp(app.id);
-              }}
-              onFocus={() => setSelectedDesktopAppId(app.id)}
-              onKeyDown={event => handleDesktopIconKeyDown(event, app.id)}
-              ref={element => {
-                desktopIconRefs.current[app.id] = element;
-              }}
-              key={app.id}
-            >
-              <img
-                data-testid={`desktop-icon-${app.id}`}
-                src={app.icon}
-                width={DESKTOP_ICON_PIXELS[desktopSettings.iconSize]}
-                height={DESKTOP_ICON_PIXELS[desktopSettings.iconSize]}
-                alt=""
-              />
-              <span>{app.title}</span>
-            </Button>
-          ))}
-          <div aria-hidden="true" className="desktop-decorative-copy">
-            <span lang="ja">仮想世界</span>
-            <small>VIRTUAL WORLD // 夜間通信</small>
-          </div>
-          {windows.map(windowState => {
-            const app = apps.find(item => item.id === windowState.appId);
-
-            if (!app) {
-              return null;
-            }
-
-            return (
-              <DesktopWindow
-                app={app}
-                compact={compactDesktop}
-                windowState={windowState}
-                active={activeWindowId === windowState.id}
-                onClose={handleCloseWindow}
-                onFocus={focusWindow}
-                onMinimize={minimizeWindow}
-                onMove={moveWindow}
-                onResize={resizeWindow}
-                onToggleMaximize={toggleMaximizeWindow}
-                appProps={{
-                  desktopSettings,
-                  onOpenApp: openApp,
-                  onPlayTestSound: playAudioTestTone,
-                  onClearDesktopSession: clearSession,
-                  onDesktopSettingsChange: updateDesktopSettings,
-                  onResetAppearance: resetDesktopAppearance,
-                  onResetDesktopSettings: resetDesktopSettings,
-                  windowCount: windows.length
-                }}
-                key={windowState.id}
-              />
-            );
-          })}
-          {contextMenu && (
+          <Wrapper
+            className="desktop-environment-wrapper"
+            data-scanline-intensity={desktopSettings.scanlineIntensity}
+            data-scanlines={desktopSettings.scanlines}
+            data-vhs-effects={desktopSettings.vhsEffects}
+            data-testid="desktop-environment"
+            style={desktopThemeStyle}
+          >
+            <div aria-hidden="true" className="vhs-overlay" />
             <div
-              className="desktop-context-menu"
-              style={{ left: contextMenu.x, top: contextMenu.y }}
-              onClick={event => event.stopPropagation()}
-              role="menu"
+              aria-hidden="true"
+              className="vhs-scan-error"
+              data-testid="vhs-scan-error"
+            />
+            <div
+              className={`desktop desktop-wallpaper-${desktopSettings.wallpaper} desktop-icons-${desktopSettings.iconLayout} desktop-icon-size-${desktopSettings.iconSize}`}
+              data-icon-glow={desktopSettings.iconGlowEffect}
+              data-testid="desktop-surface"
+              onClick={() => {
+                setOpenStartMenu(false);
+                setContextMenu(null);
+              }}
+              onContextMenu={event => {
+                event.preventDefault();
+                setOpenStartMenu(false);
+                setContextMenu(
+                  getContextMenuPosition(event.clientX, event.clientY)
+                );
+              }}
             >
-              <button
-                onClick={() => {
-                  cascadeWindows();
-                  setContextMenu(null);
-                }}
-              >
-                Cascade Windows
-              </button>
-              <button
-                onClick={() => {
-                  tileWindows({
-                    height: window.innerHeight - 47,
-                    width: window.innerWidth
-                  });
-                  setContextMenu(null);
-                }}
-              >
-                Tile Windows
-              </button>
-              <button
-                onClick={() => {
-                  showDesktop();
-                  setContextMenu(null);
-                }}
-              >
-                Show Desktop
-              </button>
-              <button onClick={openPersonalization}>Personalize</button>
-              <button onClick={() => setContextMenu(null)}>Refresh</button>
+              {desktopApps.map(app => (
+                <Button
+                  aria-pressed={selectedDesktopAppId === app.id}
+                  className="desktop-application-item"
+                  data-selected={selectedDesktopAppId === app.id}
+                  onClick={event => {
+                    event.stopPropagation();
+                    setSelectedDesktopAppId(app.id);
+                    if (compactDesktop) {
+                      openApp(app.id);
+                    }
+                  }}
+                  onDoubleClick={event => {
+                    event.stopPropagation();
+                    openApp(app.id);
+                  }}
+                  onFocus={() => setSelectedDesktopAppId(app.id)}
+                  onKeyDown={event => handleDesktopIconKeyDown(event, app.id)}
+                  ref={element => {
+                    desktopIconRefs.current[app.id] = element;
+                  }}
+                  key={app.id}
+                >
+                  <img
+                    data-testid={`desktop-icon-${app.id}`}
+                    src={app.icon}
+                    width={DESKTOP_ICON_PIXELS[desktopSettings.iconSize]}
+                    height={DESKTOP_ICON_PIXELS[desktopSettings.iconSize]}
+                    alt=""
+                  />
+                  <span>{app.title}</span>
+                </Button>
+              ))}
+              <div aria-hidden="true" className="desktop-decorative-copy">
+                <span lang="ja">仮想世界</span>
+                <small>VIRTUAL WORLD // 夜間通信</small>
+              </div>
+              {windows.map(windowState => {
+                const app = apps.find(item => item.id === windowState.appId);
+
+                if (!app) {
+                  return null;
+                }
+
+                return (
+                  <DesktopWindow
+                    app={app}
+                    compact={compactDesktop}
+                    windowState={windowState}
+                    active={activeWindowId === windowState.id}
+                    interactive={!booting && !shutdown}
+                    onClose={handleCloseWindow}
+                    onFocus={focusWindow}
+                    onMinimize={minimizeWindow}
+                    onMove={moveWindow}
+                    onResize={resizeWindow}
+                    onToggleMaximize={toggleMaximizeWindow}
+                    appProps={{
+                      desktopSettings,
+                      systemShuttingDown: Boolean(shutdown),
+                      onOpenApp: openApp,
+                      onPlayTestSound: playAudioTestTone,
+                      onClearDesktopSession: clearSession,
+                      onDesktopSettingsChange: updateDesktopSettings,
+                      onResetAppearance: resetDesktopAppearance,
+                      onResetDesktopSettings: resetDesktopSettings,
+                      windowCount: windows.length
+                    }}
+                    key={windowState.id}
+                  />
+                );
+              })}
+              {contextMenu && (
+                <div
+                  className="desktop-context-menu"
+                  style={{ left: contextMenu.x, top: contextMenu.y }}
+                  onClick={event => event.stopPropagation()}
+                  role="menu"
+                >
+                  <button
+                    onClick={() => {
+                      cascadeWindows();
+                      setContextMenu(null);
+                    }}
+                  >
+                    Cascade Windows
+                  </button>
+                  <button
+                    onClick={() => {
+                      tileWindows({
+                        height: window.innerHeight - 47,
+                        width: window.innerWidth
+                      });
+                      setContextMenu(null);
+                    }}
+                  >
+                    Tile Windows
+                  </button>
+                  <button
+                    onClick={() => {
+                      showDesktop();
+                      setContextMenu(null);
+                    }}
+                  >
+                    Show Desktop
+                  </button>
+                  <button onClick={openPersonalization}>Personalize</button>
+                  <button onClick={() => setContextMenu(null)}>Refresh</button>
+                </div>
+              )}
+              {desktopSettings.showBootLog && !bootLogDismissed && (
+                <div className="boot-sequence" aria-label="Boot sequence">
+                  <strong>Vintage BIOS 0.95</strong>
+                  <p>Memory check: 640K OK</p>
+                  <p>Loading desktop shell...</p>
+                  <p>Boot sequence complete.</p>
+                  <button onClick={() => setBootLogDismissed(true)}>
+                    Dismiss boot log
+                  </button>
+                </div>
+              )}
+              {storageNotice && (
+                <div className="desktop-notice" role="status">
+                  <span>{storageNotice}</span>
+                  <button onClick={() => setStorageNotice(null)}>Dismiss</button>
+                </div>
+              )}
             </div>
-          )}
-          {desktopSettings.showBootLog && !bootLogDismissed && (
-            <div className="boot-sequence" aria-label="Boot sequence">
-              <strong>Vintage BIOS 0.95</strong>
-              <p>Memory check: 640K OK</p>
-              <p>Loading desktop shell...</p>
-              <p>Boot sequence complete.</p>
-              <button onClick={() => setBootLogDismissed(true)}>
-                Dismiss boot log
-              </button>
-            </div>
-          )}
-          {storageNotice && (
-            <div className="desktop-notice" role="status">
-              <span>{storageNotice}</span>
-              <button onClick={() => setStorageNotice(null)}>Dismiss</button>
-            </div>
-          )}
+            <Taskbar
+              open={openStartMenu}
+              setOpen={setOpenStartMenu}
+              apps={apps}
+              windows={windows}
+              activeWindowId={activeWindowId}
+              onFocusWindow={focusWindow}
+              onMinimizeWindow={minimizeWindow}
+              onRestoreWindow={restoreWindow}
+              onOpenApp={openApp}
+              onShutdown={shutdownDesktop}
+              clockFormat={desktopSettings.clockFormat}
+              showSeconds={desktopSettings.showSeconds}
+              taskbarButtonMode={desktopSettings.taskbarButtonMode}
+            />
+          </Wrapper>
         </div>
-        <Taskbar
-          open={openStartMenu}
-          setOpen={setOpenStartMenu}
-          apps={apps}
-          windows={windows}
-          activeWindowId={activeWindowId}
-          onFocusWindow={focusWindow}
-          onMinimizeWindow={minimizeWindow}
-          onRestoreWindow={restoreWindow}
-          onOpenApp={openApp}
-          onShutdown={() => setShutdown(true)}
-          clockFormat={desktopSettings.clockFormat}
-          showSeconds={desktopSettings.showSeconds}
-          taskbarButtonMode={desktopSettings.taskbarButtonMode}
+      )}
+      {shutdown && (
+        <ShutdownSequence
+          reducedMotion={shutdown.reducedMotion}
+          saveFailed={shutdown.saveFailed}
+          onScreenOff={handleScreenOff}
         />
-      </Wrapper>
+      )}
     </ThemeProvider>
   );
 }
 
-function Home() {
-  const [initialDesktopData] = useState(loadDesktopData);
+function Home({ initialDesktopData: bootDesktopData, booting = false }) {
+  // 开机动画与路由桌面共用此实例，初始数据只读取一次，避免交接时重置会话。
+  const [initialDesktopData] = useState(() => bootDesktopData ?? loadDesktopData());
   const initialSession = initialDesktopData.settings.restoreSession
     ? initialDesktopData.session
     : DEFAULT_DESKTOP_SESSION;
 
   return (
     <DesktopProvider apps={appRegistry} initialSession={initialSession}>
-      <DesktopShell initialDesktopData={initialDesktopData} />
+      <DesktopShell initialDesktopData={initialDesktopData} booting={booting} />
     </DesktopProvider>
   );
 }

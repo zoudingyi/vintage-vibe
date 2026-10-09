@@ -1,13 +1,16 @@
 import {
+  act,
   fireEvent,
   render,
   screen,
   waitFor,
   within
 } from '@testing-library/react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { theSixtiesUSA } from 'react95/dist/themes';
-import Home from './index';
+import DesktopExperience from '@/desktop/DesktopExperience';
+import StartScreen from '../start-screen';
 import { DESKTOP_STORAGE_KEY } from '@/desktop/desktopStorage';
 import { galleryImages } from '@/desktop/apps/imageGallery';
 
@@ -16,7 +19,14 @@ const originalAudioContext = window.AudioContext;
 function renderDesktop() {
   return render(
     <ThemeProvider theme={theSixtiesUSA}>
-      <Home />
+      <MemoryRouter initialEntries={['/home']} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <Routes>
+          <Route path="/" element={<DesktopExperience />}>
+            <Route index element={<StartScreen />} />
+            <Route path="home" element={<></>} />
+          </Route>
+        </Routes>
+      </MemoryRouter>
     </ThemeProvider>
   );
 }
@@ -541,14 +551,95 @@ test('closes the start menu when clicking the desktop', () => {
   expect(screen.queryByText(/profile/i)).not.toBeInTheDocument();
 });
 
-test('enters the shutdown screen from the start menu', () => {
+test('shuts down in stages and boots back into the saved desktop session', () => {
+  jest.useFakeTimers();
   renderDesktop();
+  fireEvent.doubleClick(screen.getByRole('button', { name: /my computer/i }));
 
   openStartMenuItem(/shutdown/i);
 
-  expect(
-    screen.getByText(/it is now safe to turn off your computer/i)
-  ).toBeInTheDocument();
+  expect(screen.getByRole('status')).toHaveTextContent('VIBE/95 is shutting down');
+  expect(screen.queryByRole('button', { name: /^start$/i })).not.toBeInTheDocument();
+  fireEvent.keyDown(window, { ctrlKey: true, key: 'Escape' });
+  expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+
+  act(() => jest.advanceTimersByTime(1000));
+  expect(screen.getByRole('status')).toHaveTextContent('VIBE/95 is shutting down');
+  expect(screen.queryByRole('button', { name: '按下电源键，进入桌面' })).not.toBeInTheDocument();
+  act(() => jest.advanceTimersByTime(300));
+  expect(screen.getByRole('button', { name: '按下电源键，进入桌面' })).toBeDisabled();
+  act(() => jest.advanceTimersByTime(799));
+  expect(screen.getByRole('button', { name: '按下电源键，进入桌面' })).toBeDisabled();
+  act(() => jest.advanceTimersByTime(1));
+  const powerButton = screen.getByRole('button', { name: '按下电源键，进入桌面' });
+  expect(powerButton).toBeEnabled();
+  expect(powerButton).toHaveFocus();
+  expect(screen.getByRole('status')).toHaveTextContent('点击电源键，重新启动');
+
+  fireEvent.click(powerButton);
+  expect(screen.getByRole('status')).toHaveTextContent('VIBE/95 · BOOTING');
+  act(() => jest.advanceTimersByTime(3000));
+  expect(screen.getByRole('dialog', { name: /my computer/i })).toBeInTheDocument();
+});
+
+test('boots into an empty desktop when session restore is disabled', () => {
+  jest.useFakeTimers();
+  renderDesktop();
+  openStartMenuItem(/settings/i);
+  fireEvent.click(screen.getByRole('tab', { name: /system/i }));
+  fireEvent.click(screen.getByRole('checkbox', { name: /restore/i }));
+  openStartMenuItem(/shutdown/i);
+  act(() => jest.advanceTimersByTime(2100));
+  fireEvent.click(screen.getByRole('button', { name: '按下电源键，进入桌面' }));
+  act(() => jest.advanceTimersByTime(3000));
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+});
+
+test('fades radio audio out, stops it, and does not autoplay after restarting', () => {
+  jest.useFakeTimers();
+  const play = mockSuccessfulMediaPlayback();
+  const pause = jest.spyOn(window.HTMLMediaElement.prototype, 'pause')
+    .mockImplementation(function pause() { fireEvent.pause(this); });
+  const { container } = renderDesktop();
+  openStartMenuItem(/vaporwave radio/i);
+  fireEvent.click(screen.getByRole('button', { name: /play music/i }));
+  const audio = container.querySelector('audio');
+  expect(audio.volume).toBe(0.25);
+  openStartMenuItem(/shutdown/i);
+  act(() => jest.advanceTimersByTime(150));
+  expect(audio.volume).toBeLessThan(0.25);
+  expect(audio.volume).toBeGreaterThan(0);
+  act(() => jest.advanceTimersByTime(150));
+  expect(pause).toHaveBeenCalled();
+  act(() => jest.advanceTimersByTime(1800));
+  fireEvent.click(screen.getByRole('button', { name: '按下电源键，进入桌面' }));
+  act(() => jest.advanceTimersByTime(3000));
+  expect(screen.getByRole('button', { name: /play music/i })).toBeInTheDocument();
+  expect(play).toHaveBeenCalledTimes(1);
+  expect(container.querySelector('audio').volume).toBe(0.25);
+});
+
+test('uses a short fade for reduced motion and reports a failed save', () => {
+  jest.useFakeTimers();
+  const originalMatchMedia = window.matchMedia;
+  window.matchMedia = jest.fn(query => ({
+    matches: query === '(prefers-reduced-motion: reduce)',
+    addEventListener: jest.fn(), removeEventListener: jest.fn()
+  }));
+  try {
+    renderDesktop();
+    jest.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('Storage full');
+    });
+    openStartMenuItem(/shutdown/i);
+    expect(screen.getByRole('status')).toHaveTextContent('无法保存桌面设置');
+    act(() => jest.advanceTimersByTime(180));
+    expect(screen.getByRole('button', { name: '按下电源键，进入桌面' })).toBeEnabled();
+    expect(screen.getByRole('status')).toHaveTextContent('无法保存桌面设置');
+    expect(document.querySelector('.retro-computer--retreating')).not.toBeInTheDocument();
+  } finally {
+    window.matchMedia = originalMatchMedia;
+  }
 });
 
 test('shows profile skills from the start menu', () => {

@@ -408,7 +408,7 @@ function BroadcastTerminalRadio({
   );
 }
 
-export default function VaporwaveRadioApp({ desktopSettings }) {
+export default function VaporwaveRadioApp({ desktopSettings, systemShuttingDown = false }) {
   const radioAppearance = desktopSettings.radioAppearance;
   const reducedMotion = usePrefersReducedMotion();
   const audioRef = React.useRef(null);
@@ -479,6 +479,8 @@ export default function VaporwaveRadioApp({ desktopSettings }) {
   }, [playing, reducedMotion]);
   const requestPlayback = React.useCallback(
     audio => {
+      // 阻止加载完成等异步回调在关机淡出期间重新启动播放。
+      if (systemShuttingDown) return;
       try {
         const playRequest = audio.play();
         playRequest?.catch(reportPlaybackRejection);
@@ -486,7 +488,7 @@ export default function VaporwaveRadioApp({ desktopSettings }) {
         reportPlaybackRejection(error);
       }
     },
-    [reportPlaybackRejection]
+    [reportPlaybackRejection, systemShuttingDown]
   );
 
   React.useEffect(() => {
@@ -496,6 +498,8 @@ export default function VaporwaveRadioApp({ desktopSettings }) {
 
   React.useEffect(() => {
     const audio = audioRef.current;
+    // 关机期间由淡出逻辑接管音量，设置同步不能把音量调回去。
+    if (systemShuttingDown) return;
     const soundAvailable =
       desktopSettings.soundEnabled && desktopSettings.masterVolume > 0;
 
@@ -507,8 +511,31 @@ export default function VaporwaveRadioApp({ desktopSettings }) {
   }, [
     desktopSettings.masterVolume,
     desktopSettings.soundEnabled,
-    playing
+    playing,
+    systemShuttingDown
   ]);
+
+  React.useEffect(() => {
+    if (!systemShuttingDown) return undefined;
+    const audio = audioRef.current;
+    resumeAfterLoadRef.current = false;
+    // 在桌面熄屏卸载前，用 300ms 逐步降低真实媒体音量，结束后暂停播放。
+    const initialVolume = audio.volume;
+    const startedAt = Date.now();
+    if (reducedMotion || !playing) {
+      audio.pause();
+      return undefined;
+    }
+    const fadeTimer = window.setInterval(() => {
+      const progress = Math.min(1, (Date.now() - startedAt) / 300);
+      audio.volume = initialVolume * (1 - progress);
+      if (progress === 1) {
+        window.clearInterval(fadeTimer);
+        audio.pause();
+      }
+    }, 50);
+    return () => window.clearInterval(fadeTimer);
+  }, [systemShuttingDown, reducedMotion, playing]);
 
   function selectStation(stationId) {
     if (stationId === activeStationId) {
@@ -650,6 +677,10 @@ export default function VaporwaveRadioApp({ desktopSettings }) {
           setPlaying(false);
         }}
         onPlay={() => {
+          if (systemShuttingDown) {
+            audioRef.current.pause();
+            return;
+          }
           setPlaybackNotice('');
           setPlaying(true);
           if (!reducedMotion) {

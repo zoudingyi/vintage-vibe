@@ -242,7 +242,7 @@
 .cinema-title .cinema-title__note {
   margin-top: 22px;
   color: #ddd0e3;
-  font: italic 12px/1.5 Georgia, serif;
+  font: normal 12px/1.5 'Audiowide', sans-serif;
 }
 
 @keyframes moving-grid {

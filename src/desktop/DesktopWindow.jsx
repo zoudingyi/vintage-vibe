@@ -90,6 +90,7 @@ function DesktopWindow({
   compact,
   windowState,
   active,
+  interactive = true,
   appProps,
   onClose,
   onFocus,
@@ -105,10 +106,11 @@ function DesktopWindow({
   const titleId = `desktop-window-title-${windowState.id}`;
 
   useEffect(() => {
-    if (active && windowState.status !== 'minimized') {
+    // 电源过渡期间不自动聚焦窗口；开机解锁后再将焦点交给活动窗口。
+    if (interactive && active && windowState.status !== 'minimized') {
       nodeRef.current?.focus();
     }
-  }, [active, windowState.status]);
+  }, [active, interactive, windowState.status]);
 
   function startResize(event) {
     event.preventDefault();

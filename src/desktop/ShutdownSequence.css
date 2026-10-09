@@ -1,0 +1,126 @@
+.desktop-power-transition {
+  position: relative;
+  height: 100vh;
+  isolation: isolate;
+  background: #030417;
+}
+
+.desktop-power-transition--shutting-down {
+  pointer-events: none;
+}
+
+/* 先让关机提示停留 300ms，再按原速度收束桌面；提示与余辉在独立覆盖层中。
+   both 在等待期间保持首帧，结束后保持断电状态，避免出现闪回。 */
+.desktop-power-transition--shutting-down > .desktop-environment-wrapper {
+  transform-origin: center;
+  animation: desktop-crt-off 1000ms ease-in 300ms both;
+}
+
+.shutdown-sequence {
+  position: fixed;
+  inset: 0;
+  z-index: 10000002;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: #f8eaf2;
+}
+
+.shutdown-sequence__message {
+  max-width: min(420px, calc(100vw - 40px));
+  padding: 22px 28px;
+  border: 1px solid #d9b7d1;
+  box-shadow: inset 1px 1px #f9eaf02b, 0 8px 36px #05021290;
+  background: #23182ff0;
+  text-align: center;
+  outline: none;
+  animation: shutdown-message-off 600ms ease-in 300ms both;
+}
+
+.shutdown-sequence__eyebrow {
+  color: #c5a6c5;
+  font: 9px/1.5 monospace;
+  letter-spacing: 0.18em;
+}
+
+.shutdown-sequence__message p {
+  margin: 12px 0 0;
+  font: 16px/1.6 monospace;
+}
+
+.shutdown-sequence__message small {
+  display: block;
+  margin-top: 12px;
+  color: #ffd0b4;
+  line-height: 1.6;
+}
+
+.shutdown-sequence__afterglow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 2px;
+  opacity: 0;
+  background: #edffff;
+  box-shadow: 0 -2px 7px #48f7ff, 0 2px 9px #ff3fb4;
+  transform: translate(-50%, -50%);
+  animation: crt-afterglow 1000ms ease-in 300ms both;
+}
+
+.shutdown-sequence--retreating {
+  background: #030417;
+}
+
+.shutdown-sequence--retreating > .start-screen {
+  width: 100%;
+  height: 100%;
+}
+
+.shutdown-sequence--retreating .cinema-title > p,
+.shutdown-sequence--retreating .cinema-title > h1,
+.shutdown-sequence--retreating .start-screen__background,
+.shutdown-sequence--retreating .computer-entrance__instruction {
+  animation: shutdown-world-reveal 800ms ease-out forwards;
+}
+
+/* 停留 300ms 后变暗，再压成亮线并收成光点；在关机第 1300ms 卸载桌面。 */
+@keyframes desktop-crt-off {
+  0% { filter: brightness(1); transform: scale(1); }
+  60% { filter: brightness(0.35); transform: scale(1); }
+  82% { filter: brightness(1.5); transform: scale(1, 0.002); opacity: 1; }
+  94%, 100% { filter: brightness(1.5); transform: scale(0.001, 0.002); opacity: 0; }
+}
+
+@keyframes shutdown-message-off {
+  0%, 80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* 在桌面收束成亮线时显露余辉，并随光点消失。 */
+@keyframes crt-afterglow {
+  0%, 76% { opacity: 0; width: 100vw; }
+  82% { opacity: 0.8; width: 100vw; }
+  94% { opacity: 0.5; width: 3px; }
+  100% { opacity: 0; width: 3px; }
+}
+
+/* 首页环境与机身拉远共同持续 800ms，完成后路由首页接替覆盖层。 */
+@keyframes shutdown-world-reveal {
+  0%, 15% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* 跳过 CRT 收束和镜头拉远，仅保留与路由定时器一致的短淡出。 */
+  .desktop-power-transition--shutting-down > .desktop-environment-wrapper {
+    animation: shutdown-fade 180ms ease-out forwards !important;
+  }
+
+  .shutdown-sequence__afterglow { display: none; }
+  .shutdown-sequence__message { animation: none; }
+}
+
+@keyframes shutdown-fade {
+  to { opacity: 0; }
+}

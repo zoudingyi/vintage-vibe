@@ -1,8 +1,13 @@
 import './index.css';
 import RetroComputerEntrance from './RetroComputerEntrance';
 import MountainRange from './MountainRange';
+import { useLocation } from 'react-router-dom';
 
-function StartScreen() {
+function StartScreen({ poweredOff, retreating = false, saveFailed }) {
+  const { state } = useLocation();
+  // 关机覆盖层通过 props 提供状态；路由交接后的首页从 state 继续显示断电与保存错误。
+  const computerOff = poweredOff ?? state?.poweredOff ?? false;
+  const failedSave = saveFailed ?? state?.saveFailed ?? false;
   return (
     <main className="start-screen start-screen--computer">
       <div className="start-screen__background" aria-hidden="true">
@@ -21,7 +26,7 @@ function StartScreen() {
         <p className="cinema-title__tagline" lang="ja">
           あの頃の未来へ、ようこそ。
         </p>
-        <RetroComputerEntrance />
+        <RetroComputerEntrance poweredOff={computerOff} retreating={retreating} saveFailed={failedSave} />
         <p className="cinema-title__note">
           Take your time. There’s a whole world inside.
         </p>

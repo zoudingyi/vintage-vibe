@@ -17,11 +17,11 @@
 }
 .computer-entrance button { font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .computer-entrance button:disabled { cursor: default; }
-.computer-entrance button:focus-visible { outline: 2px solid #48f7ff; outline-offset: 7px; }
+.computer-entrance button:focus-visible { outline: 1px solid #cfd6d6; }
 .computer-entrance__instruction { display: block; min-height: 34px; margin-top: 14px; color: #ead3e2; font-size: 9px; line-height: 1.7; }
 .computer-entrance__instruction small { display: block; font-size: 8px; opacity: 0.65; margin-top: 5px; }
 
-/* A CRT monitor with pastel reflections and a curved glass face. */
+/* 带柔和反光与弧形玻璃屏幕的 CRT 显示器。 */
 .retro-computer { position: relative; }
 .retro-computer__hardware { position: relative; width: 180px; isolation: isolate; }
 .retro-computer__hardware::before {
@@ -85,7 +85,91 @@
 }
 .retro-computer__static { position: absolute; inset: 0; opacity: 0.015; background: repeating-conic-gradient(#ede7ff99 0% 25%, #25234499 0% 50%) 0 0 / 3px 3px; animation: retro-computer-static 220ms steps(2) infinite; }
 .retro-computer__scanlines { position: absolute; inset: 0; z-index: 2; background: repeating-linear-gradient(transparent 0 2px, #20183266 2px 3px); pointer-events: none; }
-.retro-computer__osd { position: absolute; top: 8px; right: 9px; z-index: 3; color: #c9ffd2; font: 5px/1 monospace; letter-spacing: 0.08em; text-shadow: 1px 1px 0 #405a63; }
+/* 小屏幕启动：0–300ms 通电，300–950ms 调谐并锁定，950–1500ms 稳定标识，
+   1500–1700ms 显露真实桌面，停留到 2050ms 后推进镜头。 */
+.retro-computer__boot-screen {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #070811;
+  pointer-events: none;
+  animation: retro-computer-boot-fade 200ms ease-out 1500ms forwards;
+}
+.retro-computer__boot-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, #302445, #121023 80%);
+  box-shadow: inset 0 0 10px #a9e9df55, 0 0 6px #a9e9df55;
+  animation: retro-computer-crt-on 300ms ease-out both, retro-computer-signal-jitter 350ms steps(1) 300ms forwards;
+}
+.retro-computer__boot-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(transparent 0 2px, #94d9d926 2px 3px);
+  animation: retro-computer-boot-scanlines 950ms linear both;
+}
+/* 雪花覆盖范围略宽于屏幕，错位时仍填满屏幕，并由按钮的 overflow 裁切。 */
+.retro-computer__boot-signal {
+  position: absolute;
+  z-index: 2;
+  inset: -3px;
+  overflow: hidden;
+  animation: retro-computer-signal-jitter 350ms steps(1) 300ms forwards;
+}
+.retro-computer__boot-noise {
+  position: absolute;
+  inset: 0;
+  background: repeating-conic-gradient(#c4cbdf99 0% 25%, #18152399 0% 50%) 0 0 / 2px 2px;
+  animation: retro-computer-signal-noise 650ms steps(1) 300ms both;
+}
+.retro-computer__boot-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 12%;
+  background: linear-gradient(transparent, #b6e7de55, transparent);
+  animation: retro-computer-signal-band 350ms linear 300ms both;
+}
+.retro-computer__boot-beam {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: #c7f6e9;
+  box-shadow: 0 0 5px #a9e9df99;
+  transform: translate(-50%, -50%);
+  animation: retro-computer-boot-beam 300ms ease-out both;
+}
+.retro-computer__boot-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  animation: retro-computer-boot-logo 300ms ease-out 650ms both;
+}
+.retro-computer__boot-logo {
+  color: #e8f7ef;
+  font: bold 12px/1 monospace;
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 5px #84d9ca66, 1px 1px #c38abf55;
+  animation: retro-computer-signal-lock 300ms ease-out 650ms both;
+}
+.retro-computer__boot-blocks { display: flex; gap: 4px; }
+.retro-computer__boot-blocks i {
+  width: 5px;
+  height: 4px;
+  background: #a0e2ce;
+  box-shadow: 0 0 3px #84d9ca66;
+  animation: retro-computer-boot-block 100ms ease-out 950ms both;
+}
+.retro-computer__boot-blocks i:nth-child(2) { animation-delay: 1050ms; }
+.retro-computer__boot-blocks i:nth-child(3) { animation-delay: 1150ms; }
 .retro-computer__monitor:is(:hover, :focus-within) .retro-computer__picture { filter: brightness(1.6) saturate(0.95); opacity: 1; }
 .retro-computer__monitor-trim { position: absolute; bottom: 6px; left: 14px; right: 13px; display: flex; justify-content: space-between; align-items: center; color: #756a80; }
 .retro-computer__brand { font: bold 5px/1.2 monospace; letter-spacing: 0.1em; text-align: left; text-shadow: 0 1px 0 #ffffff30; }
@@ -102,45 +186,118 @@
 .retro-computer__power-button:hover { background: #c4d9d3; color: #446b65; }
 .retro-computer__monitor:is(:hover, :focus-within) .retro-computer__monitor-controls b { background: #8fbeb0; box-shadow: 0 0 5px #8edcc566; }
 .retro-computer--booting .retro-computer__monitor .retro-computer__monitor-controls b { background: #93f6d5; box-shadow: 0 0 8px #93f6d5; }
-.retro-computer--booting .retro-computer__hardware { z-index: 2; transform-origin: var(--camera-origin-x) var(--camera-origin-y); animation: retro-computer-camera 1s cubic-bezier(0.65, 0, 0.3, 1) forwards; }
-.retro-computer--booting .retro-computer__picture { animation: retro-computer-boot 300ms steps(2) forwards; }
-.retro-computer--booting .retro-computer__static { z-index: 2; animation: retro-computer-stabilize 400ms steps(3) forwards; }
-.retro-computer__desktop-picture { display: block; width: 100%; height: 100%; }
-.retro-computer__wallpaper { transform-origin: top left; }
-.retro-computer__connected-desktop { position: absolute; inset: 0; opacity: 0; animation: retro-computer-connect 1s linear forwards; }
-.retro-computer-portal { position: fixed; z-index: 10000001; left: var(--screen-x); top: var(--screen-y); width: var(--screen-width); height: var(--screen-height); overflow: hidden; border-radius: 10px; background: transparent; pointer-events: none; opacity: 0; animation: retro-computer-enter 1s cubic-bezier(0.65, 0, 0.3, 1) forwards; }
-.retro-computer-portal::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(transparent 0 2px, #20183255 2px 3px); pointer-events: none; animation: retro-computer-scanlines 1s ease-out forwards; }
+/* 镜头、显示区域和桌面缩放统一在启动画面结束后推进。 */
+.retro-computer--booting, .retro-computer-portal {
+  --boot-intro-duration: 2050ms;
+  --boot-zoom-duration: 750ms;
+}
+.retro-computer--booting .retro-computer__hardware { z-index: 2; transform-origin: var(--camera-origin-x) var(--camera-origin-y); animation: retro-computer-camera var(--boot-zoom-duration) cubic-bezier(0.65, 0, 0.3, 1) var(--boot-intro-duration) both; }
+.retro-computer--off .retro-computer__screen { background: #070811; }
+.retro-computer--off .retro-computer__picture,
+.retro-computer--off .retro-computer__static,
+.retro-computer--off .retro-computer__scanlines { display: none; }
+.retro-computer--off .retro-computer__monitor .retro-computer__monitor-controls b { background: #4c4c58; box-shadow: none; }
+.retro-computer--retreating .retro-computer__hardware { z-index: 2; transform-origin: var(--camera-origin-x) var(--camera-origin-y); animation: retro-computer-retreat 800ms cubic-bezier(0.3, 0, 0.35, 1) forwards; }
+.computer-entrance__instruction .computer-entrance__save-error { max-width: 260px; color: #ffd0b4; font-size: 10px; opacity: 1; }
+.retro-computer--booting .retro-computer__static { display: none; }
+.retro-computer-portal { position: fixed; z-index: 10000001; left: var(--screen-x); top: var(--screen-y); width: var(--screen-width); height: var(--screen-height); overflow: hidden; border-radius: 10px; background: transparent; pointer-events: none; opacity: 0; animation: retro-computer-desktop-reveal 200ms ease-out 1500ms both, retro-computer-enter var(--boot-zoom-duration) cubic-bezier(0.65, 0, 0.3, 1) var(--boot-intro-duration) both; }
+.retro-computer-portal::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(transparent 0 2px, #20183255 2px 3px); pointer-events: none; animation: retro-computer-scanlines 1300ms ease-out 1500ms both; }
 
 @keyframes retro-computer-static { 50% { background-position: 2px 1px; } }
-@keyframes retro-computer-boot { 0% { transform: translateX(0); } 25% { transform: translateX(-6px); filter: hue-rotate(25deg); } 65% { transform: translateX(4px); } 100% { transform: translateX(0); } }
-@keyframes retro-computer-stabilize { 0% { opacity: 0.65; } 45% { opacity: 0.3; } 100% { opacity: 0; } }
-@keyframes retro-computer-connect { 0%, 18% { opacity: 0; } 30%, 100% { opacity: 1; } }
+@keyframes retro-computer-retreat {
+  /* 从屏幕占满视口的近景拉回机身原位，与关机第二阶段的 800ms 同步。 */
+  from { transform: translate(var(--camera-offset-x), var(--camera-offset-y)) scale(var(--camera-scale)); }
+  to { transform: translate(0, 0) scale(1); }
+}
+@keyframes retro-computer-crt-on {
+  0% { transform: scale(0.008, 0.015); filter: brightness(2); }
+  45% { transform: scale(1, 0.015); filter: brightness(1.6); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+@keyframes retro-computer-boot-beam {
+  0% { width: 1px; opacity: 0.5; }
+  45% { width: 100%; opacity: 0.8; }
+  100% { width: 100%; opacity: 0; }
+}
+@keyframes retro-computer-boot-logo {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* 搜寻阶段只出现两次幅度递减的错位；650ms 后背景与噪点恢复原位。 */
+@keyframes retro-computer-signal-jitter {
+  0%, 8% { transform: translateX(0); }
+  12%, 30% { transform: translateX(3px); }
+  32%, 52% { transform: translateX(0); }
+  56%, 72% { transform: translateX(-1px); }
+  78%, 100% { transform: translateX(0); }
+}
+@keyframes retro-computer-signal-noise {
+  0% { opacity: 0; background-position: 0 0; }
+  8% { opacity: 0.1; background-position: 1px -1px; }
+  20% { opacity: 0.2; background-position: -1px 2px; }
+  35% { opacity: 0.16; background-position: 2px 1px; }
+  54% { opacity: 0.1; background-position: -2px -1px; }
+  75% { opacity: 0.05; background-position: 1px 2px; }
+  100% { opacity: 0; background-position: 0 0; }
+}
+@keyframes retro-computer-signal-band {
+  0% { top: -12%; opacity: 0; }
+  10% { opacity: 0.45; }
+  80% { opacity: 0.22; }
+  100% { top: 100%; opacity: 0; }
+}
+/* 标识浮现时青粉边缘逐渐重合，950ms 后保持清晰，等待方块与桌面淡入。 */
+@keyframes retro-computer-signal-lock {
+  0% { transform: translateX(1px); text-shadow: 2px 0 #8cdfd5bb, -2px 0 #e4a5d4aa; }
+  50% { transform: translateX(0); text-shadow: 1px 0 #8cdfd580, -1px 0 #e4a5d480; }
+  100% { transform: translateX(0); text-shadow: 0 0 5px #84d9ca66, 1px 1px #c38abf55; }
+}
+@keyframes retro-computer-boot-block {
+  from { opacity: 0.15; }
+  to { opacity: 1; }
+}
+@keyframes retro-computer-boot-scanlines {
+  from { opacity: 0; background-position: 0 0; }
+  to { opacity: 0.45; background-position: 0 6px; }
+}
+@keyframes retro-computer-boot-fade { to { opacity: 0; } }
+@keyframes retro-computer-desktop-reveal { from { opacity: 0; } to { opacity: 1; } }
 @keyframes retro-computer-enter {
-  0%, 30% { left: var(--screen-x); top: var(--screen-y); width: var(--screen-width); height: var(--screen-height); opacity: 0; border-radius: 10px; }
-  40% { left: var(--screen-x); top: var(--screen-y); width: var(--screen-width); height: var(--screen-height); opacity: 1; border-radius: 10px; }
-  100% { left: var(--portal-end-x); top: var(--portal-end-y); width: var(--portal-end-width); height: var(--portal-end-height); opacity: 1; border-radius: 0; }
+  /* 前 2050ms 在屏幕内完成启动与稳定停留；推进结束事件才触发路由交接。 */
+  from { left: var(--screen-x); top: var(--screen-y); width: var(--screen-width); height: var(--screen-height); border-radius: 10px; }
+  to { left: var(--portal-end-x); top: var(--portal-end-y); width: var(--portal-end-width); height: var(--portal-end-height); border-radius: 0; }
 }
 @keyframes retro-computer-camera {
-  0%, 40% { transform: translate(0, 0) scale(1, 1); }
-  100% { transform: translate(var(--camera-offset-x), var(--camera-offset-y)) scale(var(--camera-scale)); }
+  /* 与真实桌面的显示区域及缩放共用延迟、时长和曲线，保持画面对齐。 */
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(var(--camera-offset-x), var(--camera-offset-y)) scale(var(--camera-scale)); }
 }
-@keyframes retro-computer-scanlines { 0%, 35% { opacity: 0.6; } 100% { opacity: 0; } }
-
+@keyframes retro-computer-scanlines { from { opacity: 0.45; } to { opacity: 0; } }
 
 @media (max-width: 600px) {
   .start-screen--computer { padding: 12px; }
   .start-screen--computer .cinema-title { padding-top: 0; }
-  .start-screen--computer .cinema-title h1 { margin-top: 16px; font-size: clamp(44px, 14vw, 78px); }
+  /* 两行标题占据主要视觉面积，电脑随屏宽缩放，保持清晰的主次比例。 */
+  .start-screen--computer .cinema-title h1 {
+    margin-top: 16px;
+    font-size: clamp(52px, 17.4vw, 92px);
+    line-height: 1.02;
+  }
   .start-screen--computer .cinema-title .cinema-title__tagline { margin-top: 14px; }
-  .computer-entrance { margin-top: 30px; }
-  .retro-computer__hardware { width: 156px; }
-  .retro-computer__monitor { width: 156px; height: 136px; padding: 10px 10px 25px; }
+  .computer-entrance { margin-top: clamp(24px, 4svh, 34px); }
+  .retro-computer { --computer-width: clamp(136px, 36vw, 156px); }
+  .retro-computer__hardware { width: var(--computer-width); margin: 0 auto; }
+  .retro-computer__monitor {
+    width: var(--computer-width);
+    height: calc(var(--computer-width) * 0.872);
+    padding: calc(var(--computer-width) * 0.064) calc(var(--computer-width) * 0.064) calc(var(--computer-width) * 0.16);
+  }
   .retro-computer__monitor-trim { left: 12px; right: 11px; bottom: 5px; }
   .retro-computer__brand { font-size: 4.5px; }
   .retro-computer__brand small { font-size: 2.8px; }
   .retro-computer__power-button { width: 18px; height: 16px; }
   .retro-computer__controls { gap: 5px; }
-  .retro-computer__screen { height: 94px; border-width: 5px; border-radius: 15px / 12px; }
+  .retro-computer__screen { height: calc(var(--computer-width) * 0.6); border-width: 5px; border-radius: 15px / 12px; }
   .computer-entrance__instruction { font-size: 8px; }
 }
 @media (max-height: 650px) {
@@ -150,7 +307,11 @@
   .computer-entrance { margin-top: 30px; }
 }
 @media (max-height: 650px) and (max-width: 600px) {
-  .start-screen--computer .cinema-title h1 { font-size: clamp(44px, 14vw, 78px); }
+  /* 矮屏同时参考视口高度，避免放大的标题把电源入口挤出首屏。 */
+  .start-screen--computer .cinema-title h1 { font-size: clamp(48px, min(17.4vw, 14svh), 84px); }
+  .computer-entrance { margin-top: 24px; }
+  .retro-computer { --computer-width: clamp(120px, min(36vw, 26svh), 156px); }
+  .retro-computer__screen { height: calc(var(--computer-width) * 0.6 - 4px); }
   .start-screen--computer .cinema-title .cinema-title__note { margin-top: 12px; font-size: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
